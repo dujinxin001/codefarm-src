@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.mybatis.orm.mapper.UserMapper">
+	<resultMap id="BaseResultMap" type="com.sxj.mybatis.orm.model.User">
+		<id property="id" column="USER_ID" jdbcType="INTEGER"/>
+		<result property="userName" column="USER_NAME" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		USER_ID, USER_NAME
+	</sql>
+	<!-- 
+	<insert id="insertUser" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="org.makersoft.activesql.model.User">
+		insert into t_user(user_name, password, birth_day, created_at, updated_at)
+		values (#{userName}, 'xxxxxxxxxxxxxxxxxxxxxxx', now(), now(), now())
+	</insert>
+	
+	<insert id="insertNew" useGeneratedKeys="true" keyColumn="id" keyProperty="id"  parameterType="org.makersoft.activesql.model.User">
+        insert into t_user
+            (${pair.key})
+        values
+            (#{pair.Value})
+    </insert>
+    
+    <insert id="insertSelective" useGeneratedKeys="true" keyColumn="id" keyProperty="id"  parameterType="org.makersoft.activesql.model.User">
+        INSERT INTO t_user
+		<trim prefix="(" suffix=")" suffixOverrides="," > 
+			<if test="userName != null" >user_name,</if>
+			<if test="password != null" >password,</if>
+			<if test="birthDay != null" >birth_day,</if>
+			<if test="createdAt != null" >created_at,</if>
+			<if test="updatedAt != null" >updated_at,</if>
+		</trim>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides="," > 
+			<if test="userName != null" >#{userName},</if>
+			<if test="password != null" >#{password},</if>
+			<if test="birthDay != null" >#{birthDay},</if>
+			<if test="createdAt != null" >#{createdAt},</if>
+			<if test="updatedAt != null" >#{updatedAt},</if>
+		</trim>
+    </insert>
+    
+	<delete id="delete">
+		delete form t_user where id = #{}
+	</delete>
+	
+	<update id="update">
+		UPDATE t_user
+		<set>
+			<if test="userName != null">
+				user_name = #{userName},
+			</if>
+			<if test="password != null" >
+				password = #{password},
+			</if>
+			<if test="birthDay != null" >
+				birth_day = #{birthDay},
+			</if>
+			<if test="createdAt != null" >
+				created_at = #{createdAt},
+			</if>
+			<if test="updatedAt != null" >
+				updated_at = #{updatedAt},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	 
+	<select id="get" resultType="org.makersoft.activesql.model.User" parameterType="int">
+		SELECT id AS id,user_name AS userName,password AS password,birth_day AS birthDay,created_at AS createdAt,updated_At AS updatedAt 
+		FROM t_user WHERE id =#{id}
+	</select>
+	-->
+	 
+</mapper>

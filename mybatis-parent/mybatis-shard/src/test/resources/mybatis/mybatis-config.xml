@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<properties>
+		<property name="dialect" value="mysql" />
+		<property name="sharded" value="true"/>
+	</properties>
+	<settings>
+		<!-- changes from the defaults -->
+		<setting name="lazyLoadingEnabled" value="false" />
+	</settings>
+	<!-- <typeHandlers>
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.MemberTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.member.AccountStatesEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.MemberTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.member.MemberTypeEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.MemberStatesEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.member.MemberStatesEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.MemberCheckStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.member.MemberCheckStateEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.ContractTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.record.ContractTypeEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.RecordStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.record.RecordStateEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.RecordTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.record.RecordTypeEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.RecordFlagEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.record.RecordFlagEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.RecordFlagEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.record.RecordConfirmStateEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.ContractStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.contract.ContractStateEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.ContractSureStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.contract.ContractSureStateEnum" />
+	</typeHandlers> -->
+	<plugins>
+		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />
+	</plugins>
+</configuration>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.mybatis.orm.mapper.FunctionMapper">
+	<resultMap type="com.sxj.mybatis.orm.model.Function" id="funciton">
+		<result property="functionId" column="ID" />
+		<result property="functionName" column="TITLE" />
+	</resultMap>
+	<cache type="com.sxj.mybatis.cache.HierarchicalCache">
+		<property name="level" value="2" />
+		<!-- 默认存活5s -->
+		<property name="timeToLive" value="10" />
+	</cache>
+	<insert id="insertDemo" parameterType="com.sxj.mybatis.orm.model.Function">
+		insert into TEST_FUNCTION (ID,TITLE) values (#{functionId},#{functionName})
+	</insert>
+</mapper>

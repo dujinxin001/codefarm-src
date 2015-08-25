@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	
+	<keyNodes> 
+		<keyNode type="SN" ref="ds1"></keyNode>
+		<keyNode type="ID" ref="ds1"></keyNode>
+		<keyNode type="ID" ref="ds2"></keyNode>
+	</keyNodes>
+	<!-- 数据结点配置 -->
+	<dataNodes>
+		<!-- 数据节点1 -->
+		<dataNode>
+			<writeNodes ref="ds1,ds2">
+			</writeNodes>
+			<readNodes ref="ds1-read,ds2-read">
+			</readNodes>
+			<tables>SHARD2</tables>
+		</dataNode>
+
+
+		<!-- 数据节点2 -->
+		<dataNode>
+			<writeNodes ref="ds2">
+				<tables></tables>
+			</writeNodes>
+			<readNodes ref="ds2-read">
+				<tables></tables>
+			</readNodes>
+			<tables>SHARD</tables>
+		</dataNode>
+	</dataNodes>
+
+	<!-- 配置需要分库的表，分库所依赖的字段 -->
+	<!-- <rules> <table name="SHARD" column="SHARD_ID"></table> </rules> -->
+
+</configuration>

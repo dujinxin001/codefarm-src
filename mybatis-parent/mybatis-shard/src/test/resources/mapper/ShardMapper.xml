@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sxj.mybatis.shard.dao.ShardMapper">
+	<resultMap type="com.sxj.mybatis.shard.entity.Shard" id="shard">
+		<id property="shardId" column="SHARD_ID"/>
+		<result property="shardName" column="SHARD_NAME"/>
+	</resultMap>
+	
+	<insert id="insert2" parameterType="com.sxj.mybatis.shard.entity.Shard">
+		insert into SHARD (SHARD_ID,SHARD_NAME) values (#{shardId},#{shardName})
+	</insert>
+	
+	<select id="get2" parameterType="Integer" resultMap="shard">
+		select SHARD_ID,SHARD_NAME from SHARD where SHARD_ID=#{shardId}
+	</select>
+</mapper>

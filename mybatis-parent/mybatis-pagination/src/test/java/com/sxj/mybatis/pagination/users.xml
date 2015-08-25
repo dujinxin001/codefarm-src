@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="users">
+	
+	<cache size="1024">
+	</cache>
+	
+	<resultMap type="user" id="userResultMap">
+		<id property="id" column="USER_ID"/>
+		<result property="name" column="USER_NAME"/>
+	</resultMap>
+	
+	<select id="selectUsers" resultMap="userResultMap" parameterType="com.sxj.mybatis.pagination.po.PageUserDTO">
+	
+		select * from USER
+		<where>
+			<if test="id != null">
+				USER_ID = #{id}
+			</if>
+			<if test="name != null">
+				and USER_NAME = #{name}
+			</if>
+		</where>
+	</select>
+</mapper>

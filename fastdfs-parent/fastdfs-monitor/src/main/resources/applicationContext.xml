@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+                        http://www.springframework.org/schema/tx
+                        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd 
+                        http://www.springframework.org/schema/task 
+                        http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+	<context:annotation-config />
+	<context:component-scan base-package="com.sxj.fastdfs.monitor">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+	</context:component-scan>
+	<bean id="placeholderConfig"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:application.properties</value>
+		</property>
+	</bean>
+	<!-- 引用@Autowired必须定义这个bean -->
+	<bean
+		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	</bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="fsMariadbDataSource"></property>
+		<property name="annotatedClasses">
+			<list>
+				<value>com.sxj.fastdfs.monitor.vo.Group</value>
+				<value>com.sxj.fastdfs.monitor.vo.Storage</value>
+				<value>com.sxj.fastdfs.monitor.vo.GroupHour</value>
+				<value>com.sxj.fastdfs.monitor.vo.StorageHour</value>
+				<value>com.sxj.fastdfs.monitor.vo.GroupDay</value>
+				<value>com.sxj.fastdfs.monitor.vo.StorageDay</value>
+				<value>com.sxj.fastdfs.monitor.vo.WarningData</value>
+				<value>com.sxj.fastdfs.monitor.vo.WarningUser</value>
+				<value>com.sxj.fastdfs.monitor.vo.User</value>
+				<value>com.sxj.fastdfs.monitor.vo.Fdfs_file</value>
+				<value>com.sxj.fastdfs.monitor.vo.DownloadFileRecord</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+				<prop key="hibernate.current_session_context_class">
+					org.springframework.orm.hibernate4.SpringSessionContext
+				</prop>
+			</props>
+		</property>
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<task:annotation-driven executor="myExecutor"
+		scheduler="myScheduler" />
+	<task:executor id="myExecutor" pool-size="5" />
+	<task:scheduler id="myScheduler" pool-size="10" />
+	<bean id="sqlSessionFactory" class="com.sxj.mybatis.orm.ActiveSQLSessionFactoryBean">
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
+		<property name="dataSource" ref="fsMariadbDataSource" />
+		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
+		<!-- 显式指定Mapper文件位置 -->
+		<property name="mapperLocations" value="classpath*:/mapper/**/*Mapper.xml" />
+	</bean>
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.sxj.fastdfs.monitor.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+	<!-- <bean id="fdfsDao" class="org.mybatis.spring.mapper.MapperFactoryBean"> 
+		<property name="mapperInterface" value="cn.me.fdfs.dao.FdfsDao" /> <property 
+		name="sqlSessionFactory" ref="sqlSessionFactory" /> </bean> -->
+	<import resource="classpath*:app-datasource.xml" />
+</beans>

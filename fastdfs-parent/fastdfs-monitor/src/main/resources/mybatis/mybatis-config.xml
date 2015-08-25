@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<properties>
+		<property name="dialect" value="mysql" />
+		<!-- <property name="sharded" value="true"/> -->
+	</properties>
+	<settings>
+		<!-- changes from the defaults -->
+		<setting name="lazyLoadingEnabled" value="false" />
+		<setting name="cacheEnabled" value="true" />
+	</settings>
+	<!-- <typeHandlers>
+		<typeHandler
+			handler="com.zijincaifu.crm.typehandler.PersonnelCompanyEnumTypeHandler"
+			javaType="com.zijincaifu.crm.enu.personnel.PersonnelCompanyEnum" />
+
+		<typeHandler
+			handler="com.zijincaifu.crm.typehandler.CustomerLevelEnumTypeHandler"
+			javaType="com.zijincaifu.crm.enu.customer.CustomerLevelEnum" />
+
+		<typeHandler
+			handler="com.zijincaifu.crm.typehandler.InvestItemStateEnumTypeHandler"
+			javaType="com.zijincaifu.crm.enu.customer.InvestItemStateEnum" />
+
+	</typeHandlers> -->
+	<plugins>
+		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />
+	</plugins>
+</configuration>

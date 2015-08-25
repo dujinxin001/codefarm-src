@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<properties>
+		<property name="dialect" value="mysql"/>
+	</properties>
+
+	<typeAliases>
+		<typeAlias type="com.sxj.mybatis.pagination.entity.User" alias="user"/>
+	</typeAliases>
+
+	<plugins>
+		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor">
+		</plugin>
+	</plugins>
+	
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="jdbc">
+				<property name="allowAutoCommit" value="true"/>
+			</transactionManager>
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="url" value="jdbc:mysql://192.168.1.12:3306/sxj-supervisor" />
+				<property name="username" value="sxj-supervisor" />
+				<property name="password" value="sxj-supervisor" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="com/sxj/mybatis/pagination/users.xml"/>
+	</mappers>
+</configuration>

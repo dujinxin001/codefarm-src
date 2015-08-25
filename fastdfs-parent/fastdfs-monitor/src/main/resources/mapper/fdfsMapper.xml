@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.me.fdfs.dao.FdfsDao">
+	<delete id="deleteGroup" parameterType="java.util.Date">
+		delete from tbgroup where created &lt; #date#
+	</delete>
+	<delete id="deleteGroupDay" parameterType="java.util.Date">
+		delete from tbgroupday where created &lt; #date#
+	</delete>
+	<delete id="deleteGroupHour" parameterType="java.util.Date">
+		delete from tbgrouphour where created &lt; #date#
+	</delete>
+	<delete id="deleteStorage" parameterType="java.util.Date">
+		delete from tbstorage where created &lt; #date#
+	</delete>
+	<delete id="deleteStorageDay" parameterType="java.util.Date">
+		delete from tbstorageday where created &lt; #date#
+	</delete>
+	<delete id="deleteStorageHour" parameterType="java.util.Date">
+		delete from tbstoragehour where created &lt; #date#
+	</delete>
+
+</mapper>
+
+
+    
