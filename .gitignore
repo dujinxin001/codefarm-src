@@ -1,6 +1,7 @@
 /parent/
 .springBeans
 .project
+.settings/
 bin/
 target/
 *.orig
