@@ -10,4 +10,6 @@ public interface ITransformer
             
     public void toPDF(InputStream source, OutputStream output)
             throws POITransformException;
+            
+    public void setPictureExactor(AbstractPictureExactor pictureExactor);
 }

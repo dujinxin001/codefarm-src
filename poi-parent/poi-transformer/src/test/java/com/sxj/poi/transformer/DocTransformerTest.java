@@ -5,13 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 
 import org.apache.poi.hwpf.usermodel.PictureType;
 import org.junit.After;
 import org.junit.Test;
 
 import com.sxj.poi.transformer.impl.DocTransformer;
+import com.sxj.poi.transformer.impl.DocXTransformer;
 
 public class DocTransformerTest
 {
@@ -21,11 +21,11 @@ public class DocTransformerTest
     {
     }
     
-    @Test
     public void testToHTML() throws FileNotFoundException, POITransformException
     {
         DocTransformer transformer = new DocTransformer();
-        transformer.setPictureExactor(new LocalPictureExactor("c:\\test\\"));
+        transformer.setPictureExactor(
+                new LocalPictureExactor("c:\\test\\", "file"));
         transformer.toHTML(
                 new FileInputStream(
                         new File("D:\\scm-repository\\git\\sxj\\abc.doc")),
@@ -33,18 +33,35 @@ public class DocTransformerTest
                         new File("D:\\scm-repository\\git\\sxj\\abc.html")));
     }
     
+    @Test
+    public void testDocxToTHML()
+            throws FileNotFoundException, POITransformException
+    {
+        DocXTransformer transformer = new DocXTransformer();
+        transformer.setPictureExactor(
+                new LocalPictureExactor("c:\\test\\", "file"));
+        transformer.toHTML(
+                new FileInputStream(
+                        new File("D:\\scm-repository\\git\\sxj\\abc.docx")),
+                new FileOutputStream(
+                        new File("D:\\scm-repository\\git\\sxj\\def.html")));
+    }
+    
     class LocalPictureExactor extends AbstractPictureExactor
     {
         private String path;
         
-        public LocalPictureExactor(String path)
+        private String scheme;
+        
+        public LocalPictureExactor(String path, String scheme)
         {
             super();
             this.path = path;
+            this.scheme = scheme;
         }
         
         @Override
-        protected URL save(byte[] content, PictureType pictureType,
+        public String save(byte[] content, PictureType pictureType,
                 String suggestedName, float widthInches, float heightInches)
         {
             try
@@ -53,8 +70,7 @@ public class DocTransformerTest
                         new File(path + File.separator + suggestedName));
                 fos.write(content);
                 fos.close();
-                return new URL(
-                        "file://" + path + File.separator + suggestedName);
+                return suggestedName;
             }
             catch (FileNotFoundException e)
             {
@@ -75,6 +91,16 @@ public class DocTransformerTest
         public void setPath(String path)
         {
             this.path = path;
+        }
+        
+        public String getScheme()
+        {
+            return scheme;
+        }
+        
+        public void setScheme(String scheme)
+        {
+            this.scheme = scheme;
         }
         
     }
