@@ -382,7 +382,7 @@ public class ExcelTransformer implements ITransformer
     
     public void printSheet(Sheet sheet, Formatter out)
     {
-        out.format("<table class=%s>%n", DEFAULTS_CLASS);
+        out.format("<table class=\"%s\">%n", DEFAULTS_CLASS);
         printCols(sheet, out);
         printSheetContent(sheet, out);
         out.format("</table>%n");
@@ -391,8 +391,8 @@ public class ExcelTransformer implements ITransformer
     private void printColumnHeads(Formatter out)
     {
         out.format("<thead>%n");
-        out.format("  <tr class=%s>%n", COL_HEAD_CLASS);
-        out.format("    <th class=%s>&#x25CA;</th>%n", COL_HEAD_CLASS);
+        out.format("  <tr class=\"%s\">%n", COL_HEAD_CLASS);
+        out.format("    <th class=\"%s\">&#x25CA;</th>%n", COL_HEAD_CLASS);
         //noinspection UnusedDeclaration
         StringBuilder colName = new StringBuilder();
         for (int i = firstColumn; i < endColumn; i++)
@@ -404,7 +404,9 @@ public class ExcelTransformer implements ITransformer
                 colName.insert(0, (char) ('A' + cnum % 26));
                 cnum /= 26;
             } while (cnum > 0);
-            out.format("    <th class=%s>%s</th>%n", COL_HEAD_CLASS, colName);
+            out.format("    <th class=\"%s\">%s</th>%n",
+                    COL_HEAD_CLASS,
+                    colName);
         }
         out.format("  </tr>%n");
         out.format("</thead>%n");
@@ -420,7 +422,7 @@ public class ExcelTransformer implements ITransformer
             Row row = rows.next();
             
             out.format("  <tr>%n");
-            out.format("    <td class=%s>%d</td>%n",
+            out.format("    <td class=\"%s\">%d</td>%n",
                     ROW_HEAD_CLASS,
                     row.getRowNum() + 1);
             for (int i = firstColumn; i < endColumn; i++)
@@ -445,7 +447,7 @@ public class ExcelTransformer implements ITransformer
                             content = "&nbsp;";
                     }
                 }
-                out.format("    <td class=%s %s>%s</td>%n",
+                out.format("    <td class=\"%s %s\">%s</td>%n",
                         styleName(style),
                         attrs,
                         content);
