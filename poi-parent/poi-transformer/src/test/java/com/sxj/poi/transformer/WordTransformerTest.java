@@ -13,7 +13,7 @@ import org.junit.Test;
 import com.sxj.poi.transformer.impl.DocTransformer;
 import com.sxj.poi.transformer.impl.DocXTransformer;
 
-public class DocTransformerTest
+public class WordTransformerTest
 {
     
     @After
@@ -33,7 +33,6 @@ public class DocTransformerTest
                         new File("D:\\scm-repository\\git\\sxj\\abc.html")));
     }
     
-    @Test
     public void testDocxToTHML()
             throws FileNotFoundException, POITransformException
     {
@@ -45,6 +44,27 @@ public class DocTransformerTest
                         new File("D:\\scm-repository\\git\\sxj\\abc.docx")),
                 new FileOutputStream(
                         new File("D:\\scm-repository\\git\\sxj\\def.html")));
+    }
+    
+    @Test
+    public void testWordTransformer()
+            throws FileNotFoundException, POITransformException
+    {
+        FileInputStream doc = new FileInputStream(
+                new File("D:\\scm-repository\\git\\sxj\\abc.doc"));
+        FileOutputStream docHTML = new FileOutputStream(
+                new File("D:\\scm-repository\\git\\sxj\\abc.doc.html"));
+        FileInputStream docx = new FileInputStream(
+                new File("D:\\scm-repository\\git\\sxj\\abc.docx"));
+        FileOutputStream docxHTML = new FileOutputStream(
+                new File("D:\\scm-repository\\git\\sxj\\abc.docx.html"));
+        WordTransformer transformer = new WordTransformer();
+        AbstractPictureExactor exactor = new LocalPictureExactor("c:\\test",
+                "file");
+        transformer.setPictureExactor(exactor);
+        transformer.toHTML(doc, docHTML);
+        transformer.toHTML(docx, docxHTML);
+        
     }
     
     class LocalPictureExactor extends AbstractPictureExactor
