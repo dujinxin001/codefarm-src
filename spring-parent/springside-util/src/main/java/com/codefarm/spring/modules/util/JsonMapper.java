@@ -1,4 +1,4 @@
-package com.codefarm.spring.modules.mapper;
+package com.codefarm.spring.modules.util;
 
 import java.io.File;
 import java.io.FileReader;

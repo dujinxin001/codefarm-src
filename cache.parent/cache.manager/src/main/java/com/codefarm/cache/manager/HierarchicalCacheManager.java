@@ -35,8 +35,6 @@ public class HierarchicalCacheManager
     
     private String configFile;
     
-    private String databaseId;
-    
     private static CacheProvider l1_provider;
     
     private static CacheProvider l2_provider;
@@ -329,16 +327,6 @@ public class HierarchicalCacheManager
     public void setConfigFile(String configFile)
     {
         this.configFile = configFile;
-    }
-    
-    public String getDatabaseId()
-    {
-        return databaseId;
-    }
-    
-    public void setDatabaseId(String databaseId)
-    {
-        this.databaseId = databaseId;
     }
     
 }
