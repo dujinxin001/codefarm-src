@@ -28,7 +28,7 @@ public class ReflectUtils
         Class<?> klass = type;
         while (klass != null && klass != Object.class)
         { // need to iterated thought hierarchy in order to retrieve
-          // methods from above the current instance
+              // methods from above the current instance
           // iterate though the list of methods declared in the class represented by klass
           // variable, and add those annotated with the specified annotation
             final List<Method> allMethods = new ArrayList<Method>(
@@ -56,7 +56,7 @@ public class ReflectUtils
         Class<?> klass = type;
         while (klass != null && klass != Object.class)
         { // need to iterated thought hierarchy in order to retrieve
-          // methods from above the current instance
+              // methods from above the current instance
           // iterate though the list of methods declared in the class represented by klass
           // variable, and add those annotated with the specified annotation
             final List<Field> allFields = new ArrayList<Field>(

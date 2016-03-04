@@ -24,14 +24,18 @@ public class ClassLoaderUtil
         //        configStream = getResource(ClassLoaderUtil.class.getClassLoader(),
         //                configFile);
         
-        InputStream configStream = ResourcePatternUtils.getResourcePatternResolver(new PathMatchingResourcePatternResolver())
+        InputStream configStream = ResourcePatternUtils
+                .getResourcePatternResolver(
+                        new PathMatchingResourcePatternResolver())
                 .getResource(configFile)
                 .getInputStream();
         if (configStream == null)
-            throw new FileNotFoundException("Cannot find "
-                    + ClassLoaderUtil.class.getClassLoader()
-                            .getResource(configFile)
-                            .toExternalForm() + " !!!");
+            throw new FileNotFoundException(
+                    "Cannot find "
+                            + ClassLoaderUtil.class.getClassLoader()
+                                    .getResource(configFile)
+                                    .toExternalForm()
+                            + " !!!");
         return configStream;
     }
     

@@ -187,7 +187,8 @@ public class Collections3
     /**
      * 返回a+b的新List.
      */
-    public static <T> List<T> union(final Collection<T> a, final Collection<T> b)
+    public static <T> List<T> union(final Collection<T> a,
+            final Collection<T> b)
     {
         List<T> result = new ArrayList<T>(a);
         result.addAll(b);

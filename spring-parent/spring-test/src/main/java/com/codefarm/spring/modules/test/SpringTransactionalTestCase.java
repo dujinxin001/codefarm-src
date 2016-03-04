@@ -1,4 +1,4 @@
-package com.sxj.spring.modules.test;
+package com.codefarm.spring.modules.test;
 
 import javax.sql.DataSource;
 

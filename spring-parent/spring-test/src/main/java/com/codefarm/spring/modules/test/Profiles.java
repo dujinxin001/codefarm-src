@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package com.sxj.spring.modules.test;
+package com.codefarm.spring.modules.test;
 
 /**
  * Spring profile 常用方法与profile名称。

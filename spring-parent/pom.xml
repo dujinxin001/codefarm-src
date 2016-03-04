@@ -148,6 +148,7 @@
 		<dozer.version>5.5.1</dozer.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<bouncycastle.version>140</bouncycastle.version>
+		<codefarm.version>4.2.4</codefarm.version>
 	</properties>
 	<build>
 		<plugins>

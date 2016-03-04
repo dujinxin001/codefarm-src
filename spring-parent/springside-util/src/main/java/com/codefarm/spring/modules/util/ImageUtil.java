@@ -135,12 +135,8 @@ public class ImageUtil
             int width = (int) (srcImage.getWidth() * xscale);
             int height = (int) (srcImage.getHeight() * yscale);
             BufferedImage image = new BufferedImage(width, height, 1);
-            image.getGraphics().drawImage(srcImage.getScaledInstance(width,
-                    height,
-                    16),
-                    0,
-                    0,
-                    null);
+            image.getGraphics().drawImage(
+                    srcImage.getScaledInstance(width, height, 16), 0, 0, null);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
             encoder.encode(image);
@@ -561,27 +557,25 @@ public class ImageUtil
             int y;
             int bianju = 60;
             int[][][] positions = {
-                    {
-                            { bianju, bianju },
-                            { (width - (pressText.length() * fontSize)) / 2,
-                                    bianju },
+                    { { bianju, bianju }, {
+                            (width - (pressText.length() * fontSize)) / 2,
+                            bianju },
                             { width - (pressText.length() * fontSize) - bianju,
                                     bianju } },
-                    {
-                            { bianju, (height - fontSize) / 2 },
+                    { { bianju, (height - fontSize) / 2 },
                             { (width - (pressText.length() * fontSize)) / 2,
                                     (height - fontSize) / 2 },
                             { width - (pressText.length() * fontSize) - bianju,
                                     (height - fontSize) / 2 } },
-                    {
-                            { bianju, height - fontSize - bianju },
+                    { { bianju, height - fontSize - bianju },
                             { (width - (pressText.length() * fontSize)) / 2,
                                     height - fontSize - bianju },
                             { width - (pressText.length() * fontSize) - bianju,
                                     height - fontSize - bianju } } };
             if (position == 0)
             {
-                position = com.codefarm.spring.modules.util.NumberUtils.getRandomIntInMax(9) + 1;
+                position = com.codefarm.spring.modules.util.NumberUtils
+                        .getRandomIntInMax(9) + 1;
             }
             x = positions[((position - 1) / 3)][((position - 1) % 3)][0];
             y = positions[((position - 1) / 3)][((position - 1) % 3)][1];
@@ -637,7 +631,8 @@ public class ImageUtil
         try
         {
             long aa = System.currentTimeMillis();
-            scaleFixedImageFile("D:/My Documents/My Pictures/279106_hyFFzuu8_o.jpg",
+            scaleFixedImageFile(
+                    "D:/My Documents/My Pictures/279106_hyFFzuu8_o.jpg",
                     "D:/My Documents/My Pictures/dq5nds_001_small2.jpg",
                     100,
                     100,

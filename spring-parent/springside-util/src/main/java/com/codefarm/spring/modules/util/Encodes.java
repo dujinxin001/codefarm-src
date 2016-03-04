@@ -29,7 +29,8 @@ public class Encodes
     
     private static final String DEFAULT_URL_ENCODING = "UTF-8";
     
-    private static final char[] BASE62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
+    private static final char[] BASE62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+            .toCharArray();
     
     private static final char[] BASE16_UPPER = "0123456789ABCDEF".toCharArray();
     

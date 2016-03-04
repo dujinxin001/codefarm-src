@@ -30,7 +30,8 @@ import org.slf4j.LoggerFactory;
 public class LocalFileUtil
 {
     
-    private static final Logger logger = LoggerFactory.getLogger(LocalFileUtil.class);
+    private static final Logger logger = LoggerFactory
+            .getLogger(LocalFileUtil.class);
     
     /**
      * 获取文件扩展名
@@ -216,8 +217,8 @@ public class LocalFileUtil
     {
         try
         {
-            BufferedReader br = new BufferedReader(new InputStreamReader(is,
-                    encoding));
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(is, encoding));
             StringBuffer sb = new StringBuffer();
             String line;
             while ((line = br.readLine()) != null)
@@ -247,8 +248,8 @@ public class LocalFileUtil
         try
         {
             InputStream is = new FileInputStream(fileName);
-            BufferedReader br = new BufferedReader(new InputStreamReader(is,
-                    encoding));
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(is, encoding));
             StringBuffer sb = new StringBuffer();
             int c = br.read();
             if ((!(encoding.equalsIgnoreCase("utf-8"))) || (c != 65279))
@@ -284,8 +285,8 @@ public class LocalFileUtil
         try
         {
             URL url = new URL(urlPath);
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    url.openStream(), encoding));
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(url.openStream(), encoding));
             StringBuffer sb = new StringBuffer();
             String line;
             while ((line = in.readLine()) != null)
@@ -411,7 +412,8 @@ public class LocalFileUtil
      * @param filter
      * @return
      */
-    public static boolean copy(String oldPath, String newPath, FileFilter filter)
+    public static boolean copy(String oldPath, String newPath,
+            FileFilter filter)
     {
         File oldFile = new File(oldPath);
         File[] oldFiles = oldFile.listFiles(filter);
@@ -492,8 +494,7 @@ public class LocalFileUtil
         catch (Exception e)
         {
             logger.warn("复制单个文件" + oldFile.getPath() + "操作出错,错误原因:"
-                    + e.getMessage(),
-                    LocalFileUtil.class);
+                    + e.getMessage(), LocalFileUtil.class);
             return false;
         }
         return true;

@@ -451,7 +451,8 @@ public class StringUtils
         
         if (distance <= 0)
         {
-            System.out.println("StringTools:addSymbolAtleft() --> Warinning ,the length is equal or larger than fullLength!");
+            System.out.println(
+                    "StringTools:addSymbolAtleft() --> Warinning ,the length is equal or larger than fullLength!");
         }
         
         else
@@ -494,7 +495,8 @@ public class StringUtils
         
         if (length >= fullLength)
         {
-            System.out.println("StringTools:addSymbolAtRight() --> Warinning ,the length is equal or larger than fullLength!");
+            System.out.println(
+                    "StringTools:addSymbolAtRight() --> Warinning ,the length is equal or larger than fullLength!");
         }
         
         else

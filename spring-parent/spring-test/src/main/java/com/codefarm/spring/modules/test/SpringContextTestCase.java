@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package com.sxj.spring.modules.test;
+package com.codefarm.spring.modules.test;
 
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;

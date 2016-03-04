@@ -13,12 +13,16 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Case formats utils.
  */
-public class CaseFormatUtils {
-	
-	/**
-	 * camel case convert to under score case
-	 */
-	public static String camelToUnderScore(String camelCase){
-		return StringUtils.join(StringUtils.splitByCharacterTypeCamelCase(camelCase), "_").toLowerCase();
-	}
+public class CaseFormatUtils
+{
+    
+    /**
+     * camel case convert to under score case
+     */
+    public static String camelToUnderScore(String camelCase)
+    {
+        return StringUtils
+                .join(StringUtils.splitByCharacterTypeCamelCase(camelCase), "_")
+                .toLowerCase();
+    }
 }

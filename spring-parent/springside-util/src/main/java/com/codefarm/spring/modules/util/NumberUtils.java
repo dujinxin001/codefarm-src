@@ -34,7 +34,8 @@ public class NumberUtils
     {
         List<BigDecimal> splitDecimalForList = splitDecimalForList(sourDecimal,
                 splitDecimal);
-        return splitDecimalForList.toArray(new BigDecimal[splitDecimalForList.size()]);
+        return splitDecimalForList
+                .toArray(new BigDecimal[splitDecimalForList.size()]);
         
     }
     
@@ -86,7 +87,8 @@ public class NumberUtils
             {
                 throw new RuntimeException("ec.commons.topupamounterror");
             }
-            BigDecimal[] bdFeeDividedBy_i = sourDecimal.divideAndRemainder(splitDecimal[i]);
+            BigDecimal[] bdFeeDividedBy_i = sourDecimal
+                    .divideAndRemainder(splitDecimal[i]);
             int split_i_leng = bdFeeDividedBy_i[0].intValue();
             for (int l = 0; l < split_i_leng; l++)
             {
@@ -97,7 +99,8 @@ public class NumberUtils
             {
                 throw new RuntimeException("ec.commons.topupamounterror");
             }
-            sourDecimal = sourDecimal.add((splitDecimal[i].multiply(bdFeeDividedBy_i[0])).negate());
+            sourDecimal = sourDecimal.add(
+                    (splitDecimal[i].multiply(bdFeeDividedBy_i[0])).negate());
             splitDecimal_i = splitDecimal[i];
         }
         
@@ -279,9 +282,8 @@ public class NumberUtils
     
     public static boolean isDigital(char c)
     {
-        if (c == '1' || c == '2' || c == '3' || c == '4' || c == '5'
-                || c == '6' || c == '7' || c == '8' || c == '9' || c == '0'
-                || c == '.')
+        if (c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6'
+                || c == '7' || c == '8' || c == '9' || c == '0' || c == '.')
         {
             return true;
         }
@@ -459,7 +461,7 @@ public class NumberUtils
             if (idx == 0 && vidx > 0)
             {
                 prefix += vunit[vidx - 1];
-            }// 段结束位置应该加上段名如万,亿
+            } // 段结束位置应该加上段名如万,亿
         }
         
         if (prefix.length() > 0)
@@ -493,8 +495,8 @@ public class NumberUtils
         {
             if (!isLong(longStrArr[i]))
             {
-                throw new RuntimeException("无法将字符串[" + longStrArr[i]
-                        + "]转换为长整型");
+                throw new RuntimeException(
+                        "无法将字符串[" + longStrArr[i] + "]转换为长整型");
             }
             
             longArr[i] = Long.parseLong(longStrArr[i]);
