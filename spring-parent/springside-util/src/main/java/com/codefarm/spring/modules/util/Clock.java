@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package com.sxj.spring.modules.util;
+package com.codefarm.spring.modules.util;
 
 /**
  * 日期提供者，使用它而不是直接取得系统时间，方便测试。

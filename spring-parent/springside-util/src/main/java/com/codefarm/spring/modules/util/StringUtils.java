@@ -1,4 +1,4 @@
-package com.sxj.spring.modules.util;
+package com.codefarm.spring.modules.util;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;

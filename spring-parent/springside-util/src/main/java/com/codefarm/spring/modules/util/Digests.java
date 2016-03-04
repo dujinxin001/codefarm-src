@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package com.sxj.spring.modules.util;
+package com.codefarm.spring.modules.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +13,7 @@ import java.security.SecureRandom;
 
 import org.apache.commons.lang3.Validate;
 
-import com.sxj.spring.modules.util.Exceptions;
+import com.codefarm.spring.modules.util.Exceptions;
 
 /**
  * 支持SHA-1/MD5消息摘要的工具类.

@@ -1,4 +1,4 @@
-package com.sxj.spring.modules.util.serializer;
+package com.codefarm.spring.modules.util.serializer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import com.sxj.spring.modules.util.Encodes;
+import com.codefarm.spring.modules.util.Encodes;
 
 public class JdkSerializer implements Serializer
 {

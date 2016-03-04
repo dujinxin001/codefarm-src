@@ -1,4 +1,4 @@
-package com.sxj.spring.modules.util.serializer;
+package com.codefarm.spring.modules.util.serializer;
 
 import java.io.IOException;
 

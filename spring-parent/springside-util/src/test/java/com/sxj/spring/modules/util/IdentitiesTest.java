@@ -2,6 +2,8 @@ package com.sxj.spring.modules.util;
 
 import org.junit.Test;
 
+import com.codefarm.spring.modules.util.Identities;
+
 public class IdentitiesTest
 {
     

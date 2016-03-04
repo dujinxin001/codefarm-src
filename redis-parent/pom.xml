@@ -13,6 +13,7 @@
   	<java.version>1.7</java.version>
   	<slf4j.version>1.7.13</slf4j.version>
   	<jedis.version>2.8.0</jedis.version>
+  	<codefarm.version>4.2.4</codefarm.version>
   </properties>
   <build>
 		<plugins>
@@ -54,9 +55,9 @@
   		<version>${slf4j.version}</version>
   	</dependency>
   	<dependency>
-  		<groupId>com.sxj</groupId>
+  		<groupId>com.codefarm</groupId>
   		<artifactId>spring-util</artifactId>
-  		<version>4.2.3</version>
+  		<version>${codefarm.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>junit</groupId>

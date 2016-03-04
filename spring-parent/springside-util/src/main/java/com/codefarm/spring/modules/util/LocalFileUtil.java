@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sxj.spring.modules.util;
+package com.codefarm.spring.modules.util;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;

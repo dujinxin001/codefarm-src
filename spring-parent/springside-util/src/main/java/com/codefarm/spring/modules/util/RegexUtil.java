@@ -1,4 +1,4 @@
-package com.sxj.spring.modules.util;
+package com.codefarm.spring.modules.util;
 
 import java.util.ArrayList;
 import java.util.List;

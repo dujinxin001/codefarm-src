@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sxj.spring.modules.util;
+package com.codefarm.spring.modules.util;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -581,7 +581,7 @@ public class ImageUtil
                                     height - fontSize - bianju } } };
             if (position == 0)
             {
-                position = com.sxj.spring.modules.util.NumberUtils.getRandomIntInMax(9) + 1;
+                position = com.codefarm.spring.modules.util.NumberUtils.getRandomIntInMax(9) + 1;
             }
             x = positions[((position - 1) / 3)][((position - 1) % 3)][0];
             y = positions[((position - 1) / 3)][((position - 1) % 3)][1];
