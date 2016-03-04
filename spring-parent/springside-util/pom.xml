@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>com.java</groupId>
 			<artifactId>rt</artifactId>
-			<version>1.7</version>
+			<version>1.8-x64</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
