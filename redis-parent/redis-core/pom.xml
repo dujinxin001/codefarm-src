@@ -4,9 +4,9 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.sxj</groupId>
+		<groupId>com.codefarm</groupId>
 		<artifactId>redis-parent</artifactId>
-		<version>1.0</version>
+		<version>${codefarm.version}</version>
 	</parent>
 	<artifactId>redis-core</artifactId>
 	<name>redis-core</name>
@@ -20,15 +20,14 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>2.4.2</version>
 		</dependency>
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>spring-util</artifactId>
-			<version>4.2.3</version>
+		<dependency> 
+			<groupId>com.codefarm</groupId>
+			<artifactId>spring-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>4.2.3</version>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-common</artifactId>
+			<version>4.0.17.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
@@ -38,17 +37,15 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.7</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>redis-provider</artifactId>
-			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+		</dependency>
+		<dependency>
+			<groupId>com.codefarm</groupId>
+			<artifactId>redis-provider</artifactId>
+			<version>${codefarm.version}</version>
 		</dependency>
 	</dependencies>
 </project>

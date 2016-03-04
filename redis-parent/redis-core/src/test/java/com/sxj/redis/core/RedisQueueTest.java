@@ -8,7 +8,8 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sxj.redis.core.collections.RedisCollections;
+import com.codefarm.redis.core.RQueue;
+import com.codefarm.redis.core.collections.RedisCollections;
 
 public class RedisQueueTest
 {

@@ -4,9 +4,9 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.sxj</groupId>
+		<groupId>com.codefarm</groupId>
 		<artifactId>cache.parent</artifactId>
-		<version>1.0</version>
+		<version>${codefarm.version}</version>
 	</parent>
 	<artifactId>cache.ehcache</artifactId>
 	<name>cache.ehcache</name>
@@ -16,9 +16,9 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>com.sxj</groupId>
+			<groupId>com.codefarm</groupId>
 			<artifactId>cache.core</artifactId>
-			<version>1.0</version>
+			<version>${codefarm.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

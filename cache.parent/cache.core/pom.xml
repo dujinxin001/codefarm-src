@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.sxj</groupId>
+	<parent> 
+		<groupId>com.codefarm</groupId>
 		<artifactId>cache.parent</artifactId>
-		<version>1.0</version>
+		<version>${codefarm.version}</version>
 	</parent>
 	<artifactId>cache.core</artifactId>
 	<name>cache.core</name>
@@ -18,7 +18,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
@@ -31,7 +30,7 @@
 			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sxj</groupId>
+			<groupId>com.codefarm</groupId>
 			<artifactId>spring-util</artifactId>
 		</dependency>
 	</dependencies>

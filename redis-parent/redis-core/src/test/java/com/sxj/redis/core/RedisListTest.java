@@ -7,7 +7,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sxj.redis.core.collections.RedisCollections;
+import com.codefarm.redis.core.RList;
+import com.codefarm.redis.core.collections.RedisCollections;
 
 public class RedisListTest
 {

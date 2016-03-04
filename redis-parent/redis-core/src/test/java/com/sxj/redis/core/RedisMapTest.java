@@ -8,7 +8,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sxj.redis.core.collections.RedisCollections;
+import com.codefarm.redis.core.RMap;
+import com.codefarm.redis.core.collections.RedisCollections;
 
 public class RedisMapTest
 {

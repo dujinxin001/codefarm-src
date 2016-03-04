@@ -3,7 +3,9 @@ package com.sxj.redis.core;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sxj.redis.core.pubsub.RedisTopics;
+import com.codefarm.redis.core.MessageListener;
+import com.codefarm.redis.core.RTopic;
+import com.codefarm.redis.core.pubsub.RedisTopics;
 
 public class RedisTopicTest
 {

@@ -3,9 +3,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.sxj</groupId>
+    <groupId>com.codefarm</groupId>
     <artifactId>redis-parent</artifactId>
-    <version>1.0</version>
+    <version>${codefarm.version}</version>
   </parent>
   <artifactId>redis-provider</artifactId>
   <name>redis-provider</name>
@@ -17,8 +17,14 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
+    </dependency>
+    <dependency>
+    	<groupId>redis.clients</groupId>
+    	<artifactId>jedis</artifactId>
+    </dependency>
+    <dependency>
+    	<groupId>com.codefarm</groupId>
+    	<artifactId>spring-util</artifactId>
     </dependency>
   </dependencies>
 </project>

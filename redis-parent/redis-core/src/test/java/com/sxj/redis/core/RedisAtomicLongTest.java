@@ -3,7 +3,8 @@ package com.sxj.redis.core;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sxj.redis.core.concurrent.RedisConcurrent;
+import com.codefarm.redis.core.RAtomicLong;
+import com.codefarm.redis.core.concurrent.RedisConcurrent;
 
 public class RedisAtomicLongTest
 {

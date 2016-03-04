@@ -9,7 +9,7 @@ import org.springframework.core.io.support.ResourcePatternUtils;
 
 public class ClassLoaderUtil
 {
-    public static InputStream getResource(String configFile) throws IOException
+    public static InputStream getResourceAsStream(String configFile) throws IOException
     {
         //        InputStream configStream = ClassLoaderUtil.class.getClassLoader()
         //                .getParent()
