@@ -8,8 +8,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import com.sxj.mybatis.shard.dao.Shard2Mapper;
-import com.sxj.mybatis.shard.entity.Shard2;
+import com.codefarm.mybatis.shard.dao.Shard2Mapper;
+import com.codefarm.mybatis.shard.entity.Shard2;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring-shard.xml" })

@@ -18,7 +18,6 @@
 		<spring.version>4.2.4.RELEASE</spring.version>
 		<java.version>1.8</java.version>
 		<codefarm.version>4.2.4</codefarm.version>
-		<mybatis.parent>4.2.4</mybatis.parent>
 		<junit.version>4.11</junit.version>
 	</properties>
 	<dependencyManagement>

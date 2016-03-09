@@ -4,16 +4,15 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.sxj</groupId>
+		<groupId>com.codefarm</groupId>
 		<artifactId>mybatis-parent</artifactId>
-		<version>3.2.2</version>
+		<version>${codefarm.version}</version>
 	</parent>
 	<artifactId>mybatis-shard</artifactId>
 	<name>mybatis-shard</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.version>4.0.6.RELEASE</spring.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -45,12 +44,12 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sxj</groupId>
+			<groupId>com.codefarm</groupId>
 			<artifactId>mybatis-orm</artifactId>
-			<version>${mybatis.parent}</version>
+			<version>${codefarm.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sxj</groupId>
+			<groupId>com.codefarm</groupId>
 			<artifactId>spring-util</artifactId>
 		</dependency>
 		<dependency>
@@ -66,17 +65,16 @@
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
-			<version>1.8.1</version>
+			<version>1.8.8</version>
 		</dependency>
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
-			<version>1.8.1</version>
+			<version>1.8.8</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.31</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
