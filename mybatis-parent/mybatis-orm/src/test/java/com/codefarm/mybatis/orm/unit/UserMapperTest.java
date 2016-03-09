@@ -21,48 +21,48 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.codefarm.mybatis.orm.mapper.UserMapper;
-import com.codefarm.mybatis.orm.model.User;
+import com.codefarm.mybatis.orm.model.TestUser;
 
 /**
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
 @ActiveProfiles("test")
-public class MyBatisTest
+public class UserMapperTest
 {
     
     @Autowired(required = true)
     private UserMapper userMapper;
     
-    private static User buildUser()
+    private static TestUser buildUser()
     {
-        User user = new User();
+        TestUser user = new TestUser();
         user.setUserName("makersoft");
         return user;
     }
     
-    @Test
     @Transactional
     public void testInsert()
     {
-        User user = buildUser();
+        TestUser user = buildUser();
+        user.setId(13333333l);
         int rows = userMapper.insertUser(user);
-        
+        user.setUserName("2");
+        userMapper.insert(user);
         assertTrue("Insert entity not success!", rows > 0);
         assertNotNull("Id can not be null!", user.getId());
         
     }
     
-    @Test
     @Transactional
     public void testUpdate()
     {
-        User entity = userMapper.get(1L);
+        TestUser entity = userMapper.get(1L);
         assertNotNull("selected entity can not be null!", entity);
         
-        User newUser = new User(entity.getId());
+        TestUser newUser = new TestUser(entity.getId());
         newUser.setUserName("my_name");
         int rows = userMapper.update(newUser);
         
@@ -73,15 +73,17 @@ public class MyBatisTest
     @Transactional
     public void testGet()
     {
-        User entity = userMapper.get(1L);
+        TestUser entity = userMapper.get(17L);
+        System.out.println(entity.getUserName());
+        entity = userMapper.getById(18L);
+        System.out.println(entity.getUserName());
         assertNotNull("selected entity can not be null!", entity);
     }
     
-    @Test
     @Transactional
     public void testDelete()
     {
-        User user = userMapper.get(1L);
+        TestUser user = userMapper.get(1L);
         user = userMapper.get(user.getId());
         
         int rows = userMapper.delete(user);

@@ -82,9 +82,14 @@
 	</build>
 	<distributionManagement>
 		<repository>
-			<id>releases</id>
+			<id>fhcard</id>
 			<name>Local Nexus Repository</name>
-			<url>http://192.168.1.11:8080/nexus/content/repositories/releases</url>
+			<url>http://scm.fhcard.com:8081/nexus/content/repositories/fhcard/</url>
 		</repository>
+		<!-- <snapshotRepository>
+			<id>nexus-snapshots</id>
+			<name>Local Nexus Repository</name>
+			<url>http://192.168.1.217:8080/nexus/content/groups/public</url>
+		</snapshotRepository> -->
 	</distributionManagement>
 </project>

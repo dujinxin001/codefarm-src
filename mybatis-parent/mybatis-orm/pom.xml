@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.codefarm</groupId>
 		<artifactId>mybatis-parent</artifactId>
-		<version>${codefarm.version}</version>
+		<version>4.2.4</version>
 	</parent>
 	<artifactId>mybatis-orm</artifactId>
 	<name>mybatis-orm</name>
@@ -15,6 +15,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
+		<!-- spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -35,23 +36,49 @@
 			<artifactId>spring-tx</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+		<!-- end spring -->
+		
+		<!-- Test -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>javassist</groupId>
-			<artifactId>javassist</artifactId>
-			<version>3.12.1.GA</version>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc14</artifactId>
+			<version>14</version>
+			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.codefarm</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${codefarm.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<!-- end Test -->
+		
+		<!-- logger -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.9</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- end logger -->
+		
+		<!-- MyBatis -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -59,15 +86,23 @@
 			<version>1.2.2</version>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-		
-		<dependency>
 			<groupId>com.codefarm</groupId>
 			<artifactId>mybatis-pagination</artifactId>
 			<version>${codefarm.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.codefarm</groupId>
+			<artifactId>mybatis-cache</artifactId>
+			<version>${codefarm.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- end MyBatis -->
 		<dependency>
 			<groupId>com.codefarm</groupId>
 			<artifactId>spring-util</artifactId>
@@ -83,15 +118,16 @@
 			<version>3.2.1</version>
 		</dependency>
 		<dependency>
-			<groupId>com.codefarm</groupId>
-			<artifactId>mybatis-cache</artifactId>
-			<version>${codefarm.version}</version>
-			<scope>test</scope>
+			<groupId>javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.12.1.GA</version>
 		</dependency>
 		<dependency>
-			<groupId>com.codefarm</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${codefarm.version}</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
 		</dependency>
+
+		
 	</dependencies>
 </project>

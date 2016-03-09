@@ -5,16 +5,16 @@
 
 <configuration>
 	<properties>
-		<property name="dialect" value="mysql" />
+		<property name="dialect" value="oracle" />
 	</properties>
 	<settings>
 		<setting name="lazyLoadingEnabled" value="false" />
 	</settings>
 	<plugins>
-		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor"></plugin>
+		<plugin interceptor="com.codefarm.mybatis.pagination.interceptor.PaginationInterceptor"></plugin>
 	</plugins>
 	<mappers>
 		<mapper resource="mybatis/mapper/UserMapper.xml" />
-		<mapper resource="mybatis/mapper/FunctionMapper.xml" />
+		<!-- <mapper resource="mybatis/mapper/FunctionMapper.xml" /> -->
 	</mappers>
 </configuration>

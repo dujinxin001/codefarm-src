@@ -42,6 +42,8 @@ import org.apache.ibatis.scripting.xmltags.SqlNode;
 import org.apache.ibatis.scripting.xmltags.TextSqlNode;
 import org.apache.ibatis.scripting.xmltags.TrimSqlNode;
 import org.apache.ibatis.session.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ReflectionUtils.FieldCallback;
 import org.springframework.util.ReflectionUtils.FieldFilter;
@@ -65,6 +67,7 @@ import com.codefarm.mybatis.orm.annotations.Transient;
 import com.codefarm.mybatis.orm.annotations.Update;
 import com.codefarm.mybatis.orm.annotations.Version;
 import com.codefarm.mybatis.orm.keygen.Jdbc4KeyGenerator;
+import com.codefarm.mybatis.orm.keygen.SequenceKeyGenerator;
 import com.codefarm.mybatis.orm.keygen.ShardJdbc4KeyGenerator;
 import com.codefarm.mybatis.orm.keygen.ShardKeyGenerator;
 import com.codefarm.mybatis.orm.keygen.ShardSnGenerator;
@@ -82,6 +85,8 @@ import com.codefarm.spring.modules.util.ReflectUtils;
  */
 public class GenericStatementBuilder extends BaseBuilder
 {
+    private static final Logger logger = LoggerFactory
+            .getLogger(GenericStatementBuilder.class);
     
     private MapperBuilderAssistant assistant;
     
@@ -91,29 +96,47 @@ public class GenericStatementBuilder extends BaseBuilder
     
     private static Map<String, SnGenerator> snGenerators = new HashMap<String, SnGenerator>();
     
+    /**
+     * 是否包含SN属性
+     */
     private boolean containSn = false;
     
+    /**
+     * 实体类
+     */
     private Class<?> entityClass;
     
     private String databaseId;
     
     private LanguageDriver lang;
     
-    ////////~~~~~~~~~~~~~~~~~
+    /**
+     * 实体对应的数据库表名
+     */
     private String tableName;
     
-    ////////~~~~~~~~~~~~~~~~~
+    /**
+     * 主键属性
+     */
     private Field idField;
     
+    /**
+     * 乐观锁属性
+     */
     private Field versionField;
     
     private List<Field> columnFields = new ArrayList<Field>();
     
-    //
+    /**
+     * Mapper接口
+     */
     private Class<?> mapperType;
     
     private Entity entity;
     
+    /**
+     * Mybatis注册名称空间
+     */
     private String namespace;
     
     private static final String ITEM = "item";
@@ -125,7 +148,86 @@ public class GenericStatementBuilder extends BaseBuilder
     {
         super(configuration);
         this.entityClass = entityClass;
+        readConfiguration(configuration);
+        initAssistant(configuration, entityClass);
+        parseEntity(entityClass);
+    }
+    
+    /**
+     * @param entityClass
+     * 解析Entity
+     */
+    private void parseEntity(final Class<?> entityClass)
+    {
+        Table table = entityClass.getAnnotation(Table.class);
+        //默认表名，大写字母转为下划线：TestUserEntity==>test_user_entity
+        if (table == null)
+        {
+            tableName = CaseFormatUtils
+                    .camelToUnderScore(entityClass.getSimpleName());
+        }
+        else
+        {
+            tableName = table.name();
+        }
+        //主键属性
+        idField = AnnotationUtils.findDeclaredFieldWithAnnoation(Id.class,
+                entityClass);
+        //乐观锁属性
+        versionField = AnnotationUtils
+                .findDeclaredFieldWithAnnoation(Version.class, entityClass);
+        //其他表属性
+        ReflectionUtils.doWithFields(entityClass, new FieldCallback()
+        {
+            
+            @Override
+            public void doWith(Field field)
+                    throws IllegalArgumentException, IllegalAccessException
+            {
+                if (field.isAnnotationPresent(Column.class)
+                        || field.isAnnotationPresent(Id.class))
+                    columnFields.add(field);
+                if (field.isAnnotationPresent(Sn.class))
+                    containSn = true;
+                
+            }
+        }, new FieldFilter()
+        {
+            
+            @Override
+            public boolean matches(Field field)
+            {
+                if (Modifier.isStatic(field.getModifiers())
+                        || Modifier.isFinal(field.getModifiers()))
+                {
+                    return false;
+                }
+                
+                for (Annotation annotation : field.getAnnotations())
+                {
+                    if (Transient.class.isAssignableFrom(annotation.getClass()))
+                    {
+                        
+                        return false;
+                    }
+                }
+                
+                return true;
+            }
+        });
+    }
+    
+    private void readConfiguration(Configuration configuration)
+    {
+        //是否分库
         sharded = ConfigurationProperties.isSharded(configuration);
+        databaseId = super.getConfiguration().getDatabaseId();
+        lang = super.getConfiguration().getDefaultScriptingLanuageInstance();
+    }
+    
+    private void initAssistant(Configuration configuration,
+            final Class<?> entityClass)
+    {
         String resource = entityClass.getName().replace('.', '/')
                 + ".java (best guess)";
         assistant = new MapperBuilderAssistant(configuration, resource);
@@ -148,71 +250,6 @@ public class GenericStatementBuilder extends BaseBuilder
                 assistant.useCacheRef(name);
                 break;
             }
-        
-        databaseId = super.getConfiguration().getDatabaseId();
-        lang = super.getConfiguration().getDefaultScriptingLanuageInstance();
-        
-        //~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        Table table = entityClass.getAnnotation(Table.class);
-        if (table == null)
-        {
-            tableName = CaseFormatUtils
-                    .camelToUnderScore(entityClass.getSimpleName());
-        }
-        else
-        {
-            tableName = table.name();
-        }
-        
-        ///~~~~~~~~~~~~~~~~~~~~~~
-        idField = AnnotationUtils.findDeclaredFieldWithAnnoation(Id.class,
-                entityClass);
-        if (!sharded && (this.idField.isAnnotationPresent(GeneratedValue.class))
-                && (this.idField.getAnnotation(GeneratedValue.class)
-                        .strategy() == GenerationType.UUID))
-            columnFields.add(idField);
-        else
-            columnFields.add(idField);
-        versionField = AnnotationUtils
-                .findDeclaredFieldWithAnnoation(Version.class, entityClass);
-        
-        ReflectionUtils.doWithFields(entityClass, new FieldCallback()
-        {
-            
-            @Override
-            public void doWith(Field field)
-                    throws IllegalArgumentException, IllegalAccessException
-            {
-                if (field.isAnnotationPresent(Column.class))
-                    columnFields.add(field);
-                if (field.isAnnotationPresent(Sn.class))
-                    containSn = true;
-                
-            }
-        }, new FieldFilter()
-        {
-            
-            @Override
-            public boolean matches(Field field)
-            {
-                if (Modifier.isStatic(field.getModifiers())
-                        || Modifier.isFinal(field.getModifiers()))
-                {
-                    return false;
-                }
-                
-                for (Annotation annotation : field.getAnnotations())
-                {
-                    if (Transient.class.isAssignableFrom(annotation.getClass())
-                            || Id.class.isAssignableFrom(annotation.getClass()))
-                    {
-                        return false;
-                    }
-                }
-                
-                return true;
-            }
-        });
     }
     
     private String getColumnNameByField(Field field)
@@ -274,7 +311,6 @@ public class GenericStatementBuilder extends BaseBuilder
     
     public void build()
     {
-        String insertStatementId = "insert";
         String deleteStatementId = "delete";
         String updateStatementId = "update";
         String selectStatementId = "get";
@@ -282,139 +318,138 @@ public class GenericStatementBuilder extends BaseBuilder
         String batchDeleteStatementId = "batchDelete";
         String multiGetStatementId = "multiGet";
         
-        if (!mapperType.isAssignableFrom(Void.class))
+        buildInsertStatements();
+        
+        List<Method> deleteMethods = ReflectUtils
+                .findMethodsAnnotatedWith(mapperType, Delete.class);
+        if (Collections3.isNotEmpty(deleteMethods))
         {
-            List<Method> insertMethods = ReflectUtils
-                    .findMethodsAnnotatedWith(mapperType, Insert.class);
-            if (Collections3.isNotEmpty(insertMethods))
+            if (deleteMethods.size() > 1)
             {
-                if (insertMethods.size() > 1)
-                {
-                    throw new RuntimeException("有多个@Insert方法");
-                }
-                insertStatementId = insertMethods.get(0).getName();
-                if (!super.getConfiguration()
-                        .hasStatement(namespace + "." + insertStatementId))
-                {
-                    buildInsert(namespace + "." + insertStatementId);
-                }
+                throw new RuntimeException("有多个@Delete方法");
             }
-            
-            List<Method> deleteMethods = ReflectUtils
-                    .findMethodsAnnotatedWith(mapperType, Delete.class);
-            if (Collections3.isNotEmpty(deleteMethods))
+            deleteStatementId = deleteMethods.get(0).getName();
+            if (!super.getConfiguration()
+                    .hasStatement(namespace + "." + deleteStatementId))
             {
-                if (deleteMethods.size() > 1)
-                {
-                    throw new RuntimeException("有多个@Delete方法");
-                }
-                deleteStatementId = deleteMethods.get(0).getName();
-                if (!super.getConfiguration()
-                        .hasStatement(namespace + "." + deleteStatementId))
-                {
-                    buildDelete(namespace + "." + deleteStatementId);
-                }
+                buildDelete(namespace + "." + deleteStatementId);
             }
-            
-            List<Method> updateMethods = ReflectUtils
-                    .findMethodsAnnotatedWith(mapperType, Update.class);
-            if (Collections3.isNotEmpty(updateMethods))
-            {
-                if (updateMethods.size() > 1 && updateMethods.size() > 0)
-                {
-                    throw new RuntimeException("有多个@Update方法");
-                }
-                updateStatementId = updateMethods.get(0).getName();
-                if (!super.getConfiguration()
-                        .hasStatement(namespace + "." + updateStatementId))
-                {
-                    buildUpdate(namespace + "." + updateStatementId);
-                }
-            }
-            
-            List<Method> selectMethods = ReflectUtils
-                    .findMethodsAnnotatedWith(mapperType, Get.class);
-            if (Collections3.isNotEmpty(selectMethods))
-            {
-                if (selectMethods.size() > 1)
-                {
-                    throw new RuntimeException("有多个@Select方法");
-                }
-                selectStatementId = selectMethods.get(0).getName();
-                if (!super.getConfiguration()
-                        .hasStatement(namespace + "." + selectStatementId))
-                {
-                    buildSelect(namespace + "." + selectStatementId);
-                }
-            }
-            
-            List<Method> batchInsertMethods = ReflectUtils
-                    .findMethodsAnnotatedWith(mapperType, BatchInsert.class);
-            if (Collections3.isNotEmpty(batchInsertMethods))
-            {
-                if (batchInsertMethods.size() > 1)
-                {
-                    throw new RuntimeException("有多个@BatchInsert方法");
-                }
-                batchInsertStatementId = batchInsertMethods.get(0).getName();
-                if (!super.getConfiguration()
-                        .hasCache(namespace + "." + batchInsertStatementId))
-                {
-                    buildBatchInsert(namespace + "." + batchInsertStatementId,
-                            getCollection(batchInsertMethods.get(0)));
-                }
-            }
-            List<Method> batchDeleteMethods = ReflectUtils
-                    .findMethodsAnnotatedWith(mapperType, BatchDelete.class);
-            if (Collections3.isNotEmpty(batchDeleteMethods))
-            {
-                if (batchDeleteMethods.size() > 1)
-                {
-                    throw new RuntimeException("有多个@BatchDelete方法");
-                }
-                batchDeleteStatementId = batchDeleteMethods.get(0).getName();
-                if (!super.getConfiguration()
-                        .hasCache(namespace + "." + batchDeleteStatementId))
-                {
-                    buildBatchDelete(namespace + "." + batchDeleteStatementId,
-                            getCollection(batchDeleteMethods.get(0)));
-                }
-            }
-            List<Method> batchUpdateMethods = ReflectUtils
-                    .findMethodsAnnotatedWith(mapperType, BatchUpdate.class);
-            if (Collections3.isNotEmpty(batchUpdateMethods))
-            {
-                if (batchUpdateMethods.size() > 1)
-                {
-                    throw new RuntimeException("有多个@BatchUpdate方法");
-                }
-                batchDeleteStatementId = batchUpdateMethods.get(0).getName();
-                if (!super.getConfiguration()
-                        .hasCache(namespace + "." + batchDeleteStatementId))
-                {
-                    buildBatchUpdate(namespace + "." + batchDeleteStatementId,
-                            getCollection(batchUpdateMethods.get(0)));
-                }
-            }
-            List<Method> multiGetMethods = ReflectUtils
-                    .findMethodsAnnotatedWith(mapperType, MultiGet.class);
-            if (Collections3.isNotEmpty(multiGetMethods))
-            {
-                if (multiGetMethods.size() > 1)
-                {
-                    throw new RuntimeException("有多个@MultiGet方法");
-                }
-                multiGetStatementId = multiGetMethods.get(0).getName();
-                if (!super.getConfiguration()
-                        .hasCache(namespace + "." + multiGetStatementId))
-                {
-                    buildMultiGet(namespace + "." + multiGetStatementId,
-                            getCollection(multiGetMethods.get(0)));
-                }
-            }
-            
         }
         
+        List<Method> updateMethods = ReflectUtils
+                .findMethodsAnnotatedWith(mapperType, Update.class);
+        if (Collections3.isNotEmpty(updateMethods))
+        {
+            if (updateMethods.size() > 1 && updateMethods.size() > 0)
+            {
+                throw new RuntimeException("有多个@Update方法");
+            }
+            updateStatementId = updateMethods.get(0).getName();
+            if (!super.getConfiguration()
+                    .hasStatement(namespace + "." + updateStatementId))
+            {
+                buildUpdate(namespace + "." + updateStatementId);
+            }
+        }
+        
+        buildSelectStatements();
+        
+        List<Method> batchInsertMethods = ReflectUtils
+                .findMethodsAnnotatedWith(mapperType, BatchInsert.class);
+        if (Collections3.isNotEmpty(batchInsertMethods))
+        {
+            if (batchInsertMethods.size() > 1)
+            {
+                throw new RuntimeException("有多个@BatchInsert方法");
+            }
+            batchInsertStatementId = batchInsertMethods.get(0).getName();
+            if (!super.getConfiguration()
+                    .hasCache(namespace + "." + batchInsertStatementId))
+            {
+                buildBatchInsert(namespace + "." + batchInsertStatementId,
+                        getCollection(batchInsertMethods.get(0)));
+            }
+        }
+        List<Method> batchDeleteMethods = ReflectUtils
+                .findMethodsAnnotatedWith(mapperType, BatchDelete.class);
+        if (Collections3.isNotEmpty(batchDeleteMethods))
+        {
+            if (batchDeleteMethods.size() > 1)
+            {
+                throw new RuntimeException("有多个@BatchDelete方法");
+            }
+            batchDeleteStatementId = batchDeleteMethods.get(0).getName();
+            if (!super.getConfiguration()
+                    .hasCache(namespace + "." + batchDeleteStatementId))
+            {
+                buildBatchDelete(namespace + "." + batchDeleteStatementId,
+                        getCollection(batchDeleteMethods.get(0)));
+            }
+        }
+        List<Method> batchUpdateMethods = ReflectUtils
+                .findMethodsAnnotatedWith(mapperType, BatchUpdate.class);
+        if (Collections3.isNotEmpty(batchUpdateMethods))
+        {
+            if (batchUpdateMethods.size() > 1)
+            {
+                throw new RuntimeException("有多个@BatchUpdate方法");
+            }
+            batchDeleteStatementId = batchUpdateMethods.get(0).getName();
+            if (!super.getConfiguration()
+                    .hasCache(namespace + "." + batchDeleteStatementId))
+            {
+                buildBatchUpdate(namespace + "." + batchDeleteStatementId,
+                        getCollection(batchUpdateMethods.get(0)));
+            }
+        }
+        List<Method> multiGetMethods = ReflectUtils
+                .findMethodsAnnotatedWith(mapperType, MultiGet.class);
+        if (Collections3.isNotEmpty(multiGetMethods))
+        {
+            if (multiGetMethods.size() > 1)
+            {
+                throw new RuntimeException("有多个@MultiGet方法");
+            }
+            multiGetStatementId = multiGetMethods.get(0).getName();
+            if (!super.getConfiguration()
+                    .hasCache(namespace + "." + multiGetStatementId))
+            {
+                buildMultiGet(namespace + "." + multiGetStatementId,
+                        getCollection(multiGetMethods.get(0)));
+            }
+        }
+    }
+    
+    private void buildSelectStatements()
+    {
+        String selectStatementId;
+        List<Method> selectMethods = ReflectUtils
+                .findMethodsAnnotatedWith(mapperType, Get.class);
+        for (Method method : selectMethods)
+        {
+            selectStatementId = method.getName();
+            if (!super.getConfiguration()
+                    .hasStatement(namespace + "." + selectStatementId))
+            {
+                buildSelect(namespace + "." + selectStatementId);
+            }
+        }
+    }
+    
+    private void buildInsertStatements()
+    {
+        String insertStatementId;
+        List<Method> insertMethods = ReflectUtils
+                .findMethodsAnnotatedWith(mapperType, Insert.class);
+        for (Method method : insertMethods)
+        {
+            insertStatementId = method.getName();
+            if (!super.getConfiguration()
+                    .hasStatement(namespace + "." + insertStatementId))
+            {
+                buildInsert(namespace + "." + insertStatementId);
+            }
+        }
     }
     
     private String getCollection(Method method)
@@ -445,19 +480,7 @@ public class GenericStatementBuilder extends BaseBuilder
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 getMultiGetSql(collection));
         
-        String resultMap = null;
-        Iterator<String> resultMapNames = configuration.getResultMapNames()
-                .iterator();
-        while (resultMapNames.hasNext())
-        {
-            String name = resultMapNames.next();
-            ResultMap temp = configuration.getResultMap(name);
-            if (temp.getType().equals(entityClass))
-            {
-                resultMap = temp.getId();
-                break;
-            }
-        }
+        String resultMap = findResultMap();
         assistant.addMappedStatement(statementId,
                 sqlSource,
                 StatementType.PREPARED,
@@ -687,18 +710,7 @@ public class GenericStatementBuilder extends BaseBuilder
         
         SqlSource sqlSource = mappedStatement.getSqlSource();
         String parameterMap = null;
-        Iterator<String> parameterMapNames = configuration
-                .getParameterMapNames().iterator();
-        while (parameterMapNames.hasNext())
-        {
-            String name = parameterMapNames.next();
-            ParameterMap temp = configuration.getParameterMap(name);
-            if (temp.getType().equals(entityClass))
-            {
-                parameterMap = temp.getId();
-                break;
-            }
-        }
+        parameterMap = findParameterMap();
         assistant.addMappedStatement(mappedStatement.getId(),
                 sqlSource,
                 StatementType.PREPARED,
@@ -722,7 +734,7 @@ public class GenericStatementBuilder extends BaseBuilder
     
     private void buildInsert(String statementId)
     {
-        //
+        
         Integer timeout = null;
         Class<?> parameterType = entityClass;
         
@@ -735,57 +747,19 @@ public class GenericStatementBuilder extends BaseBuilder
         String keyColumn = null;
         
         Id id = AnnotationUtils.findDeclaredAnnotation(Id.class, entityClass);
-        GeneratedValue generatedValue = AnnotationUtils
-                .findDeclaredAnnotation(GeneratedValue.class, entityClass);
-        if (id != null)
+        
+        if (id != null && id.generatedKeys())
         {
             String keyStatementId = entityClass.getName() + ".insert"
                     + SelectKeyGenerator.SELECT_KEY_SUFFIX;
             if (!sharded)
             {
                 
-                if (containSn)
-                    snGenerators.put(statementId, new SnGenerator());
-                if (configuration.hasKeyGenerator(keyStatementId))
-                {
-                    keyGenerator = configuration
-                            .getKeyGenerator(keyStatementId);
-                }
-                else if (generatedValue != null)
-                {
-                    if (generatedValue.strategy() == GenerationType.UUID)
-                    {
-                        keyGenerator = new UuidKeyGenerator(
-                                generatedValue.length());
-                        
-                    }
-                }
-                else
-                {
-                    keyGenerator = id.generatedKeys() ? new Jdbc4KeyGenerator()
-                            : new NoKeyGenerator();
-                }
+                keyGenerator = buildKeyGenerator(statementId, keyStatementId);
             }
             else
             {
-                if (containSn)
-                    shardSnGenerators.put(statementId, new ShardSnGenerator());
-                if (generatedValue != null)
-                {
-                    if (generatedValue.strategy() == GenerationType.UUID)
-                    {
-                        shardedKeyGenerators.put(statementId,
-                                new ShardUuidKeyGenerator(
-                                        generatedValue.length()));
-                    }
-                    else if (generatedValue.strategy() == GenerationType.TABLE
-                            || generatedValue.strategy() == GenerationType.AUTO)
-                    {
-                        shardedKeyGenerators.put(statementId,
-                                new ShardJdbc4KeyGenerator());
-                    }
-                }
-                //                shardedKeyGenerators.put(statementId, new shardeduu)
+                buildShardedKeyGenerator(statementId);
             }
             keyProperty = idField.getName();
             keyColumn = StringUtils.isBlank(id.column())
@@ -798,18 +772,8 @@ public class GenericStatementBuilder extends BaseBuilder
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
         String parameterMap = null;
-        Iterator<String> parameterMapNames = configuration
-                .getParameterMapNames().iterator();
-        while (parameterMapNames.hasNext())
-        {
-            String name = parameterMapNames.next();
-            ParameterMap temp = configuration.getParameterMap(name);
-            if (temp.getType().equals(entityClass))
-            {
-                parameterMap = temp.getId();
-                break;
-            }
-        }
+        parameterMap = findParameterMap();
+        logger.info("绑定Map {}", statementId);
         assistant.addMappedStatement(statementId,
                 sqlSource,
                 StatementType.PREPARED,
@@ -829,6 +793,70 @@ public class GenericStatementBuilder extends BaseBuilder
                 keyColumn,
                 databaseId,
                 lang);
+    }
+    
+    private String findParameterMap()
+    {
+        Iterator<String> parameterMapNames = configuration
+                .getParameterMapNames().iterator();
+        while (parameterMapNames.hasNext())
+        {
+            String name = parameterMapNames.next();
+            ParameterMap temp = configuration.getParameterMap(name);
+            if (temp.getType().equals(entityClass))
+            {
+                return temp.getId();
+            }
+        }
+        return null;
+    }
+    
+    private void buildShardedKeyGenerator(String statementId)
+    {
+        GeneratedValue generatedValue = AnnotationUtils
+                .findDeclaredAnnotation(GeneratedValue.class, entityClass);
+        if (containSn)
+            shardSnGenerators.put(statementId, new ShardSnGenerator());
+        if (generatedValue != null)
+        {
+            if (generatedValue.strategy() == GenerationType.UUID)
+            {
+                shardedKeyGenerators.put(statementId,
+                        new ShardUuidKeyGenerator(generatedValue.length()));
+            }
+            else if (generatedValue.strategy() == GenerationType.TABLE
+                    || generatedValue.strategy() == GenerationType.AUTO)
+            {
+                shardedKeyGenerators.put(statementId,
+                        new ShardJdbc4KeyGenerator());
+            }
+        }
+    }
+    
+    private KeyGenerator buildKeyGenerator(String statementId,
+            String keyStatementId)
+    {
+        GeneratedValue generatedValue = AnnotationUtils
+                .findDeclaredAnnotation(GeneratedValue.class, entityClass);
+        if (containSn)
+            snGenerators.put(statementId, new SnGenerator());
+        if (configuration.hasKeyGenerator(keyStatementId))
+        {
+            return configuration.getKeyGenerator(keyStatementId);
+        }
+        else if (generatedValue != null)
+        {
+            if (generatedValue.strategy() == GenerationType.UUID)
+            {
+                return new UuidKeyGenerator(generatedValue.length());
+                
+            }
+            else if (generatedValue.strategy() == GenerationType.SEQUENCE)
+            {
+                return new SequenceKeyGenerator(generatedValue.sequence());
+            }
+        }
+        return new NoKeyGenerator();
     }
     
     private SqlNode getBatchInsertSql(String collection)
@@ -1037,19 +1065,7 @@ public class GenericStatementBuilder extends BaseBuilder
         
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
-        String parameterMap = null;
-        Iterator<String> parameterMapNames = configuration
-                .getParameterMapNames().iterator();
-        while (parameterMapNames.hasNext())
-        {
-            String name = parameterMapNames.next();
-            ParameterMap temp = configuration.getParameterMap(name);
-            if (temp.getType().equals(entityClass))
-            {
-                parameterMap = temp.getId();
-                break;
-            }
-        }
+        String parameterMap = findParameterMap();
         assistant.addMappedStatement(statementId,
                 sqlSource,
                 StatementType.PREPARED,
@@ -1090,18 +1106,7 @@ public class GenericStatementBuilder extends BaseBuilder
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
         String parameterMap = null;
-        Iterator<String> parameterMapNames = configuration
-                .getParameterMapNames().iterator();
-        while (parameterMapNames.hasNext())
-        {
-            String name = parameterMapNames.next();
-            ParameterMap temp = configuration.getParameterMap(name);
-            if (temp.getType().equals(entityClass))
-            {
-                parameterMap = temp.getId();
-                break;
-            }
-        }
+        parameterMap = findParameterMap();
         assistant.addMappedStatement(statementId,
                 sqlSource,
                 StatementType.PREPARED,
@@ -1222,7 +1227,6 @@ public class GenericStatementBuilder extends BaseBuilder
         Integer timeout = entity.timeout() == -1 ? null : entity.timeout();
         Class<?> resultType = entityClass;
         
-        //~~~~~~~~~~~~~~~~~
         boolean flushCache = entity.flushCache();
         boolean useCache = entity.useCache();
         boolean resultOrdered = false;
@@ -1230,22 +1234,10 @@ public class GenericStatementBuilder extends BaseBuilder
         
         List<SqlNode> contents = new ArrayList<SqlNode>();
         contents.add(this.getGetSql());
-        
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
-        String resultMap = null;
-        Iterator<String> resultMapNames = configuration.getResultMapNames()
-                .iterator();
-        while (resultMapNames.hasNext())
-        {
-            String name = resultMapNames.next();
-            ResultMap temp = configuration.getResultMap(name);
-            if (temp.getType().equals(entityClass))
-            {
-                resultMap = temp.getId();
-                break;
-            }
-        }
+        
+        String resultMap = findResultMap();
         assistant.addMappedStatement(statementId,
                 sqlSource,
                 StatementType.PREPARED,
@@ -1265,6 +1257,24 @@ public class GenericStatementBuilder extends BaseBuilder
                 null,
                 databaseId,
                 lang);
+    }
+    
+    private String findResultMap()
+    {
+        String resultMap = null;
+        Iterator<String> resultMapNames = configuration.getResultMapNames()
+                .iterator();
+        while (resultMapNames.hasNext())
+        {
+            String name = resultMapNames.next();
+            ResultMap temp = configuration.getResultMap(name);
+            if (temp.getType().equals(entityClass))
+            {
+                resultMap = temp.getId();
+                break;
+            }
+        }
+        return resultMap;
     }
     
     private SqlNode getGetSql()

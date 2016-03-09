@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.codefarm</groupId>
 		<artifactId>mybatis-parent</artifactId>
-		<version>${codefarm.version}</version>
+		<version>4.2.4</version>
 	</parent>
 	<artifactId>mybatis-shard</artifactId>
 	<name>mybatis-shard</name>

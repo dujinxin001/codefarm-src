@@ -12,7 +12,7 @@ import com.codefarm.mybatis.orm.annotations.Delete;
 import com.codefarm.mybatis.orm.annotations.Get;
 import com.codefarm.mybatis.orm.annotations.Insert;
 import com.codefarm.mybatis.orm.annotations.Update;
-import com.codefarm.mybatis.orm.model.User;
+import com.codefarm.mybatis.orm.model.TestUser;
 
 /**
  * Class description goes here.
@@ -21,14 +21,20 @@ public interface UserMapper
 {
     
     @Insert
-    int insertUser(User user);
+    int insertUser(TestUser user);
+    
+    @Insert
+    int insert(TestUser user);
     
     @Delete
-    int delete(User user);
+    int delete(TestUser user);
     
     @Update
-    int update(User user);
+    int update(TestUser user);
     
     @Get
-    User get(Long id);
+    TestUser get(Long id);
+    
+    @Get
+    TestUser getById(Long id);
 }

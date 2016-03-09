@@ -12,6 +12,8 @@ import java.io.Serializable;
 
 import com.codefarm.mybatis.orm.annotations.Column;
 import com.codefarm.mybatis.orm.annotations.Entity;
+import com.codefarm.mybatis.orm.annotations.GeneratedValue;
+import com.codefarm.mybatis.orm.annotations.GenerationType;
 import com.codefarm.mybatis.orm.annotations.Id;
 import com.codefarm.mybatis.orm.annotations.Table;
 import com.codefarm.mybatis.orm.mapper.UserMapper;
@@ -21,25 +23,25 @@ import com.codefarm.mybatis.pagination.Pagable;
  * Class description goes here.
  */
 @Entity(mapper = UserMapper.class)
-@Table(name = "USER")
-public class User extends Pagable implements Serializable
+@Table(name = "testuser")
+public class TestUser extends Pagable implements Serializable
 {
     
     private static final long serialVersionUID = 6275980778279891698L;
     
-    @Id(column = "USER_ID", generatedKeys = false)
+    @Id(column = "userid", generatedKeys = true)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, sequence = "test_seq")
     private Long id;
     
-    @Column(name = "USER_NAME")
+    @Column(name = "username")
     private String userName;
     
-    //~~~~~~~~~~~
-    public User()
+    public TestUser()
     {
-        
+        super();
     }
     
-    public User(Long id)
+    public TestUser(Long id)
     {
         this.id = id;
     }

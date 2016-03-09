@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.sxj.mybatis.orm.mapper.UserMapper">
-	<resultMap id="BaseResultMap" type="com.sxj.mybatis.orm.model.User">
-		<id property="id" column="USER_ID" jdbcType="INTEGER"/>
-		<result property="userName" column="USER_NAME" jdbcType="VARCHAR"/>
+<mapper namespace="com.codefarm.mybatis.orm.mapper.UserMapper">
+	<resultMap id="BaseResultMap" type="com.codefarm.mybatis.orm.model.TestUser">
+		<id property="id" column="userid" jdbcType="INTEGER"/>
+		<result property="userName" column="username" jdbcType="VARCHAR"/>
 	</resultMap>
 	
 	<sql id="Base_Column_List">
