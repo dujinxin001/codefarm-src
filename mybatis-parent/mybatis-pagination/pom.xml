@@ -4,9 +4,9 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.sxj</groupId>
+		<groupId>com.codefarm</groupId>
 		<artifactId>mybatis-parent</artifactId>
-		<version>3.2.2</version>
+		<version>${codefarm.version}</version>
 	</parent>
 	<artifactId>mybatis-pagination</artifactId>
 	<name>mybatis-pagination</name>
@@ -18,7 +18,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -27,16 +26,14 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.31</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.sxj</groupId>
+			<groupId>com.codefarm</groupId>
 			<artifactId>mybatis-dialect</artifactId>
-			<version>3.2.2</version>
+			<version>${codefarm.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sxj</groupId>
+			<groupId>com.codefarm</groupId>
 			<artifactId>spring-util</artifactId>
 		</dependency>
 	</dependencies>

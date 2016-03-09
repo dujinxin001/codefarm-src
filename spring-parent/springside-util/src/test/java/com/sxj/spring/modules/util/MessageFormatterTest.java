@@ -12,10 +12,9 @@ public class MessageFormatterTest
     @Test
     public void test()
     {
-        
-        String arrayFormat = MessageFormatter.arrayFormat("http://{}/{}",
-                "a",
-                "b");
+        String a = "a";
+        String b = "b";
+        String arrayFormat = MessageFormatter.arrayFormat("http://{}/{}", a, b);
         System.out.println(arrayFormat);
         Assert.assertEquals("http://a/b", arrayFormat);
     }

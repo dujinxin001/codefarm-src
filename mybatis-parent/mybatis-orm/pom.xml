@@ -4,9 +4,9 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.sxj</groupId>
+		<groupId>com.codefarm</groupId>
 		<artifactId>mybatis-parent</artifactId>
-		<version>3.2.2</version>
+		<version>${codefarm.version}</version>
 	</parent>
 	<artifactId>mybatis-orm</artifactId>
 	<name>mybatis-orm</name>
@@ -31,15 +31,18 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.31</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>javassist</groupId>
 			<artifactId>javassist</artifactId>
-			<version>3.9.0.GA</version>
+			<version>3.12.1.GA</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -56,28 +59,17 @@
 			<version>1.2.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>3.1.1.RELEASE</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
+		
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sxj</groupId>
+			<groupId>com.codefarm</groupId>
 			<artifactId>mybatis-pagination</artifactId>
-			<version>${mybatis.parent}</version>
+			<version>${codefarm.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sxj</groupId>
+			<groupId>com.codefarm</groupId>
 			<artifactId>spring-util</artifactId>
 		</dependency>
 		<dependency>
@@ -88,33 +80,18 @@
 		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
-			<version>3.1</version>
+			<version>3.2.1</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sxj</groupId>
+			<groupId>com.codefarm</groupId>
 			<artifactId>mybatis-cache</artifactId>
-			<version>3.2.2</version>
+			<version>${codefarm.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.7</version>
-			<scope>test</scope>
+			<groupId>com.codefarm</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${codefarm.version}</version>
 		</dependency>
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>

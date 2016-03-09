@@ -3,9 +3,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.sxj</groupId>
+    <groupId>com.codefarm</groupId>
     <artifactId>mybatis-parent</artifactId>
-    <version>3.2.2</version>
+    <version>${codefarm.version}</version>
   </parent>
   <artifactId>mybatis-dialect</artifactId>
   <name>mybatis-dialect</name>

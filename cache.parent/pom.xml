@@ -59,14 +59,14 @@
 				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
-			<groupId>com.codefarm</groupId>
-			<artifactId>spring-util</artifactId>
-			<version>${codefarm.version}</version>
-		</dependency>
+				<groupId>com.codefarm</groupId>
+				<artifactId>spring-util</artifactId>
+				<version>${codefarm.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<!-- 插件配置 -->
-		<build>
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -101,8 +101,11 @@
 	</build>
 	<distributionManagement>
 		<repository>
-			<id>releases</id>
-			<url>http://192.168.1.11:8080/nexus/content/repositories/releases/</url>
+			<id>fhcard</id>
+			<name>Local Nexus Repository</name>
+			<url>http://scm.fhcard.com:8081/nexus/content/repositories/fhcard/</url>
 		</repository>
+		<!-- <snapshotRepository> <id>nexus-snapshots</id> <name>Local Nexus Repository</name> 
+			<url>http://192.168.1.217:8080/nexus/content/groups/public</url> </snapshotRepository> -->
 	</distributionManagement>
 </project>

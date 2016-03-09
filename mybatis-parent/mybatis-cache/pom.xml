@@ -4,9 +4,9 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.sxj</groupId>
+		<groupId>com.codefarm</groupId>
 		<artifactId>mybatis-parent</artifactId>
-		<version>3.2.2</version>
+		<version>${codefarm.version}</version>
 	</parent>
 	<artifactId>mybatis-cache</artifactId>
 	<name>mybatis-cache</name>
@@ -18,17 +18,16 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.sxj</groupId>
+		<dependency> 
+			<groupId>com.codefarm</groupId>
 			<artifactId>cache.manager</artifactId>
-			<version>1.0</version>
+			<version>${codefarm.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>
-		</dependency>
+		</dependency> 
 		<dependency>
 			<groupId>org.mybatis.caches</groupId>
 			<artifactId>mybatis-ehcache</artifactId>

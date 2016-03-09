@@ -10,7 +10,7 @@ import org.aspectj.lang.annotation.Pointcut;
 
 import com.codefarm.cache.manager.CacheLevel;
 import com.codefarm.cache.manager.HierarchicalCacheManager;
-import com.sxj.cache.spring.annotation.Cached;
+import com.codefarm.cache.spring.annotation.Cached;
 
 import net.sf.ehcache.CacheException;
 
