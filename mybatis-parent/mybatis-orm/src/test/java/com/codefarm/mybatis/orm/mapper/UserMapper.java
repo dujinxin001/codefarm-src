@@ -31,7 +31,18 @@ public interface UserMapper
     int insert(TestUser user);
     
     @Delete
-    int delete(TestUser user);
+    int delete(@Criteria(column = "userid") Long id);
+    
+    @Delete
+    int deleteByIdAndName(@Criteria(column = "userid") Long id,
+            @Criteria(column = "username") String name);
+    
+    @Delete
+    int deleteByCriterias(TestUserCriterias criterias);
+    
+    @Delete
+    int deleteByCriteriasAndUserName(TestUserCriterias criterias,
+            @Criteria(column = "username") String username);
     
     @Update
     int update(TestUser user);

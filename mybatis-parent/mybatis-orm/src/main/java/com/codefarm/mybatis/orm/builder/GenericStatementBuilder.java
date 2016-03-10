@@ -341,21 +341,8 @@ public class GenericStatementBuilder extends BaseBuilder
         String multiGetStatementId = "multiGet";
         //----------inserts------------//
         buildInsertStatements();
-        
-        List<Method> deleteMethods = ReflectUtils
-                .findMethodsAnnotatedWith(mapperType, Delete.class);
-        if (Collections3.isNotEmpty(deleteMethods))
-        {
-            if (deleteMethods.size() > 1)
-            {
-                throw new RuntimeException("有多个@Delete方法");
-            }
-            deleteStatementId = deleteMethods.get(0).getName();
-            if (!hasStatement(deleteStatementId))
-            {
-                buildDelete(namespace + "." + deleteStatementId);
-            }
-        }
+        //----------deletes------------//
+        buildDeleteStatements();
         
         List<Method> updateMethods = ReflectUtils
                 .findMethodsAnnotatedWith(mapperType, Update.class);
@@ -436,6 +423,21 @@ public class GenericStatementBuilder extends BaseBuilder
             {
                 buildMultiGet(namespace + "." + multiGetStatementId,
                         getCollection(multiGetMethods.get(0)));
+            }
+        }
+    }
+    
+    private void buildDeleteStatements()
+    {
+        String deleteStatementId;
+        List<Method> deleteMethods = ReflectUtils
+                .findMethodsAnnotatedWith(mapperType, Delete.class);
+        for (Method method : deleteMethods)
+        {
+            deleteStatementId = method.getName();
+            if (!hasStatement(deleteStatementId))
+            {
+                buildDelete(namespace + "." + deleteStatementId, method);
             }
         }
     }
@@ -1030,21 +1032,27 @@ public class GenericStatementBuilder extends BaseBuilder
                 null, ")", ",");
     }
     
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    //delete
-    private void buildDelete(String statementId)
+    private String getDeleteSql(Method method)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("DELETE FROM ");
+        sb.append(tableName);
+        sb.append(buildCriterias(method));
+        return sb.toString();
+    }
+    
+    private void buildDelete(String statementId, Method method)
     {
         Integer timeout = null;
         Class<?> parameterType = entityClass;
         
-        //~~~~~~~~~~~~~~~~~~~~~~~
         boolean flushCache = true;
         boolean useCache = false;
         boolean resultOrdered = false;
         KeyGenerator keyGenerator = new NoKeyGenerator();
         List<SqlNode> contents = new ArrayList<SqlNode>();
-        SqlNode sqlNode = new TextSqlNode("DELETE FROM " + tableName + " WHERE "
-                + getIdColumnName() + " = #{" + getIdFieldName() + "} ");
+        SqlNode sqlNode = new TrimSqlNode(configuration,
+                new TextSqlNode(getDeleteSql(method)), null, null, null, "AND");
         contents.add(sqlNode);
         //        if (versionField != null)
         //            contents.add(new IfSqlNode(new TextSqlNode(getVersionSQL()),
@@ -1322,12 +1330,32 @@ public class GenericStatementBuilder extends BaseBuilder
         sb.append(" FROM ");
         sb.append(tableName);
         
+        sb.append(buildCriterias(method));
+        //        sql += " FROM " + tableName + " WHERE " + getIdColumnName() + " = #{"
+        //                + getIdFieldName() + "}";
+        //        SqlNode clause = new TextSqlNode(sb.toString());
+        //                content.add(new IfSqlNode(clause,
+        //                        getTestByParameter(null, parameter)));
+        content.add(new TrimSqlNode(configuration,
+                new TextSqlNode(sb.toString()), null, null, null, "AND"));
+        Select select = method.getAnnotation(Select.class);
+        if (com.codefarm.spring.modules.util.StringUtils
+                .isNotEmpty(select.orderby()))
+        {
+            sb.delete(0, sb.length());
+            sb.append(" order by ");
+            sb.append(select.orderby());
+            content.add(new TextSqlNode(sb.toString()));
+        }
+        return new MixedSqlNode(content);
+    }
+    
+    private String buildCriterias(Method method)
+    {
+        StringBuilder sb = new StringBuilder();
         Parameter[] parameters = method.getParameters();
         if (parameters != null && parameters.length > 0)
             sb.append(" WHERE ");
-        content.add(new TextSqlNode(sb.toString()));
-        
-        sb.delete(0, sb.length());
         int index = 0;
         for (Parameter parameter : parameters)
         {
@@ -1345,7 +1373,12 @@ public class GenericStatementBuilder extends BaseBuilder
                         String columnName = annotation.column();
                         sb.append(columnName);
                         sb.append(annotation.operator().getOperator());
-                        sb.append(" #{" + index + ".");
+                        
+                        sb.append(" #{");
+                        if (parameters.length > 1)
+                        {
+                            sb.append(index + ".");
+                        }
                         sb.append(field.getName());
                         sb.append("}");
                         sb.append(" AND ");
@@ -1369,23 +1402,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 index++;
             }
         }
-        //        sql += " FROM " + tableName + " WHERE " + getIdColumnName() + " = #{"
-        //                + getIdFieldName() + "}";
-        //        SqlNode clause = new TextSqlNode(sb.toString());
-        //                content.add(new IfSqlNode(clause,
-        //                        getTestByParameter(null, parameter)));
-        content.add(new TrimSqlNode(configuration,
-                new TextSqlNode(sb.toString()), null, null, null, "AND"));
-        Select select = method.getAnnotation(Select.class);
-        if (com.codefarm.spring.modules.util.StringUtils
-                .isNotEmpty(select.orderby()))
-        {
-            sb.delete(0, sb.length());
-            sb.append(" order by ");
-            sb.append(select.orderby());
-            content.add(new TextSqlNode(sb.toString()));
-        }
-        return new MixedSqlNode(content);
+        return sb.toString();
     }
     
     public static Map<String, ShardKeyGenerator> getShardedKeyGenerators()

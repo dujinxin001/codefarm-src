@@ -31,7 +31,7 @@ import com.codefarm.mybatis.orm.po.TestUserCriterias;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @ActiveProfiles("test")
 public class UserMapperTest
 {
@@ -72,34 +72,41 @@ public class UserMapperTest
         assertTrue("Update entity not success!", rows == 1);
     }
     
-    @Test
     @Transactional
     public void testGet()
     {
-        //        TestUser entity = userMapper.getById(17L);
-        //        assertNotNull(entity);
-        //        assertTrue(entity.getId() == 17l);
-        //        List<TestUser> select = userMapper.select(18l, "2");
-        //        assertNotNull(select);
-        //        assertTrue(select.size() == 1);
+        TestUser entity = userMapper.getById(17L);
+        assertNotNull(entity);
+        assertTrue(entity.getId() == 17l);
+        List<TestUser> select = userMapper.select(18l, "2");
+        assertNotNull(select);
+        assertTrue(select.size() == 1);
         TestUserCriterias criterias = new TestUserCriterias();
         criterias.setUserid(15l);
-        //        List<TestUser> select2 = userMapper.selectByCriterias(criterias);
-        //        assertNotNull(select2);
+        List<TestUser> select2 = userMapper.selectByCriterias(criterias);
+        assertNotNull(select2);
         List<TestUserCriterias> select3 = userMapper
                 .selectByCriteriasAndUserName(criterias, "2");
         assertNotNull(select3);
     }
     
+    @Test
     @Transactional
     public void testDelete()
     {
-        TestUser user = userMapper.getById(1L);
-        user = userMapper.getById(user.getId());
+        int rows = userMapper.delete(17l);
+        assertTrue(rows == 1);
+        rows = userMapper.deleteByIdAndName(15l, "2");
+        assertTrue(rows == 0);
+        rows = userMapper.deleteByIdAndName(15l, "makersoft");
+        assertTrue(rows == 1);
+        TestUserCriterias criterias = new TestUserCriterias();
+        criterias.setUserid(15l);
+        rows = userMapper.deleteByCriteriasAndUserName(criterias, "2");
+        assertTrue("Delete operation could not success!", rows > 1);
+        rows = userMapper.deleteByCriterias(criterias);
+        assertTrue(rows > 1);
         
-        int rows = userMapper.delete(user);
-        
-        assertTrue("Delete operation could not success!", rows == 1);
     }
     
 }
