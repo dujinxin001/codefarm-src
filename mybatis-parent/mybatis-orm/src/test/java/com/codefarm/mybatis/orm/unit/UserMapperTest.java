@@ -49,35 +49,37 @@ public class UserMapperTest
     @Transactional
     public void testInsert()
     {
-        TestUser user = buildUser();
-        user.setId(13333333l);
-        int rows = userMapper.insertUser(user);
-        user.setUserName("2");
-        userMapper.insert(user);
-        assertTrue("Insert entity not success!", rows > 0);
-        assertNotNull("Id can not be null!", user.getId());
+        //        TestUser user = buildUser();
+        //        user.setId(13333333l);
+        //        int rows = userMapper.insertUser(user);
+        //        user.setUserName("2");
+        //        userMapper.insert(user);
+        //        assertTrue("Insert entity not success!", rows > 0);
+        //        assertNotNull("Id can not be null!", user.getId());
         
     }
     
     @Transactional
     public void testUpdate()
     {
-        TestUser entity = userMapper.getById(1L);
-        assertNotNull("selected entity can not be null!", entity);
-        
-        TestUser newUser = new TestUser(entity.getId());
-        newUser.setUserName("my_name");
-        int rows = userMapper.update(newUser);
-        
-        assertTrue("Update entity not success!", rows == 1);
+        //        TestUser entity = userMapper.getById(1L);
+        //        assertNotNull("selected entity can not be null!", entity);
+        //        
+        //        TestUser newUser = new TestUser(entity.getId());
+        //        newUser.setUserName("my_name");
+        //        int rows = userMapper.update(newUser);
+        //        
+        //        assertTrue("Update entity not success!", rows == 1);
     }
     
+    @Test
     @Transactional
     public void testGet()
     {
         TestUser entity = userMapper.getById(17L);
         assertNotNull(entity);
         assertTrue(entity.getId() == 17l);
+        
         List<TestUser> select = userMapper.select(18l, "2");
         assertNotNull(select);
         assertTrue(select.size() == 1);
@@ -85,27 +87,30 @@ public class UserMapperTest
         criterias.setUserid(15l);
         List<TestUser> select2 = userMapper.selectByCriterias(criterias);
         assertNotNull(select2);
-        List<TestUserCriterias> select3 = userMapper
-                .selectByCriteriasAndUserName(criterias, "2");
-        assertNotNull(select3);
+        List<TestUser> select4 = userMapper
+                .selectByIds(new Long[] { 15l, 16l });
+        assertTrue(select4.size() == 2);
+        //        TestUserCriterias criterias2 = new TestUserCriterias();
+        //        criterias2.setUserids(new Long[] { 15l, 16l });
+        //        List<TestUser> select5 = userMapper.selectByCriterias(criterias2);
+        //        assertTrue(select5.size() == 2);
     }
     
-    @Test
     @Transactional
     public void testDelete()
     {
-        int rows = userMapper.delete(17l);
-        assertTrue(rows == 1);
-        rows = userMapper.deleteByIdAndName(15l, "2");
-        assertTrue(rows == 0);
-        rows = userMapper.deleteByIdAndName(15l, "makersoft");
-        assertTrue(rows == 1);
-        TestUserCriterias criterias = new TestUserCriterias();
-        criterias.setUserid(15l);
-        rows = userMapper.deleteByCriteriasAndUserName(criterias, "2");
-        assertTrue("Delete operation could not success!", rows > 1);
-        rows = userMapper.deleteByCriterias(criterias);
-        assertTrue(rows > 1);
+        //        int rows = userMapper.delete(17l);
+        //        assertTrue(rows == 1);
+        //        rows = userMapper.deleteByIdAndName(15l, "2");
+        //        assertTrue(rows == 0);
+        //        rows = userMapper.deleteByIdAndName(15l, "makersoft");
+        //        assertTrue(rows == 1);
+        //        TestUserCriterias criterias = new TestUserCriterias();
+        //        criterias.setUserid(15l);
+        //        rows = userMapper.deleteByCriteriasAndUserName(criterias, "2");
+        //        assertTrue("Delete operation could not success!", rows > 1);
+        //        rows = userMapper.deleteByCriterias(criterias);
+        //        assertTrue(rows > 1);
         
     }
     

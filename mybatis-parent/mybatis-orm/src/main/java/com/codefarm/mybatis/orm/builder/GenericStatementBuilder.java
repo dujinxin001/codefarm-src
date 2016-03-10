@@ -289,8 +289,13 @@ public class GenericStatementBuilder extends BaseBuilder
         }
         else
         {
-            return (StringUtils.isEmpty(prefix) ? "" : prefix + ".")
-                    + field.getName() + "!= null";
+            if (StringUtils.isEmpty(prefix))
+                return field.getName() + "!=null";
+            else
+            {
+                return "#{" + prefix + "." + field.getName() + "}" + "!= null";
+            }
+            
         }
         
     }
@@ -374,7 +379,7 @@ public class GenericStatementBuilder extends BaseBuilder
                     .hasCache(namespace + "." + batchInsertStatementId))
             {
                 buildBatchInsert(namespace + "." + batchInsertStatementId,
-                        getCollection(batchInsertMethods.get(0)));
+                        getCollectionName(batchInsertMethods.get(0)));
             }
         }
         List<Method> batchDeleteMethods = ReflectUtils
@@ -390,7 +395,7 @@ public class GenericStatementBuilder extends BaseBuilder
                     .hasCache(namespace + "." + batchDeleteStatementId))
             {
                 buildBatchDelete(namespace + "." + batchDeleteStatementId,
-                        getCollection(batchDeleteMethods.get(0)));
+                        getCollectionName(batchDeleteMethods.get(0)));
             }
         }
         List<Method> batchUpdateMethods = ReflectUtils
@@ -406,7 +411,7 @@ public class GenericStatementBuilder extends BaseBuilder
                     .hasCache(namespace + "." + batchDeleteStatementId))
             {
                 buildBatchUpdate(namespace + "." + batchDeleteStatementId,
-                        getCollection(batchUpdateMethods.get(0)));
+                        getCollectionName(batchUpdateMethods.get(0)));
             }
         }
         List<Method> multiGetMethods = ReflectUtils
@@ -422,7 +427,7 @@ public class GenericStatementBuilder extends BaseBuilder
                     .hasCache(namespace + "." + multiGetStatementId))
             {
                 buildMultiGet(namespace + "." + multiGetStatementId,
-                        getCollection(multiGetMethods.get(0)));
+                        getCollectionName(multiGetMethods.get(0)));
             }
         }
     }
@@ -478,7 +483,7 @@ public class GenericStatementBuilder extends BaseBuilder
         }
     }
     
-    private String getCollection(Method method)
+    private String getCollectionName(Method method)
     
     {
         //        Method method = methods.get(0);
@@ -486,6 +491,26 @@ public class GenericStatementBuilder extends BaseBuilder
         if (parameterTypes.length != 1)
             throw new RuntimeException("@Batch有且仅能有一个参数");
         Class<?> parameterType = parameterTypes[0];
+        if (parameterType.equals(List.class))
+            return "list";
+        else
+            return "array";
+    }
+    
+    private String getCollectionName(Parameter parameter)
+    
+    {
+        //        Method method = methods.get(0);
+        Class<?> parameterType = parameter.getType();
+        if (parameterType.equals(List.class))
+            return "list";
+        else
+            return "array";
+    }
+    
+    private String getCollectionName(Field field)
+    {
+        Class<?> parameterType = field.getDeclaringClass();
         if (parameterType.equals(List.class))
             return "list";
         else
@@ -917,11 +942,11 @@ public class GenericStatementBuilder extends BaseBuilder
         sql += " FROM " + tableName + " WHERE " + getIdColumnName() + " in";
         List<SqlNode> contents = new ArrayList<SqlNode>();
         contents.add(new TextSqlNode(sql));
-        contents.add(getMultiGetFields(collection));
+        contents.add(getForEachSqlNode(collection));
         return new MixedSqlNode(contents);
     }
     
-    private SqlNode getMultiGetFields(String collection)
+    private SqlNode getForEachSqlNode(String collection)
     {
         TextSqlNode fieldSqlNode = new TextSqlNode("#{" + ITEM + "}");
         ForEachSqlNode forEachSqlNode = new ForEachSqlNode(configuration,
@@ -1032,13 +1057,15 @@ public class GenericStatementBuilder extends BaseBuilder
                 null, ")", ",");
     }
     
-    private String getDeleteSql(Method method)
+    private SqlNode getDeleteSqlNode(Method method)
     {
+        List<SqlNode> contents = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         sb.append("DELETE FROM ");
         sb.append(tableName);
-        sb.append(buildCriterias(method));
-        return sb.toString();
+        contents.add(new TextSqlNode(sb.toString()));
+        contents.add(buildCriterias(method));
+        return new MixedSqlNode(contents);
     }
     
     private void buildDelete(String statementId, Method method)
@@ -1052,7 +1079,7 @@ public class GenericStatementBuilder extends BaseBuilder
         KeyGenerator keyGenerator = new NoKeyGenerator();
         List<SqlNode> contents = new ArrayList<SqlNode>();
         SqlNode sqlNode = new TrimSqlNode(configuration,
-                new TextSqlNode(getDeleteSql(method)), null, null, null, "AND");
+                getDeleteSqlNode(method), null, null, null, "AND");
         contents.add(sqlNode);
         //        if (versionField != null)
         //            contents.add(new IfSqlNode(new TextSqlNode(getVersionSQL()),
@@ -1251,6 +1278,17 @@ public class GenericStatementBuilder extends BaseBuilder
         return new SetSqlNode(configuration, new MixedSqlNode(contents));
     }
     
+    private Class<?> findParameterType(Method method)
+    {
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        for (Class<?> clazz : parameterTypes)
+        {
+            if (clazz.isAnnotationPresent(Criterias.class))
+                return clazz;
+        }
+        return null;
+    }
+    
     //~~~~~~~~~~~~~~~~~
     //get
     private void buildSelect(String statementId, Method method)
@@ -1258,7 +1296,9 @@ public class GenericStatementBuilder extends BaseBuilder
         Integer fetchSize = null;
         Integer timeout = entity.timeout() == -1 ? null : entity.timeout();
         Class<?> resultType = entityClass;
-        
+        Class<?> parameterType = findParameterType(method);
+        if (parameterType == null)
+            parameterType = idField.getType();
         boolean flushCache = entity.flushCache();
         boolean useCache = entity.useCache();
         boolean resultOrdered = false;
@@ -1278,7 +1318,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 fetchSize,
                 timeout,
                 null,
-                idField.getType(),
+                parameterType,
                 resultMap,
                 resultType,
                 null,
@@ -1312,7 +1352,7 @@ public class GenericStatementBuilder extends BaseBuilder
     
     private SqlNode getSelectSql(Method method)
     {
-        List<SqlNode> content = new ArrayList<>();
+        List<SqlNode> contents = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT ");
         //        String sql = "SELECT " + getIdColumnName() + " AS " + getIdFieldName();
@@ -1324,20 +1364,21 @@ public class GenericStatementBuilder extends BaseBuilder
             sb.append(getColumnNameByField(field));
             sb.append(",");
         }
-        content.add(new TrimSqlNode(configuration,
+        System.out.println(sb.toString());
+        contents.add(new TrimSqlNode(configuration,
                 new TextSqlNode(sb.toString()), null, null, null, ","));
         sb.delete(0, sb.length());
         sb.append(" FROM ");
         sb.append(tableName);
-        
-        sb.append(buildCriterias(method));
+        System.out.println(sb.toString());
+        contents.add(new TextSqlNode(sb.toString()));
         //        sql += " FROM " + tableName + " WHERE " + getIdColumnName() + " = #{"
         //                + getIdFieldName() + "}";
         //        SqlNode clause = new TextSqlNode(sb.toString());
         //                content.add(new IfSqlNode(clause,
         //                        getTestByParameter(null, parameter)));
-        content.add(new TrimSqlNode(configuration,
-                new TextSqlNode(sb.toString()), null, null, null, "AND"));
+        contents.add(new TrimSqlNode(configuration, buildCriterias(method),
+                null, null, null, "AND"));
         Select select = method.getAnnotation(Select.class);
         if (com.codefarm.spring.modules.util.StringUtils
                 .isNotEmpty(select.orderby()))
@@ -1345,64 +1386,108 @@ public class GenericStatementBuilder extends BaseBuilder
             sb.delete(0, sb.length());
             sb.append(" order by ");
             sb.append(select.orderby());
-            content.add(new TextSqlNode(sb.toString()));
+            contents.add(new TextSqlNode(sb.toString()));
         }
-        return new MixedSqlNode(content);
+        return new MixedSqlNode(contents);
     }
     
-    private String buildCriterias(Method method)
+    private SqlNode buildCriterias(Method method)
     {
+        System.out.println("----------------------");
+        List<SqlNode> contents = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         Parameter[] parameters = method.getParameters();
         if (parameters != null && parameters.length > 0)
-            sb.append(" WHERE ");
-        int index = 0;
+            contents.add(new TextSqlNode(" WHERE "));
+        int index = 1;
         for (Parameter parameter : parameters)
         {
+            sb.delete(0, sb.length());
             //-------parse @Criterias parameter
             if (parameter.getType().isAnnotationPresent(Criterias.class))
             {
-                
                 Field[] fields = parameter.getType().getDeclaredFields();
                 for (Field field : fields)
                 {
+                    
+                    sb.delete(0, sb.length());
                     if (field.isAnnotationPresent(Criteria.class))
                     {
                         Criteria annotation = field
                                 .getAnnotation(Criteria.class);
                         String columnName = annotation.column();
-                        sb.append(columnName);
-                        sb.append(annotation.operator().getOperator());
-                        
-                        sb.append(" #{");
-                        if (parameters.length > 1)
+                        //--------数组参数--------//
+                        if (field.getType().isArray()
+                                || field.getDeclaringClass()
+                                        .isAssignableFrom(Collection.class))
                         {
-                            sb.append(index + ".");
+                            sb.append(columnName);
+                            sb.append(" in ");
+                            List<SqlNode> sub = new ArrayList<>();
+                            sub.add(new TextSqlNode(sb.toString()));
+                            sub.add(getForEachSqlNode(field.getName()));
+                            sub.add(new TextSqlNode(" AND "));
+                            contents.add(new IfSqlNode(new MixedSqlNode(sub),
+                                    getTestByField(null, field)));
+                            
                         }
-                        sb.append(field.getName());
-                        sb.append("}");
-                        sb.append(" AND ");
-                        index++;
+                        else
+                        {
+                            sb.append(columnName);
+                            sb.append(annotation.operator().getOperator());
+                            
+                            sb.append(" #{");
+                            if (parameters.length > 1)
+                            {
+                                sb.append("param" + index + ".");
+                            }
+                            sb.append(field.getName());
+                            sb.append("}");
+                            sb.append(" AND ");
+                            System.out.println(sb.toString());
+                            String test = getTestByField(parameters.length > 1
+                                    ? "param" + index : null, field);
+                            System.out.println(test);
+                            contents.add(new IfSqlNode(
+                                    new TextSqlNode(sb.toString()), test));
+                        }
+                        
                     }
                     
                 }
+                index++;
             }
             //--------parse Primative paramter
             
-            if (parameter.isAnnotationPresent(Criteria.class))
+            else if (parameter.isAnnotationPresent(Criteria.class))
             {
                 Criteria annotation = parameter.getAnnotation(Criteria.class);
                 String columnName = annotation.column();
-                sb.append(columnName);
-                sb.append(annotation.operator().getOperator());
-                sb.append(" #{");
-                sb.append(index);
-                sb.append("}");
-                sb.append(" AND ");
+                //--------数组参数--------//
+                if (parameter.getType().isArray() || parameter.getType()
+                        .isAssignableFrom(Collection.class))
+                {
+                    sb.append(columnName);
+                    sb.append(" in ");
+                    contents.add(new TextSqlNode(sb.toString()));
+                    String collection = getCollectionName(parameter);
+                    contents.add(getForEachSqlNode(collection));
+                }
+                else
+                {
+                    
+                    sb.append(columnName);
+                    sb.append(annotation.operator().getOperator());
+                    sb.append(" #{");
+                    sb.append("param" + index);
+                    sb.append("}");
+                    sb.append(" AND ");
+                    contents.add(new TextSqlNode(sb.toString()));
+                }
                 index++;
             }
         }
-        return sb.toString();
+        return new MixedSqlNode(contents);
     }
     
     public static Map<String, ShardKeyGenerator> getShardedKeyGenerators()

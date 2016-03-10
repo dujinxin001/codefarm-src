@@ -11,6 +11,18 @@
 	<sql id="Base_Column_List">
 		USER_ID, USER_NAME
 	</sql>
+	
+	<select id="selectABC" resultMap="BaseResultMap" parameterType="com.codefarm.mybatis.orm.po.TestUserCriterias">
+
+		SELECT userid AS userid,username AS username
+ FROM testuser where
+ <if test="#{param1.userid}!= null">  
+ userid &gt; #{param1.userid} 
+</if>
+ <if test="#{param1.username}!= null">  
+ username= #{param1.username}
+</if>
+	</select>
 	<!-- 
 	<insert id="insertUser" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="org.makersoft.activesql.model.User">
 		insert into t_user(user_name, password, birth_day, created_at, updated_at)
