@@ -8,11 +8,15 @@
  */
 package com.codefarm.mybatis.orm.mapper;
 
+import java.util.List;
+
+import com.codefarm.mybatis.orm.annotations.Criteria;
 import com.codefarm.mybatis.orm.annotations.Delete;
-import com.codefarm.mybatis.orm.annotations.Get;
 import com.codefarm.mybatis.orm.annotations.Insert;
+import com.codefarm.mybatis.orm.annotations.Select;
 import com.codefarm.mybatis.orm.annotations.Update;
 import com.codefarm.mybatis.orm.model.TestUser;
+import com.codefarm.mybatis.orm.po.TestUserCriterias;
 
 /**
  * Class description goes here.
@@ -32,9 +36,18 @@ public interface UserMapper
     @Update
     int update(TestUser user);
     
-    @Get
-    TestUser get(Long id);
+    @Select(orderby = "userid desc")
+    TestUser getById(@Criteria(column = "userid") Long id);
     
-    @Get
-    TestUser getById(Long id);
+    @Select
+    List<TestUser> select(@Criteria(column = "userid") Long id,
+            @Criteria(column = "username") String username);
+    
+    @Select(orderby = "userid asc")
+    List<TestUser> selectByCriterias(TestUserCriterias criterias);
+    
+    @Select(orderby = "userid asc")
+    List<TestUserCriterias> selectByCriteriasAndUserName(
+            TestUserCriterias criterias,
+            @Criteria(column = "username") String username);
 }

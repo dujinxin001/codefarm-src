@@ -11,6 +11,8 @@ package com.codefarm.mybatis.orm.unit;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.codefarm.mybatis.orm.mapper.UserMapper;
 import com.codefarm.mybatis.orm.model.TestUser;
+import com.codefarm.mybatis.orm.po.TestUserCriterias;
 
 /**
  * 
@@ -59,7 +62,7 @@ public class UserMapperTest
     @Transactional
     public void testUpdate()
     {
-        TestUser entity = userMapper.get(1L);
+        TestUser entity = userMapper.getById(1L);
         assertNotNull("selected entity can not be null!", entity);
         
         TestUser newUser = new TestUser(entity.getId());
@@ -73,18 +76,26 @@ public class UserMapperTest
     @Transactional
     public void testGet()
     {
-        TestUser entity = userMapper.get(17L);
-        System.out.println(entity.getUserName());
-        entity = userMapper.getById(18L);
-        System.out.println(entity.getUserName());
-        assertNotNull("selected entity can not be null!", entity);
+        //        TestUser entity = userMapper.getById(17L);
+        //        assertNotNull(entity);
+        //        assertTrue(entity.getId() == 17l);
+        //        List<TestUser> select = userMapper.select(18l, "2");
+        //        assertNotNull(select);
+        //        assertTrue(select.size() == 1);
+        TestUserCriterias criterias = new TestUserCriterias();
+        criterias.setUserid(15l);
+        //        List<TestUser> select2 = userMapper.selectByCriterias(criterias);
+        //        assertNotNull(select2);
+        List<TestUserCriterias> select3 = userMapper
+                .selectByCriteriasAndUserName(criterias, "2");
+        assertNotNull(select3);
     }
     
     @Transactional
     public void testDelete()
     {
-        TestUser user = userMapper.get(1L);
-        user = userMapper.get(user.getId());
+        TestUser user = userMapper.getById(1L);
+        user = userMapper.getById(user.getId());
         
         int rows = userMapper.delete(user);
         

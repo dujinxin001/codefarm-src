@@ -12,6 +12,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -53,14 +54,16 @@ import com.codefarm.mybatis.orm.annotations.BatchDelete;
 import com.codefarm.mybatis.orm.annotations.BatchInsert;
 import com.codefarm.mybatis.orm.annotations.BatchUpdate;
 import com.codefarm.mybatis.orm.annotations.Column;
+import com.codefarm.mybatis.orm.annotations.Criteria;
+import com.codefarm.mybatis.orm.annotations.Criterias;
 import com.codefarm.mybatis.orm.annotations.Delete;
 import com.codefarm.mybatis.orm.annotations.Entity;
 import com.codefarm.mybatis.orm.annotations.GeneratedValue;
 import com.codefarm.mybatis.orm.annotations.GenerationType;
-import com.codefarm.mybatis.orm.annotations.Get;
 import com.codefarm.mybatis.orm.annotations.Id;
 import com.codefarm.mybatis.orm.annotations.Insert;
 import com.codefarm.mybatis.orm.annotations.MultiGet;
+import com.codefarm.mybatis.orm.annotations.Select;
 import com.codefarm.mybatis.orm.annotations.Sn;
 import com.codefarm.mybatis.orm.annotations.Table;
 import com.codefarm.mybatis.orm.annotations.Transient;
@@ -271,6 +274,12 @@ public class GenericStatementBuilder extends BaseBuilder
         }
     }
     
+    /**
+     * 生成if动态sql
+     * @param prefix
+     * @param field
+     * @return
+     */
     private String getTestByField(String prefix, Field field)
     {
         Column column = field.getAnnotation(Column.class);
@@ -283,6 +292,19 @@ public class GenericStatementBuilder extends BaseBuilder
             return (StringUtils.isEmpty(prefix) ? "" : prefix + ".")
                     + field.getName() + "!= null";
         }
+        
+    }
+    
+    /**
+     * 生成if动态sql
+     * @param prefix
+     * @param parameter
+     * @return
+     */
+    private String getTestByParameter(String prefix, Parameter parameter)
+    {
+        return (StringUtils.isEmpty(prefix) ? "" : prefix + ".")
+                + parameter.getName() + "!= null";
         
     }
     
@@ -317,7 +339,7 @@ public class GenericStatementBuilder extends BaseBuilder
         String batchInsertStatementId = "batchinsert";
         String batchDeleteStatementId = "batchDelete";
         String multiGetStatementId = "multiGet";
-        
+        //----------inserts------------//
         buildInsertStatements();
         
         List<Method> deleteMethods = ReflectUtils
@@ -329,8 +351,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 throw new RuntimeException("有多个@Delete方法");
             }
             deleteStatementId = deleteMethods.get(0).getName();
-            if (!super.getConfiguration()
-                    .hasStatement(namespace + "." + deleteStatementId))
+            if (!hasStatement(deleteStatementId))
             {
                 buildDelete(namespace + "." + deleteStatementId);
             }
@@ -345,13 +366,12 @@ public class GenericStatementBuilder extends BaseBuilder
                 throw new RuntimeException("有多个@Update方法");
             }
             updateStatementId = updateMethods.get(0).getName();
-            if (!super.getConfiguration()
-                    .hasStatement(namespace + "." + updateStatementId))
+            if (!hasStatement(updateStatementId))
             {
                 buildUpdate(namespace + "." + updateStatementId);
             }
         }
-        
+        //----------selects------------//
         buildSelectStatements();
         
         List<Method> batchInsertMethods = ReflectUtils
@@ -424,16 +444,21 @@ public class GenericStatementBuilder extends BaseBuilder
     {
         String selectStatementId;
         List<Method> selectMethods = ReflectUtils
-                .findMethodsAnnotatedWith(mapperType, Get.class);
+                .findMethodsAnnotatedWith(mapperType, Select.class);
         for (Method method : selectMethods)
         {
             selectStatementId = method.getName();
-            if (!super.getConfiguration()
-                    .hasStatement(namespace + "." + selectStatementId))
+            if (!hasStatement(selectStatementId))
             {
-                buildSelect(namespace + "." + selectStatementId);
+                buildSelect(namespace + "." + selectStatementId, method);
             }
         }
+    }
+    
+    private boolean hasStatement(String selectStatementId)
+    {
+        return super.getConfiguration()
+                .hasStatement(namespace + "." + selectStatementId);
     }
     
     private void buildInsertStatements()
@@ -444,8 +469,7 @@ public class GenericStatementBuilder extends BaseBuilder
         for (Method method : insertMethods)
         {
             insertStatementId = method.getName();
-            if (!super.getConfiguration()
-                    .hasStatement(namespace + "." + insertStatementId))
+            if (!hasStatement(insertStatementId))
             {
                 buildInsert(namespace + "." + insertStatementId);
             }
@@ -1221,7 +1245,7 @@ public class GenericStatementBuilder extends BaseBuilder
     
     //~~~~~~~~~~~~~~~~~
     //get
-    private void buildSelect(String statementId)
+    private void buildSelect(String statementId, Method method)
     {
         Integer fetchSize = null;
         Integer timeout = entity.timeout() == -1 ? null : entity.timeout();
@@ -1233,11 +1257,12 @@ public class GenericStatementBuilder extends BaseBuilder
         KeyGenerator keyGenerator = new NoKeyGenerator();
         
         List<SqlNode> contents = new ArrayList<SqlNode>();
-        contents.add(this.getGetSql());
+        contents.add(this.getSelectSql(method));
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
         
         String resultMap = findResultMap();
+        logger.info("绑定Map {}", statementId);
         assistant.addMappedStatement(statementId,
                 sqlSource,
                 StatementType.PREPARED,
@@ -1277,21 +1302,90 @@ public class GenericStatementBuilder extends BaseBuilder
         return resultMap;
     }
     
-    private SqlNode getGetSql()
+    private SqlNode getSelectSql(Method method)
     {
-        String sql = "SELECT " + getIdColumnName() + " AS " + getIdFieldName();
+        List<SqlNode> content = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT ");
+        //        String sql = "SELECT " + getIdColumnName() + " AS " + getIdFieldName();
         
         for (Field field : columnFields)
         {
-            if (!getColumnNameByField(field).equals(getIdColumnName()))
-                sql += "," + getColumnNameByField(field) + " AS "
-                        + getColumnNameByField(field);
+            sb.append(getColumnNameByField(field));
+            sb.append(" AS ");
+            sb.append(getColumnNameByField(field));
+            sb.append(",");
         }
+        content.add(new TrimSqlNode(configuration,
+                new TextSqlNode(sb.toString()), null, null, null, ","));
+        sb.delete(0, sb.length());
+        sb.append(" FROM ");
+        sb.append(tableName);
         
-        sql += " FROM " + tableName + " WHERE " + getIdColumnName() + " = #{"
-                + getIdFieldName() + "}";
+        Parameter[] parameters = method.getParameters();
+        if (parameters != null && parameters.length > 0)
+            sb.append(" WHERE ");
+        content.add(new TextSqlNode(sb.toString()));
         
-        return new TextSqlNode(sql);
+        sb.delete(0, sb.length());
+        int index = 0;
+        for (Parameter parameter : parameters)
+        {
+            //-------parse @Criterias parameter
+            if (parameter.getType().isAnnotationPresent(Criterias.class))
+            {
+                
+                Field[] fields = parameter.getType().getDeclaredFields();
+                for (Field field : fields)
+                {
+                    if (field.isAnnotationPresent(Criteria.class))
+                    {
+                        Criteria annotation = field
+                                .getAnnotation(Criteria.class);
+                        String columnName = annotation.column();
+                        sb.append(columnName);
+                        sb.append(annotation.operator().getOperator());
+                        sb.append(" #{" + index + ".");
+                        sb.append(field.getName());
+                        sb.append("}");
+                        sb.append(" AND ");
+                        index++;
+                    }
+                    
+                }
+            }
+            //--------parse Primative paramter
+            
+            if (parameter.isAnnotationPresent(Criteria.class))
+            {
+                Criteria annotation = parameter.getAnnotation(Criteria.class);
+                String columnName = annotation.column();
+                sb.append(columnName);
+                sb.append(annotation.operator().getOperator());
+                sb.append(" #{");
+                sb.append(index);
+                sb.append("}");
+                sb.append(" AND ");
+                index++;
+            }
+        }
+        //        sql += " FROM " + tableName + " WHERE " + getIdColumnName() + " = #{"
+        //                + getIdFieldName() + "}";
+        //        SqlNode clause = new TextSqlNode(sb.toString());
+        //                content.add(new IfSqlNode(clause,
+        //                        getTestByParameter(null, parameter)));
+        content.add(new TrimSqlNode(configuration,
+                new TextSqlNode(sb.toString()), null, null, null, "AND"));
+        Select select = method.getAnnotation(Select.class);
+        if (com.codefarm.spring.modules.util.StringUtils
+                .isNotEmpty(select.orderby()))
+        {
+            sb.delete(0, sb.length());
+            sb.append(" order by ");
+            sb.append(select.orderby());
+            content.add(new TextSqlNode(sb.toString()));
+        }
+        return new MixedSqlNode(content);
     }
     
     public static Map<String, ShardKeyGenerator> getShardedKeyGenerators()

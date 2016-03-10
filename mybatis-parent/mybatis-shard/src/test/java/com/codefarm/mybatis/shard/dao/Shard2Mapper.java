@@ -1,12 +1,12 @@
 package com.codefarm.mybatis.shard.dao;
 
-import com.codefarm.mybatis.orm.annotations.Get;
+import com.codefarm.mybatis.orm.annotations.Select;
 import com.codefarm.mybatis.orm.annotations.Insert;
 import com.codefarm.mybatis.shard.entity.Shard2;
 
 public interface Shard2Mapper
 {
-    @Get
+    @Select
     public Shard2 get(String shard2Id);
     
     @Insert
