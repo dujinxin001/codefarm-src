@@ -5,6 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.ibatis.type.JdbcType;
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Id
@@ -17,4 +19,6 @@ public @interface Id
     boolean generatedKeys() default true;
     
     String column() default "";
+    
+    JdbcType jdbcType();
 }

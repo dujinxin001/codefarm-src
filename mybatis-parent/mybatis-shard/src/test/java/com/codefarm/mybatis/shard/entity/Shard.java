@@ -1,5 +1,7 @@
 package com.codefarm.mybatis.shard.entity;
 
+import org.apache.ibatis.type.JdbcType;
+
 import com.codefarm.mybatis.orm.annotations.Column;
 import com.codefarm.mybatis.orm.annotations.Entity;
 import com.codefarm.mybatis.orm.annotations.GeneratedValue;
@@ -12,14 +14,14 @@ import com.codefarm.mybatis.shard.dao.ShardMapper;
 @Table(name = "SHARD")
 public class Shard
 {
-    @Id(column = "SHARD_ID")
+    @Id(column = "SHARD_ID", jdbcType = JdbcType.BIGINT)
     @GeneratedValue
     private long shardId;
     
-    @Column(name = "SHARD_NAME")
+    @Column(name = "SHARD_NAME", jdbcType = JdbcType.VARCHAR)
     private String shardName;
     
-    @Column(name = "SERIAL_NUMBER")
+    @Column(name = "SERIAL_NUMBER", jdbcType = JdbcType.VARCHAR)
     @Sn(stubValue = "SHARD")
     private String serialNumber;
     

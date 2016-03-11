@@ -10,7 +10,6 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 
-	<context:component-scan base-package="org.makersoft"/>
 	
 	<bean id="sqlSessionFactory" class="com.codefarm.mybatis.orm.ActiveSQLSessionFactoryBean">
 		<property name="configLocation" value="classpath:mybatis/configuration.xml" />

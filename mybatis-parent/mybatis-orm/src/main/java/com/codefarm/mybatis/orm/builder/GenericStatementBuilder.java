@@ -677,9 +677,17 @@ public class GenericStatementBuilder extends BaseBuilder
             }
             else
             {
-                sqlNodes.add(new TextSqlNode("#{" + ITEM + "." + field.getName()
-                        + ",jdbcType="
-                        + JdbcTypeFactory.getJdbcType(field.getType()) + "},"));
+                if (column != null)
+                    sqlNodes.add(
+                            new TextSqlNode("#{" + ITEM + "." + field.getName()
+                                    + ",jdbcType=" + column.jdbcType() + "},"));
+                else
+                {
+                    Id id = field.getAnnotation(Id.class);
+                    sqlNodes.add(
+                            new TextSqlNode("#{" + ITEM + "." + field.getName()
+                                    + ",jdbcType=" + id.jdbcType() + "},"));
+                }
             }
             
             contents.add(new MixedSqlNode(sqlNodes));
@@ -724,9 +732,15 @@ public class GenericStatementBuilder extends BaseBuilder
             }
             else
             {
-                contents.add(new TextSqlNode("#{" + field.getName()
-                        + ",jdbcType="
-                        + JdbcTypeFactory.getJdbcType(field.getType()) + "},"));
+                if (column != null)
+                    contents.add(new TextSqlNode("#{" + field.getName()
+                            + ",jdbcType=" + column.jdbcType() + "},"));
+                else
+                {
+                    Id id = field.getAnnotation(Id.class);
+                    contents.add(new TextSqlNode("#{" + field.getName()
+                            + ",jdbcType=" + id.jdbcType() + "},"));
+                }
             }
             
         }
@@ -892,7 +906,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 }
                 sb.append(field.getName());
                 sb.append(",jdbcType=");
-                sb.append(JdbcTypeFactory.getJdbcType(field.getType()));
+                sb.append(field.getAnnotation(Column.class).jdbcType());
                 sb.append("},");
             }
             contents.add(new IfSqlNode(new TextSqlNode(sb.toString()),

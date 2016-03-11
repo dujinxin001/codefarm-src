@@ -12,6 +12,8 @@ import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
 
+import com.codefarm.spring.modules.util.Reflections;
+
 public class SequenceKeyGenerator implements KeyGenerator
 {
     private String squenceName;
@@ -39,7 +41,6 @@ public class SequenceKeyGenerator implements KeyGenerator
         String[] keyProperties = ms.getKeyProperties();
         try
         {
-            
             if (parameter instanceof StrictMap)
             {
                 StrictMap map = (StrictMap) parameter;
@@ -77,6 +78,10 @@ public class SequenceKeyGenerator implements KeyGenerator
                     }
                 }
             }
+            else
+            {
+                populateKey(parameter, keyProperties, executor);
+            }
             
         }
         catch (SQLException e)
@@ -111,6 +116,30 @@ public class SequenceKeyGenerator implements KeyGenerator
                 rs.next();
                 Long key = rs.getLong(1);
                 metaParam.setValue(keyProperties[i], key);
+                rs.close();
+                
+            }
+            
+        }
+        statement.close();
+    }
+    
+    private void populateKey(Object parameter, String[] keyProperties,
+            Executor executor) throws SQLException
+    {
+        Statement statement = executor.getTransaction()
+                .getConnection()
+                .createStatement();
+        
+        for (int i = 0; i < keyProperties.length; i++)
+        {
+            if (Reflections.getFieldValue(parameter, keyProperties[i]) == null)
+            {
+                ResultSet rs = statement.executeQuery(
+                        "select " + getSquenceName() + ".nextval from dual");
+                rs.next();
+                Long key = rs.getLong(1);
+                Reflections.setFieldValue(parameter, keyProperties[i], key);
                 rs.close();
                 
             }

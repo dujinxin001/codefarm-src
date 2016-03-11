@@ -13,14 +13,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.ibatis.type.JdbcType;
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Column {
-
-	String name() default "";
-	
-	boolean sysdate() default false;
-	
-	String test() default "";
-	
+public @interface Column
+{
+    
+    String name() default "";
+    
+    boolean sysdate() default false;
+    
+    String test() default "";
+    
+    JdbcType jdbcType();
+    
 }

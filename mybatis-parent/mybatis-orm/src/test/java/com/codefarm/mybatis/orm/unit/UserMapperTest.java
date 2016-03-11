@@ -1,11 +1,3 @@
-/*
- * @(#)MyBatisTest.java 2013年12月23日 下午23:33:33
- *
- * Copyright (c) 2011-2013 Makersoft.org all rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- *
- */
 package com.codefarm.mybatis.orm.unit;
 
 import static org.junit.Assert.assertNotNull;
@@ -27,9 +19,6 @@ import com.codefarm.mybatis.orm.mapper.UserMapper;
 import com.codefarm.mybatis.orm.model.TestUser;
 import com.codefarm.mybatis.orm.po.TestUserCriterias;
 
-/**
- * 
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
@@ -46,6 +35,7 @@ public class UserMapperTest
         return user;
     }
     
+    @Test
     @Transactional
     public void testInsert()
     {
@@ -72,7 +62,6 @@ public class UserMapperTest
         
     }
     
-    @Test
     @Transactional
     public void testUpdate()
     {

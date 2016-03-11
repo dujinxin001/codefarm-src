@@ -2,6 +2,8 @@ package com.codefarm.mybatis.orm.model;
 
 import java.io.Serializable;
 
+import org.apache.ibatis.type.JdbcType;
+
 import com.codefarm.mybatis.orm.annotations.Column;
 import com.codefarm.mybatis.orm.annotations.Entity;
 import com.codefarm.mybatis.orm.annotations.GeneratedValue;
@@ -18,11 +20,11 @@ public class TestUser extends Pagable implements Serializable
     
     private static final long serialVersionUID = 6275980778279891698L;
     
-    @Id(column = "userid", generatedKeys = true)
+    @Id(column = "userid", generatedKeys = true, jdbcType = JdbcType.BIGINT)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, sequence = "test_seq")
     private Long id;
     
-    @Column(name = "username")
+    @Column(name = "username", jdbcType = JdbcType.VARCHAR)
     private String userName;
     
     public TestUser()
