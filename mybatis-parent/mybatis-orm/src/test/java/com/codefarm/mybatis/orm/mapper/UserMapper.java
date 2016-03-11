@@ -6,6 +6,7 @@ import com.codefarm.mybatis.orm.annotations.Criteria;
 import com.codefarm.mybatis.orm.annotations.Delete;
 import com.codefarm.mybatis.orm.annotations.Insert;
 import com.codefarm.mybatis.orm.annotations.Select;
+import com.codefarm.mybatis.orm.annotations.Update;
 import com.codefarm.mybatis.orm.model.TestUser;
 import com.codefarm.mybatis.orm.po.TestUserCriterias;
 
@@ -36,9 +37,19 @@ public interface UserMapper
      */
     int insertABC(TestUser[] users);
     
-    //    @Update
-    //    int update(TestUser user);
-    //    
+    @Update
+    int updateSingle(TestUser user);
+    
+    @Update
+    int update(TestUser newUser,
+            @Criteria(column = "username") String username);
+    
+    @Update
+    int updateUser(TestUser user);
+    
+    @Update
+    int updateUsers(TestUser newUser, TestUserCriterias criterias);
+    
     @Select(orderby = "userid desc")
     TestUser getById(@Criteria(column = "userid") Long id);
     

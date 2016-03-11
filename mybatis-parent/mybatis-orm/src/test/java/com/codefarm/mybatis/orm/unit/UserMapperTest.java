@@ -46,7 +46,6 @@ public class UserMapperTest
         return user;
     }
     
-    @Test
     @Transactional
     public void testInsert()
     {
@@ -73,9 +72,29 @@ public class UserMapperTest
         
     }
     
+    @Test
     @Transactional
     public void testUpdate()
     {
+        TestUser user = new TestUser();
+        user.setId(15l);
+        user.setUserName("abc");
+        int rows = userMapper.updateUser(user);
+        assertTrue(rows == 1);
+        rows = userMapper.updateSingle(user);
+        assertTrue(rows == 1);
+        
+        TestUser user2 = new TestUser();
+        user2.setUserName("cde");
+        int rows2 = userMapper.update(user2, "abc");
+        assertTrue(rows2 == 1);
+        
+        TestUser user3 = new TestUser();
+        user3.setUserName("cde");
+        TestUserCriterias criterias = new TestUserCriterias();
+        criterias.setIds(new Long[] { 15l, 16l });
+        int rows3 = userMapper.updateUsers(user3, criterias);
+        assertTrue(rows3 == 2);
         //        TestUser entity = userMapper.getById(1L);
         //        assertNotNull("selected entity can not be null!", entity);
         //        
