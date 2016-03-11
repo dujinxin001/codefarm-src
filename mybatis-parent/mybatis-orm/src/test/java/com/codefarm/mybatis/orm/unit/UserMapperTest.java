@@ -9,7 +9,6 @@
 package com.codefarm.mybatis.orm.unit;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -78,22 +77,31 @@ public class UserMapperTest
     {
         TestUser entity = userMapper.getById(17L);
         assertNotNull(entity);
-        assertTrue(entity.getId() == 17l);
         
         List<TestUser> select = userMapper.select(18l, "2");
         assertNotNull(select);
-        assertTrue(select.size() == 1);
+        
         TestUserCriterias criterias = new TestUserCriterias();
         criterias.setUserid(15l);
         List<TestUser> select2 = userMapper.selectByCriterias(criterias);
         assertNotNull(select2);
+        
+        TestUserCriterias criterias2 = new TestUserCriterias();
+        criterias2.setUserid(15l);
+        //        criterias2.setUsername("2");
+        criterias2.setIds(new Long[] { 15l, 16l });
+        List<TestUser> select3 = userMapper
+                .selectByCriteriasAndUsername(criterias2, "2");
+        assertNotNull(select3);
+        
         List<TestUser> select4 = userMapper
                 .selectByIds(new Long[] { 15l, 16l });
-        assertTrue(select4.size() == 2);
-        //        TestUserCriterias criterias2 = new TestUserCriterias();
-        //        criterias2.setUserids(new Long[] { 15l, 16l });
-        //        List<TestUser> select5 = userMapper.selectByCriterias(criterias2);
-        //        assertTrue(select5.size() == 2);
+        assertNotNull(select4);
+        
+        TestUserCriterias criterias5 = new TestUserCriterias();
+        criterias5.setIds(new Long[] { 15l, 16l });
+        List<TestUser> select5 = userMapper.selectByCriterias(criterias5);
+        assertNotNull(select5);
     }
     
     @Transactional

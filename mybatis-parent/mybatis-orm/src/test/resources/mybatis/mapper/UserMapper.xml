@@ -19,8 +19,11 @@
  <if test="#{param1.userid}!= null">  
  userid &gt; #{param1.userid} 
 </if>
- <if test="#{param1.username}!= null">  
- username= #{param1.username}
+ <if test="param1.username!= null and param1.username!=''">  
+ AND username= #{param1.username}
+</if>
+<if test="#{param2}!= null">  
+ AND username= #{param2}
 </if>
 	</select>
 	<!-- 

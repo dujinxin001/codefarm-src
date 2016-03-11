@@ -293,7 +293,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 return field.getName() + "!=null";
             else
             {
-                return "#{" + prefix + "." + field.getName() + "}" + "!= null";
+                return prefix + "." + field.getName() + "!= null";
             }
             
         }
@@ -1425,10 +1425,16 @@ public class GenericStatementBuilder extends BaseBuilder
                             sb.append(" in ");
                             List<SqlNode> sub = new ArrayList<>();
                             sub.add(new TextSqlNode(sb.toString()));
-                            sub.add(getForEachSqlNode(field.getName()));
+                            if (parameters.length > 1)
+                                sub.add(getForEachSqlNode("param" + index + "."
+                                        + field.getName()));
+                            else
+                                sub.add(getForEachSqlNode(field.getName()));
                             sub.add(new TextSqlNode(" AND "));
-                            contents.add(new IfSqlNode(new MixedSqlNode(sub),
-                                    getTestByField(null, field)));
+                            String test = getTestByField(parameters.length > 1
+                                    ? "param" + index : null, field);
+                            contents.add(
+                                    new IfSqlNode(new MixedSqlNode(sub), test));
                             
                         }
                         else
@@ -1458,7 +1464,6 @@ public class GenericStatementBuilder extends BaseBuilder
                 index++;
             }
             //--------parse Primative paramter
-            
             else if (parameter.isAnnotationPresent(Criteria.class))
             {
                 Criteria annotation = parameter.getAnnotation(Criteria.class);
@@ -1479,7 +1484,12 @@ public class GenericStatementBuilder extends BaseBuilder
                     sb.append(columnName);
                     sb.append(annotation.operator().getOperator());
                     sb.append(" #{");
-                    sb.append("param" + index);
+                    if (parameters.length > 1)
+                    {
+                        sb.append("param" + index);
+                    }
+                    else
+                        sb.append(index);
                     sb.append("}");
                     sb.append(" AND ");
                     contents.add(new TextSqlNode(sb.toString()));

@@ -51,10 +51,18 @@ public interface UserMapper
     List<TestUser> select(@Criteria(column = "userid") Long id,
             @Criteria(column = "username") String username);
     
-    @Select(orderby = "userid asc")
-    List<TestUser> selectByCriterias(TestUserCriterias criterias);
+    @Select
+    List<TestUser> selectByCriteriasAndUsername(TestUserCriterias criterias,
+            @Criteria(column = "username") String username);
     
     @Select(orderby = "userid desc")
     List<TestUser> selectByIds(@Criteria(column = "userid") Long[] ids);
+    
+    @Select(orderby = "userid asc")
+    List<TestUser> selectByCriterias(TestUserCriterias criterias);
+    
+    //    
+    
+    List<TestUser> selectABC(TestUserCriterias criterias, String username);
     
 }

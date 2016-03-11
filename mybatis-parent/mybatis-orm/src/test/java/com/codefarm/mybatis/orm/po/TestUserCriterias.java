@@ -13,6 +13,9 @@ public class TestUserCriterias
     @Criteria(column = "username")
     private String username = null;
     
+    @Criteria(column = "userid")
+    private Long[] ids;
+    
     public Long getUserid()
     {
         return userid;
@@ -31,6 +34,16 @@ public class TestUserCriterias
     public void setUsername(String username)
     {
         this.username = username;
+    }
+    
+    public Long[] getIds()
+    {
+        return ids;
+    }
+    
+    public void setIds(Long[] ids)
+    {
+        this.ids = ids;
     }
     
 }
