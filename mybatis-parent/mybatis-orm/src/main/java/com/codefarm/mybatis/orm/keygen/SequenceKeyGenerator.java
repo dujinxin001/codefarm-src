@@ -1,17 +1,16 @@
 package com.codefarm.mybatis.orm.keygen;
 
-import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.mapping.MappedStatement;
-
-import com.codefarm.mybatis.orm.annotations.Id;
-import com.codefarm.spring.modules.util.AnnotationUtils;
-import com.codefarm.spring.modules.util.Reflections;
+import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
 
 public class SequenceKeyGenerator implements KeyGenerator
 {
@@ -32,23 +31,53 @@ public class SequenceKeyGenerator implements KeyGenerator
     }
     
     @Override
-    public void processBefore(Executor executor, MappedStatement arg1,
+    public void processBefore(Executor executor, MappedStatement ms,
             Statement arg2, Object parameter)
     {
+        MetaObject newMetaObject = ms.getConfiguration()
+                .newMetaObject(parameter);
+        String[] keyProperties = ms.getKeyProperties();
         try
         {
-            Statement statement = executor.getTransaction()
-                    .getConnection()
-                    .createStatement();
-            ResultSet rs = statement.executeQuery(
-                    "select " + getSquenceName() + ".nextval from dual");
-            rs.next();
-            Long key = rs.getLong(1);
-            Field idField = AnnotationUtils.findDeclaredFieldWithAnnoation(
-                    Id.class, parameter.getClass());
-            Reflections.invokeSetter(parameter, idField.getName(), key);
-            rs.close();
-            statement.close();
+            
+            if (parameter instanceof StrictMap)
+            {
+                StrictMap map = (StrictMap) parameter;
+                Iterator<String> keySet = map.keySet().iterator();
+                while (keySet.hasNext())
+                {
+                    String key = keySet.next();
+                    if (key.equals("list"))
+                    {
+                        List list = (List) map.get(key);
+                        if (list != null)
+                            for (Object object : list)
+                            {
+                                populateKey(
+                                        ms.getConfiguration()
+                                                .newMetaObject(object),
+                                        keyProperties,
+                                        executor);
+                                
+                            }
+                    }
+                    else if (key.equals("array"))
+                    {
+                        
+                        Object[] array = (Object[]) map.get(key);
+                        if (array != null)
+                            for (Object object : array)
+                            {
+                                populateKey(
+                                        ms.getConfiguration()
+                                                .newMetaObject(object),
+                                        keyProperties,
+                                        executor);
+                            }
+                    }
+                }
+            }
+            
         }
         catch (SQLException e)
         {
@@ -66,4 +95,27 @@ public class SequenceKeyGenerator implements KeyGenerator
         this.squenceName = squenceName;
     }
     
+    private void populateKey(MetaObject metaParam, String[] keyProperties,
+            Executor executor) throws SQLException
+    {
+        Statement statement = executor.getTransaction()
+                .getConnection()
+                .createStatement();
+        
+        for (int i = 0; i < keyProperties.length; i++)
+        {
+            if (metaParam.getValue(keyProperties[i]) == null)
+            {
+                ResultSet rs = statement.executeQuery(
+                        "select " + getSquenceName() + ".nextval from dual");
+                rs.next();
+                Long key = rs.getLong(1);
+                metaParam.setValue(keyProperties[i], key);
+                rs.close();
+                
+            }
+            
+        }
+        statement.close();
+    }
 }

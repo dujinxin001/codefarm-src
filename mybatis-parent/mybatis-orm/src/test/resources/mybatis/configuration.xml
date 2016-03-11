@@ -9,6 +9,7 @@
 	</properties>
 	<settings>
 		<setting name="lazyLoadingEnabled" value="false" />
+		<setting name="callSettersOnNulls" value="true"/>
 	</settings>
 	<plugins>
 		<plugin interceptor="com.codefarm.mybatis.pagination.interceptor.PaginationInterceptor"></plugin>

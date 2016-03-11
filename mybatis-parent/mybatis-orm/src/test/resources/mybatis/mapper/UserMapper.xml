@@ -8,24 +8,40 @@
 		<result property="userName" column="username" jdbcType="VARCHAR"/>
 	</resultMap>
 	
+	<parameterMap type="com.codefarm.mybatis.orm.model.TestUser" id="BaseParameterMap">
+		<parameter property="id" jdbcType="INTEGER" javaType="java.lang.Long"/>
+		<parameter property="userName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	</parameterMap>
+	
 	<sql id="Base_Column_List">
 		USER_ID, USER_NAME
 	</sql>
 	
-	<select id="selectABC" resultMap="BaseResultMap" parameterType="com.codefarm.mybatis.orm.po.TestUserCriterias">
+	<insert id="insertABC" parameterType="com.codefarm.mybatis.orm.model.TestUser" parameterMap="BaseParameterMap">
+		INSERT INTO testuser ( userid,username ) VALUES 
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item.id},#{item.userName,jdbcType=VARCHAR}
+        </foreach>
+	</insert>
 
+	<select id="selectABC" resultMap="BaseResultMap"
+		parameterType="com.codefarm.mybatis.orm.po.TestUserCriterias">
 		SELECT userid AS userid,username AS username
- FROM testuser where
- <if test="#{param1.userid}!= null">  
- userid &gt; #{param1.userid} 
-</if>
- <if test="param1.username!= null and param1.username!=''">  
- AND username= #{param1.username}
-</if>
-<if test="#{param2}!= null">  
- AND username= #{param2}
-</if>
+		FROM testuser where
+		<if test="#{param1.userid}!= null">
+			userid &gt; #{param1.userid}
+		</if>
+		<if test="param1.username!= null and param1.username!=''">
+			AND username= #{param1.username}
+		</if>
+		<if test="#{param2}!= null">
+			AND username= #{param2}
+		</if>
 	</select>
+	
+	
+	
+	
 	<!-- 
 	<insert id="insertUser" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="org.makersoft.activesql.model.User">
 		insert into t_user(user_name, password, birth_day, created_at, updated_at)

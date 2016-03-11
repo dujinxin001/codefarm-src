@@ -478,7 +478,7 @@ public class GenericStatementBuilder extends BaseBuilder
             insertStatementId = method.getName();
             if (!hasStatement(insertStatementId))
             {
-                buildInsert(namespace + "." + insertStatementId);
+                buildInsert(namespace + "." + insertStatementId, method);
             }
         }
     }
@@ -783,7 +783,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 lang);
     }
     
-    private void buildInsert(String statementId)
+    private void buildInsert(String statementId, Method method)
     {
         
         Integer timeout = null;
@@ -819,7 +819,7 @@ public class GenericStatementBuilder extends BaseBuilder
         }
         
         List<SqlNode> contents = new ArrayList<SqlNode>();
-        contents.add(this.getInsertSql());
+        contents.add(this.getInsertSql(method));
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
         String parameterMap = null;
@@ -976,8 +976,9 @@ public class GenericStatementBuilder extends BaseBuilder
             }
             else
             {
-                sqlNodes.add(
-                        new TextSqlNode("#{item." + field.getName() + "},"));
+                sqlNodes.add(new TextSqlNode("#{" + ITEM + "." + field.getName()
+                        + ",jdbcType="
+                        + JdbcTypeFactory.getJdbcType(field.getType()) + "},"));
             }
             
             contents.add(new MixedSqlNode(sqlNodes));
@@ -992,12 +993,21 @@ public class GenericStatementBuilder extends BaseBuilder
                 "", ",");
     }
     
-    private SqlNode getInsertSql()
+    private SqlNode getInsertSql(Method method)
     {
+        if (method.getParameters().length > 1 || method.getParameters() == null)
+            throw new RuntimeException("inserts can have only one parameter");
         List<SqlNode> contents = new ArrayList<SqlNode>();
         contents.add(new TextSqlNode("INSERT INTO " + tableName + " "));
         contents.add(getInsertColumns());
-        contents.add(getInsertFileds());
+        Class<?> parameterType = method.getParameterTypes()[0];
+        System.out.println(parameterType);
+        if (parameterType.isArray()
+                || Collection.class.isAssignableFrom(parameterType))
+            contents.add(getBatchInsertFields(
+                    getCollectionName(method.getParameters()[0])));
+        else
+            contents.add(getInsertFileds());
         return new MixedSqlNode(contents);
     }
     
@@ -1011,15 +1021,15 @@ public class GenericStatementBuilder extends BaseBuilder
             if (Date.class.isAssignableFrom(field.getType()) && column != null
                     && column.sysdate() == true)
             {
-                sqlNodes.add(new TextSqlNode("now(),"));
+                contents.add(new TextSqlNode("now(),"));
             }
             else
             {
-                sqlNodes.add(new TextSqlNode("#{" + field.getName() + "},"));
+                contents.add(new TextSqlNode("#{" + field.getName()
+                        + ",jdbcType="
+                        + JdbcTypeFactory.getJdbcType(field.getType()) + "},"));
             }
             
-            contents.add(new IfSqlNode(new MixedSqlNode(sqlNodes),
-                    getTestByField(null, field)));
         }
         
         return new TrimSqlNode(configuration, new MixedSqlNode(contents),
@@ -1046,11 +1056,7 @@ public class GenericStatementBuilder extends BaseBuilder
         List<SqlNode> contents = new ArrayList<SqlNode>();
         for (Field field : columnFields)
         {
-            List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-            sqlNodes.add(new TextSqlNode(getColumnNameByField(field) + ","));
-            
-            contents.add(new IfSqlNode(new MixedSqlNode(sqlNodes),
-                    getTestByField(null, field)));
+            contents.add(new TextSqlNode(getColumnNameByField(field) + ","));
         }
         
         return new TrimSqlNode(configuration, new MixedSqlNode(contents), "(",
@@ -1417,9 +1423,8 @@ public class GenericStatementBuilder extends BaseBuilder
                                 .getAnnotation(Criteria.class);
                         String columnName = annotation.column();
                         //--------数组参数--------//
-                        if (field.getType().isArray()
-                                || field.getDeclaringClass()
-                                        .isAssignableFrom(Collection.class))
+                        if (field.getType().isArray() || Collection.class
+                                .isAssignableFrom(field.getDeclaringClass()))
                         {
                             sb.append(columnName);
                             sb.append(" in ");
@@ -1469,8 +1474,8 @@ public class GenericStatementBuilder extends BaseBuilder
                 Criteria annotation = parameter.getAnnotation(Criteria.class);
                 String columnName = annotation.column();
                 //--------数组参数--------//
-                if (parameter.getType().isArray() || parameter.getType()
-                        .isAssignableFrom(Collection.class))
+                if (parameter.getType().isArray() || Collection.class
+                        .isAssignableFrom(parameter.getType()))
                 {
                     sb.append(columnName);
                     sb.append(" in ");

@@ -9,7 +9,9 @@
 package com.codefarm.mybatis.orm.unit;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -41,20 +43,33 @@ public class UserMapperTest
     private static TestUser buildUser()
     {
         TestUser user = new TestUser();
-        user.setUserName("makersoft");
         return user;
     }
     
+    @Test
     @Transactional
     public void testInsert()
     {
-        //        TestUser user = buildUser();
-        //        user.setId(13333333l);
-        //        int rows = userMapper.insertUser(user);
-        //        user.setUserName("2");
-        //        userMapper.insert(user);
-        //        assertTrue("Insert entity not success!", rows > 0);
-        //        assertNotNull("Id can not be null!", user.getId());
+        //---------insert single object-----------//
+        TestUser user = buildUser();
+        user.setId(13333333l);
+        int rows = userMapper.insertUser(user);
+        assertTrue(rows == 1);
+        
+        user.setUserName("2");
+        rows = userMapper.insert(user);
+        assertTrue(rows == 1);
+        
+        //---------insert batch objects-----------//
+        TestUser[] users = new TestUser[] { user };
+        int rows2 = userMapper.insertUserArray(users);
+        assertTrue(rows2 == 1);
+        //        userMapper.insertABC(users);
+        //        
+        List<TestUser> users2 = new ArrayList<>();
+        users2.add(user);
+        int rows3 = userMapper.insertUserList(users2);
+        assertTrue(rows3 == 1);
         
     }
     
@@ -71,7 +86,6 @@ public class UserMapperTest
         //        assertTrue("Update entity not success!", rows == 1);
     }
     
-    @Test
     @Transactional
     public void testGet()
     {
@@ -107,18 +121,23 @@ public class UserMapperTest
     @Transactional
     public void testDelete()
     {
-        //        int rows = userMapper.delete(17l);
-        //        assertTrue(rows == 1);
-        //        rows = userMapper.deleteByIdAndName(15l, "2");
-        //        assertTrue(rows == 0);
-        //        rows = userMapper.deleteByIdAndName(15l, "makersoft");
-        //        assertTrue(rows == 1);
-        //        TestUserCriterias criterias = new TestUserCriterias();
-        //        criterias.setUserid(15l);
-        //        rows = userMapper.deleteByCriteriasAndUserName(criterias, "2");
-        //        assertTrue("Delete operation could not success!", rows > 1);
-        //        rows = userMapper.deleteByCriterias(criterias);
-        //        assertTrue(rows > 1);
+        int rows = userMapper.delete(17l);
+        assertTrue(rows == 1);
+        
+        rows = userMapper.deleteByIdAndName(15l, "2");
+        assertTrue(rows == 0);
+        rows = userMapper.deleteByIdAndName(15l, "makersoft");
+        assertTrue(rows == 1);
+        
+        TestUserCriterias criterias = new TestUserCriterias();
+        criterias.setUserid(15l);
+        rows = userMapper.deleteByCriteriasAndUserName(criterias, "2");
+        assertTrue("Delete operation could not success!", rows > 1);
+        
+        TestUserCriterias criterias2 = new TestUserCriterias();
+        criterias2.setIds(new Long[] { 15l, 16l });
+        rows = userMapper.deleteByCriterias(criterias2);
+        assertTrue(rows == 0);
         
     }
     

@@ -1,46 +1,41 @@
-/*
- * @(#)UserMapper.java 2013年12月23日 下午23:33:33
- *
- * Copyright (c) 2011-2013 Makersoft.org all rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- *
- */
 package com.codefarm.mybatis.orm.mapper;
 
 import java.util.List;
 
 import com.codefarm.mybatis.orm.annotations.Criteria;
+import com.codefarm.mybatis.orm.annotations.Delete;
+import com.codefarm.mybatis.orm.annotations.Insert;
 import com.codefarm.mybatis.orm.annotations.Select;
 import com.codefarm.mybatis.orm.model.TestUser;
 import com.codefarm.mybatis.orm.po.TestUserCriterias;
 
 /**
- * Class description goes here.
+ * 注意接口方法名称必须唯一，用作MappedStatementId
+ * @author zhangjian
+ *
  */
 public interface UserMapper
 {
     
-    //    @Insert
-    //    int insertUser(TestUser user);
-    //    
-    //    @Insert
-    //    int insert(TestUser user);
-    //    
-    //    @Delete
-    //    int delete(@Criteria(column = "userid") Long id);
-    //    
-    //    @Delete
-    //    int deleteByIdAndName(@Criteria(column = "userid") Long id,
-    //            @Criteria(column = "username") String name);
-    //    
-    //    @Delete
-    //    int deleteByCriterias(TestUserCriterias criterias);
-    //    
-    //    @Delete
-    //    int deleteByCriteriasAndUserName(TestUserCriterias criterias,
-    //            @Criteria(column = "username") String username);
-    //    
+    @Insert
+    int insertUser(TestUser user);
+    
+    @Insert
+    int insert(TestUser user);
+    
+    @Insert
+    int insertUserList(List<TestUser> users);
+    
+    @Insert
+    int insertUserArray(TestUser[] users);
+    
+    /**
+     * UserMapper.xml
+     * @param users
+     * @return
+     */
+    int insertABC(TestUser[] users);
+    
     //    @Update
     //    int update(TestUser user);
     //    
@@ -61,8 +56,26 @@ public interface UserMapper
     @Select(orderby = "userid asc")
     List<TestUser> selectByCriterias(TestUserCriterias criterias);
     
-    //    
-    
+    /**
+     * UserMapper.xml
+     * @param criterias
+     * @param username
+     * @return
+     */
     List<TestUser> selectABC(TestUserCriterias criterias, String username);
+    
+    @Delete
+    int delete(@Criteria(column = "userid") Long id);
+    
+    @Delete
+    int deleteByIdAndName(@Criteria(column = "userid") Long id,
+            @Criteria(column = "username") String name);
+    
+    @Delete
+    int deleteByCriterias(TestUserCriterias criterias);
+    
+    @Delete
+    int deleteByCriteriasAndUserName(TestUserCriterias criterias,
+            @Criteria(column = "username") String username);
     
 }
