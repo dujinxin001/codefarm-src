@@ -86,7 +86,7 @@ public class UserMapperTest
         
         TestUser user2 = new TestUser();
         user2.setUserName("cde");
-        int rows2 = userMapper.update(user2, "abc");
+        int rows2 = userMapper.update("abc", user2);
         assertTrue(rows2 == 1);
         
         TestUser user3 = new TestUser();

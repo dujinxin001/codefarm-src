@@ -41,8 +41,8 @@ public interface UserMapper
     int updateSingle(TestUser user);
     
     @Update
-    int update(TestUser newUser,
-            @Criteria(column = "username") String username);
+    int update(@Criteria(column = "username") String username,
+            TestUser newUser);
     
     @Update
     int updateUser(TestUser user);
