@@ -50,6 +50,7 @@ import org.springframework.util.ReflectionUtils.FieldCallback;
 import org.springframework.util.ReflectionUtils.FieldFilter;
 
 import com.codefarm.mybatis.orm.ConfigurationProperties;
+import com.codefarm.mybatis.orm.ResultMapBuilder;
 import com.codefarm.mybatis.orm.annotations.Column;
 import com.codefarm.mybatis.orm.annotations.Criteria;
 import com.codefarm.mybatis.orm.annotations.Criterias;
@@ -1008,7 +1009,14 @@ public class GenericStatementBuilder extends BaseBuilder
                 break;
             }
         }
+        if (resultMap == null)
+            return buildResultMap();
         return resultMap;
+    }
+    
+    private String buildResultMap()
+    {
+        return ResultMapBuilder.build(configuration, entityClass, namespace);
     }
     
     private SqlNode getSelectSql(Method method)
