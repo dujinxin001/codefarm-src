@@ -999,15 +999,23 @@ public class GenericStatementBuilder extends BaseBuilder
         String resultMap = null;
         Iterator<String> resultMapNames = configuration.getResultMapNames()
                 .iterator();
-        while (resultMapNames.hasNext())
+        try
         {
-            String name = resultMapNames.next();
-            ResultMap temp = configuration.getResultMap(name);
-            if (temp.getType().equals(entityClass))
+            while (resultMapNames.hasNext())
             {
-                resultMap = temp.getId();
-                break;
+                String name = resultMapNames.next();
+                ResultMap temp = configuration
+                        .getResultMap(namespace + "." + name);
+                if (temp.getType().equals(entityClass))
+                {
+                    resultMap = temp.getId();
+                    break;
+                }
             }
+        }
+        catch (Exception e)
+        {
+            
         }
         if (resultMap == null)
             return buildResultMap();
