@@ -18,12 +18,12 @@
 		<httpclient.version>4.5.2</httpclient.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>com.java</groupId>
-			<artifactId>rt</artifactId>
-			<version>1.8-x64</version>
-			<scope>provided</scope>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.java</groupId> -->
+<!-- 			<artifactId>rt</artifactId> -->
+<!-- 			<version>1.8-x64</version> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>

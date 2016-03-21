@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.sxj</groupId>
-  <artifactId>birt-parent</artifactId>
-  <version>1.0</version>
-  <packaging>pom</packaging>
-  <modules>
-    <module>birt-spring</module>
-    <module>birt-spring-website</module>
-  </modules>
-  <dependencyManagement>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.sxj</groupId>
+	<artifactId>birt-parent</artifactId>
+	<version>1.0</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>birt-spring</module>
+		<module>birt-spring-website</module>
+	</modules>
+	<properties>
+		<java.version>1.7</java.version>
+		<servlet.version>3.0.1</servlet.version>
+		<spring.version>4.0.6.RELEASE</spring.version>
+		<mysql.version>5.1.31</mysql.version>
+	</properties>
+	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>javax.servlet</groupId>
@@ -115,10 +122,16 @@
 			</plugin>
 		</plugins>
 	</build>
-	<properties>
-		<java.version>1.7</java.version>
-		<servlet.version>3.0.1</servlet.version>
-		<spring.version>4.0.6.RELEASE</spring.version>
-		<mysql.version>5.1.31</mysql.version>
-	</properties>
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Local Nexus Repository</name>
+			<url>http://120.25.177.16/nexus/content/repositories/releases</url>
+		</repository>
+<!-- 		<snapshotRepository> -->
+<!-- 			<id>nexus-snapshots</id> -->
+<!-- 			<name>Local Nexus Repository</name> -->
+<!-- 			<url>http://120.25.177.16/nexus/content/groups/public</url> -->
+<!-- 		</snapshotRepository> -->
+	</distributionManagement>
 </project>

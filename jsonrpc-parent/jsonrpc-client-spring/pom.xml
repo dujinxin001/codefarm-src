@@ -36,12 +36,6 @@
 			<version>4.11</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>supervisor-service</artifactId>
-			<version>1.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>

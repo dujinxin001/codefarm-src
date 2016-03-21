@@ -83,13 +83,13 @@
 	<distributionManagement>
 		<repository>
 			<id>codefarm</id>
-			<name>Aliyun Repository</name>
-			<url>http://120.25.177.16/nexus/content/repositories/releases/</url>
-		</repository>
-		<!-- <snapshotRepository>
-			<id>nexus-snapshots</id>
 			<name>Local Nexus Repository</name>
-			<url>http://192.168.1.217:8080/nexus/content/groups/public</url>
-		</snapshotRepository> -->
+			<url>http://dev.codefarm.tech/nexus/content/repositories/releases/</url>
+		</repository>
+<!-- 		<snapshotRepository> -->
+<!-- 			<id>nexus-snapshots</id> -->
+<!-- 			<name>Local Nexus Repository</name> -->
+<!-- 			<url>http://120.25.177.16/nexus/content/groups/public</url> -->
+<!-- 		</snapshotRepository> -->
 	</distributionManagement>
 </project>
