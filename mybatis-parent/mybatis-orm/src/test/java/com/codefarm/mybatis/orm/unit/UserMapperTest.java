@@ -35,7 +35,6 @@ public class UserMapperTest
         return user;
     }
     
-    @Test
     @Transactional
     public void testInsert()
     {
@@ -94,6 +93,7 @@ public class UserMapperTest
         //        assertTrue("Update entity not success!", rows == 1);
     }
     
+    @Test
     @Transactional
     public void testGet()
     {

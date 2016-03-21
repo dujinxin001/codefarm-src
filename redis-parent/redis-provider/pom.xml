@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.codefarm</groupId>
     <artifactId>redis-parent</artifactId>
-    <version>${codefarm.version}</version>
+    <version>4.2.4</version>
   </parent>
   <artifactId>redis-provider</artifactId>
   <name>redis-provider</name>
