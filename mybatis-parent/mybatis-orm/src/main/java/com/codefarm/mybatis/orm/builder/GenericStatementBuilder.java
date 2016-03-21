@@ -1038,7 +1038,7 @@ public class GenericStatementBuilder extends BaseBuilder
         {
             sb.append(getColumnNameByField(field));
             sb.append(" AS ");
-            sb.append(getColumnNameByField(field));
+            sb.append(field.getName());
             sb.append(",");
         }
         contents.add(new TrimSqlNode(configuration,
@@ -1113,6 +1113,7 @@ public class GenericStatementBuilder extends BaseBuilder
                         else
                         {
                             sb.append(columnName);
+                            sb.append(" ");
                             sb.append(annotation.operator().getOperator());
                             
                             sb.append(" #{");

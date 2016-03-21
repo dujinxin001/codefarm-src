@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.sxj</groupId>
-		<artifactId>spring-parent</artifactId>
-		<version>4.2.3</version>
-	</parent>
+    <groupId>com.codefarm</groupId>
+    <artifactId>spring-parent</artifactId>
+    <version>4.2.4</version>
+  </parent>
 	<artifactId>spring-extension</artifactId>
 	<packaging>jar</packaging>
 	<dependencies>
@@ -46,9 +46,9 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.sxj</groupId>
+			<groupId>com.codefarm</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>4.2.3</version>
+			<version>${codefarm.version}</version>
 		</dependency>
 		<!-- TEST -->
 		<dependency>

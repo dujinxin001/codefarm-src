@@ -3,9 +3,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.sxj</groupId>
+    <groupId>com.codefarm</groupId>
     <artifactId>spring-parent</artifactId>
-    <version>4.2.3</version>
+    <version>4.2.4</version>
   </parent>
   <artifactId>spring-quartz</artifactId>
   <name>spring-quartz</name>

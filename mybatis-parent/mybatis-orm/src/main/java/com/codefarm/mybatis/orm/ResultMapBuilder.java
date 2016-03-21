@@ -35,13 +35,13 @@ public class ResultMapBuilder
             {
                 Column column = field.getAnnotation(Column.class);
                 
-                columnName = column.name();
+                columnName = field.getName();
                 jdbcType = column.jdbcType();
             }
             else if (field.isAnnotationPresent(Id.class))
             {
                 Id id = field.getAnnotation(Id.class);
-                columnName = id.column();
+                columnName = field.getName();
                 jdbcType = id.jdbcType();
                 flags.add(ResultFlag.ID);
             }
