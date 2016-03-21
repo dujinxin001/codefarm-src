@@ -170,12 +170,12 @@
 		<repository>
 			<id>releases</id>
 			<name>Local Nexus Repository</name>
-			<url>http://192.168.1.11:8080/nexus/content/repositories/releases</url>
+			<url>http://120.25.177.16/nexus/content/repositories/releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>nexus-snapshots</id>
 			<name>Local Nexus Repository</name>
-			<url>http://192.168.1.11:8080/nexus/content/groups/public</url>
+			<url>http://120.25.177.16/nexus/content/groups/public</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<build>

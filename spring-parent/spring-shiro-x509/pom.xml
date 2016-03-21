@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.sxj</groupId>
     <artifactId>spring-parent</artifactId>
-    <version>4.2.3</version>
+    <version>4.2.4</version>
   </parent>
   <artifactId>spring-shiro-x509</artifactId>
   <name>spring-shiro-x509</name>

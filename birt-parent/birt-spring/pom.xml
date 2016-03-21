@@ -40,8 +40,9 @@
 			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>birt.runtime</artifactId>
+			<groupId>org.eclipse.birt.runtime</groupId>
+			<artifactId>org.eclipse.birt.runtime</artifactId>
+			<version>4.5.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.ibm.icu</groupId>
