@@ -56,7 +56,7 @@ import com.codefarm.mybatis.orm.annotations.Transient;
 import com.codefarm.mybatis.orm.annotations.Update;
 import com.codefarm.mybatis.orm.annotations.Version;
 import com.codefarm.mybatis.orm.keygen.Jdbc4KeyGenerator;
-import com.codefarm.mybatis.orm.keygen.SequenceKeyGenerator;
+import com.codefarm.mybatis.orm.keygen.LongSequenceKeyGenerator;
 import com.codefarm.mybatis.orm.keygen.ShardJdbc4KeyGenerator;
 import com.codefarm.mybatis.orm.keygen.ShardKeyGenerator;
 import com.codefarm.mybatis.orm.keygen.ShardSnGenerator;
@@ -423,6 +423,20 @@ public class GenericStatementBuilder extends BaseBuilder
             keyColumn = StringUtils.isBlank(id.column())
                     ? CaseFormatUtils.camelToUnderScore(idField.getName())
                     : id.column();
+            GeneratedValue annotation = idField
+                    .getAnnotation(GeneratedValue.class);
+            if (annotation != null && !annotation.generator()
+                    .isAssignableFrom(NoKeyGenerator.class))
+                try
+                {
+                    keyGenerator = annotation.generator()
+                            .getDeclaredConstructor(String.class)
+                            .newInstance(annotation.sequence());
+                }
+                catch (Exception e)
+                {
+                    throw new RuntimeException(e);
+                }
         }
         
         SqlSource sqlSource = new DynamicSqlSource(configuration,
@@ -516,7 +530,7 @@ public class GenericStatementBuilder extends BaseBuilder
             }
             else if (generatedValue.strategy() == GenerationType.SEQUENCE)
             {
-                return new SequenceKeyGenerator(generatedValue.sequence());
+                return new LongSequenceKeyGenerator(generatedValue.sequence());
             }
         }
         return new NoKeyGenerator();

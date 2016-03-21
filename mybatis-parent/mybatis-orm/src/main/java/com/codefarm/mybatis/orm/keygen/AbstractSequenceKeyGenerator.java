@@ -14,11 +14,11 @@ import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
 
 import com.codefarm.spring.modules.util.Reflections;
 
-public class SequenceKeyGenerator implements KeyGenerator
+public abstract class AbstractSequenceKeyGenerator implements KeyGenerator
 {
     private String squenceName;
     
-    public SequenceKeyGenerator(String squenceName)
+    public AbstractSequenceKeyGenerator(String squenceName)
     {
         super();
         this.squenceName = squenceName;
@@ -115,7 +115,8 @@ public class SequenceKeyGenerator implements KeyGenerator
                         "select " + getSquenceName() + ".nextval from dual");
                 rs.next();
                 Long key = rs.getLong(1);
-                metaParam.setValue(keyProperties[i], key);
+                //metaParam.setValue(keyProperties[i], key);
+                setValue(metaParam, keyProperties[i], key);
                 rs.close();
                 
             }
@@ -123,6 +124,12 @@ public class SequenceKeyGenerator implements KeyGenerator
         }
         statement.close();
     }
+    
+    protected abstract void setValue(MetaObject meta, String keyProperty,
+            Long key);
+    
+    protected abstract void setValue(Object param, String keyProperty,
+            Long key);
     
     private void populateKey(Object parameter, String[] keyProperties,
             Executor executor) throws SQLException
@@ -139,7 +146,8 @@ public class SequenceKeyGenerator implements KeyGenerator
                         "select " + getSquenceName() + ".nextval from dual");
                 rs.next();
                 Long key = rs.getLong(1);
-                Reflections.setFieldValue(parameter, keyProperties[i], key);
+                // Reflections.setFieldValue(parameter, keyProperties[i], key);
+                setValue(parameter, keyProperties[i], key);
                 rs.close();
                 
             }

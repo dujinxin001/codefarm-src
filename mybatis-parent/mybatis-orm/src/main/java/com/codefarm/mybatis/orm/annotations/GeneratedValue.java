@@ -5,6 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.ibatis.executor.keygen.KeyGenerator;
+import org.apache.ibatis.executor.keygen.NoKeyGenerator;
+
 /**
  * Class description goes here.
  */
@@ -24,4 +27,6 @@ public @interface GeneratedValue
     String delimiterColumn() default "IDENTITIES_DELIMITER";
     
     String sequence() default "KEY_SEQUENCE";
+    
+    Class<? extends KeyGenerator> generator() default NoKeyGenerator.class;
 }
