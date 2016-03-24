@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -281,6 +282,15 @@ public class HttpClient
         
     }
     
+    public InputStream getInputStream(String url)
+            throws ClientProtocolException, IOException
+    {
+        CloseableHttpClient client = HttpClientBuilder.create().build();
+        HttpGet getMethod = new HttpGet(url);
+        HttpResponse response = client.execute(getMethod);
+        return consumeResponseEntity(response);
+    }
+    
     private String get(String url, String responseCharset, Header... headers)
             throws ClientProtocolException, IOException
     {
@@ -534,6 +544,20 @@ public class HttpClient
         return null;
     }
     
+    private InputStream consumeResponseEntity(HttpResponse response)
+            throws IOException
+    {
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
+        {
+            HttpEntity responseEntity = response.getEntity();
+            return responseEntity.getContent();
+        }
+        else
+        {
+        }
+        return null;
+    }
+    
     private CloseableHttpClient getSslHttpClient(String keyType, String keyPath,
             String keyPassword) throws Exception
     {
@@ -611,6 +635,7 @@ public class HttpClient
         /*
          * Delegate to the default trust manager.
          */
+        @Override
         public void checkClientTrusted(X509Certificate[] chain, String authType)
                 throws CertificateException
         {
@@ -620,6 +645,7 @@ public class HttpClient
         /*
          * Delegate to the default trust manager.
          */
+        @Override
         public void checkServerTrusted(X509Certificate[] chain, String authType)
                 throws CertificateException
         {
@@ -629,6 +655,7 @@ public class HttpClient
         /*
          * Merely pass this through.
          */
+        @Override
         public X509Certificate[] getAcceptedIssuers()
         {
             return new java.security.cert.X509Certificate[0];
