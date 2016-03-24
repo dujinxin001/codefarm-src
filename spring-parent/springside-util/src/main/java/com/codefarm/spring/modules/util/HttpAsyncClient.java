@@ -48,13 +48,13 @@ public class HttpAsyncClient
         }
         catch (Exception e)
         {
-            logger.error(e.getMessage(), HttpAsyncClient.class);
+            logger.error(e.getMessage(), e, HttpAsyncClient.class);
         }
     }
     
     private static CloseableHttpAsyncClient bulidAsyncClient()
     {
-        if (closeableHttpAsyncClient != null)
+        if (closeableHttpAsyncClient == null)
         {
             HttpAsyncClientBuilder clientBuilder = HttpAsyncClients.custom()
                     .setConnectionManager(niocm);
@@ -83,7 +83,7 @@ public class HttpAsyncClient
         }
         catch (Exception e)
         {
-            logger.error(e.getMessage(), HttpAsyncClient.class);
+            logger.error(e.getMessage(), e, HttpAsyncClient.class);
         }
         
     }
@@ -193,7 +193,7 @@ public class HttpAsyncClient
         }
         catch (Exception e)
         {
-            logger.error(e.getMessage(), HttpAsyncClient.class);
+            logger.error(e.getMessage(), e, HttpAsyncClient.class);
         }
     }
     
@@ -246,71 +246,71 @@ public class HttpAsyncClient
         }
         catch (Exception e)
         {
-            logger.debug(e.getMessage(), HttpAsyncClient.class);
+            logger.error(e.getMessage(), e, HttpAsyncClient.class);
         }
     }
     
     // /////////////////////////////////////////////////////////////////////////
     // <<SSL Get>>
     
-//    public static void sslGet(String url, Map<String, String> params,
-//            String keyType, String keyPath, String keyPassword, int sslport,
-//            String authString, FutureCallback<HttpResponse> callback)
-//    {
-//        try
-//        {
-//            AsyncScheme sch = getSslScheme(keyType,
-//                    keyPath,
-//                    keyPassword,
-//                    sslport);
-//            sslGet(url, params, sch, authString, callback);
-//        }
-//        catch (Exception e)
-//        {
-//            logger.debug(e.getMessage(), HttpAsyncClientUtil.class);
-//        }
-//    }
-//    
-//    private static void sslGet(String url, Map<String, String> params,
-//            AsyncScheme sch, String authString,
-//            FutureCallback<HttpResponse> callback)
-//    {
-//        logger.debug("SSL Get [" + url + "] ...",
-//                HttpAsyncClientUtil.class);
-//        
-//        try
-//        {
-//            HttpAsyncClient client = new DefaultHttpAsyncClient(niocm);
-//            IOReactorStatus state = client.getStatus();
-//            if (!state.equals(IOReactorStatus.ACTIVE))
-//            {
-//                client.start();
-//            }
-//            
-//            client.getConnectionManager().getSchemeRegistry().register(sch);
-//            HttpGet getMethod = new HttpGet(url);
-//            
-//            if (authString != null)
-//                getMethod.setHeader("Authorization", authString);
-//            
-//            if (params != null)
-//            {
-//                HttpParams httpParams = new BasicHttpParams();
-//                for (String key : params.keySet())
-//                {
-//                    httpParams.setParameter(key, params.get(key));
-//                }
-//                getMethod.setParams(httpParams);
-//            }
-//            
-//            client.execute(getMethod, callback);
-//        }
-//        catch (Exception e)
-//        {
-//            logger.debug(e.getMessage(), HttpAsyncClientUtil.class);
-//        }
-//    }
-//    
+    //    public static void sslGet(String url, Map<String, String> params,
+    //            String keyType, String keyPath, String keyPassword, int sslport,
+    //            String authString, FutureCallback<HttpResponse> callback)
+    //    {
+    //        try
+    //        {
+    //            AsyncScheme sch = getSslScheme(keyType,
+    //                    keyPath,
+    //                    keyPassword,
+    //                    sslport);
+    //            sslGet(url, params, sch, authString, callback);
+    //        }
+    //        catch (Exception e)
+    //        {
+    //            logger.debug(e.getMessage(), HttpAsyncClientUtil.class);
+    //        }
+    //    }
+    //    
+    //    private static void sslGet(String url, Map<String, String> params,
+    //            AsyncScheme sch, String authString,
+    //            FutureCallback<HttpResponse> callback)
+    //    {
+    //        logger.debug("SSL Get [" + url + "] ...",
+    //                HttpAsyncClientUtil.class);
+    //        
+    //        try
+    //        {
+    //            HttpAsyncClient client = new DefaultHttpAsyncClient(niocm);
+    //            IOReactorStatus state = client.getStatus();
+    //            if (!state.equals(IOReactorStatus.ACTIVE))
+    //            {
+    //                client.start();
+    //            }
+    //            
+    //            client.getConnectionManager().getSchemeRegistry().register(sch);
+    //            HttpGet getMethod = new HttpGet(url);
+    //            
+    //            if (authString != null)
+    //                getMethod.setHeader("Authorization", authString);
+    //            
+    //            if (params != null)
+    //            {
+    //                HttpParams httpParams = new BasicHttpParams();
+    //                for (String key : params.keySet())
+    //                {
+    //                    httpParams.setParameter(key, params.get(key));
+    //                }
+    //                getMethod.setParams(httpParams);
+    //            }
+    //            
+    //            client.execute(getMethod, callback);
+    //        }
+    //        catch (Exception e)
+    //        {
+    //            logger.debug(e.getMessage(), HttpAsyncClientUtil.class);
+    //        }
+    //    }
+    //    
     // /////////////////////////////////////////////////////////////////////////
     //    // <<SSL Post>>
     //    
