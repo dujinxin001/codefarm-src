@@ -18,12 +18,12 @@
 		<httpclient.version>4.5.2</httpclient.version>
 	</properties>
 	<dependencies>
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.java</groupId> -->
-<!-- 			<artifactId>rt</artifactId> -->
-<!-- 			<version>1.8-x64</version> -->
-<!-- 			<scope>provided</scope> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.java</groupId> -->
+		<!-- <artifactId>rt</artifactId> -->
+		<!-- <version>1.8-x64</version> -->
+		<!-- <scope>provided</scope> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
@@ -77,6 +77,11 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>${httpclient.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpasyncclient</artifactId>
+			<version>4.1.1</version>
 		</dependency>
 	</dependencies>
 </project>
