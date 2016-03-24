@@ -8,8 +8,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
-public class CustomizedPropertyPlaceholderConfigurer extends
-        PropertyPlaceholderConfigurer
+public class CustomizedPropertyPlaceholderConfigurer
+        extends PropertyPlaceholderConfigurer
 {
     private static Map<String, String> ctx_props = new HashMap<String, String>();
     
@@ -27,7 +27,7 @@ public class CustomizedPropertyPlaceholderConfigurer extends
         }
     }
     
-    public static String getContextProperty(String name)
+    public String getContextProperty(String name)
     {
         return ctx_props.get(name);
     }
