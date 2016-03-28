@@ -1,4 +1,4 @@
-package com.sxj.freemarker;
+package com.codefarm.freemarker;
 
 public class FreemarkerException extends RuntimeException
 {

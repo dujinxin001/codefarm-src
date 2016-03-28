@@ -1,4 +1,4 @@
-package com.sxj.freemarker;
+package com.codefarm.freemarker;
 
 import java.io.IOException;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class FreeMarkerConfiguration
 {
     private static final Logger logger = LoggerFactory
             .getLogger(FreeMarkerConfiguration.class);
-            
+    
     private Resource configLocation;
     
     private String defaultEncoding;

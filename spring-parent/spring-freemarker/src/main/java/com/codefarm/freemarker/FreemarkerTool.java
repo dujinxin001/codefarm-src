@@ -1,4 +1,4 @@
-package com.sxj.freemarker;
+package com.codefarm.freemarker;
 
 import java.io.IOException;
 import java.io.StringWriter;

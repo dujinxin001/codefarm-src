@@ -1,4 +1,4 @@
-package com.sxj.freemarker;
+package com.codefarm.freemarker;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import com.sxj.spring.modules.util.ClassLoaderUtil;
-import com.sxj.spring.modules.util.Collections3;
-import com.sxj.spring.modules.util.StringUtils;
+import com.codefarm.spring.modules.util.ClassLoaderUtil;
+import com.codefarm.spring.modules.util.Collections3;
+import com.codefarm.spring.modules.util.StringUtils;
 
 public class StringTemplateLoader extends freemarker.cache.StringTemplateLoader
 {
@@ -21,7 +21,8 @@ public class StringTemplateLoader extends freemarker.cache.StringTemplateLoader
             return;
         try
         {
-            InputStream resource = ClassLoaderUtil.getResource(templateConfig);
+            InputStream resource = ClassLoaderUtil
+                    .getResourceAsStream(templateConfig);
             Properties properties = new Properties();
             properties.load(resource);
             Enumeration<Object> keys = properties.keys();
