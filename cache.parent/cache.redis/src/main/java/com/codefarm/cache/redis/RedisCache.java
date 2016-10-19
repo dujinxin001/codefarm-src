@@ -326,4 +326,55 @@ public class RedisCache implements Cache
         }
         return false;
     }
+
+	@Override
+	public Object brpop(Object key , int seconds) {
+        boolean broken = false;
+        Jedis cache = provider.getResource();
+        try
+        {
+            if (null == key)
+                return null;
+            List<byte[]> list =  cache.brpop(seconds,serializeKey(key).getBytes());
+            if(list !=null && list.size()>1)
+             return deserializeObject(new String(list.get(1)));
+        }
+        catch (Exception e)
+        {
+            LOGGER.error("Error occured when get data from L2 cache", e);
+            broken = true;
+        }
+        finally
+        {
+            provider.returnResource(cache, broken);
+        }
+        return null;
+		
+	}
+
+
+	@Override
+	public void lpush(Object key, Object value) {
+		if (value == null)
+            evict(key);
+        else
+        {
+            boolean broken = false;
+            Jedis cache = provider.getResource();
+            try
+            {
+                cache.lpush(serializeKey(key).getBytes(),
+                        serializeObject(value).getBytes());
+            }
+            catch (Exception e)
+            {
+                broken = true;
+                LOGGER.error("Error occured when get data from L2 cache", e);
+            }
+            finally
+            {
+                provider.returnResource(cache, broken);
+            }
+        }
+	}
 }

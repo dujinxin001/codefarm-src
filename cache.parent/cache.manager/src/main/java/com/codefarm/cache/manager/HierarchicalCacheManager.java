@@ -290,7 +290,41 @@ public class HierarchicalCacheManager
                 cache.evict(keys);
         }
     }
-    
+/**
+ * 阻塞队列里取数据
+ * @param level
+ * @param name
+ * @param key
+ * @param value
+ * @param seconds
+ */
+    public static final Object brpop(CacheLevel level, String name,
+            Object key,int seconds)
+    {
+    	if (name != null && key != null )
+        {
+            Cache cache = getCache(level, name, true);
+            if (cache != null)
+                  return  cache.brpop(key,seconds);
+        }
+    	 return null;
+    }
+    /**
+     * 放入阻塞队列
+     * @param level
+     * @param name
+     * @param key
+     * @return
+     */
+    public static final void lpush(CacheLevel level, String name, Object key,Object value)
+    {
+        if (name != null && key != null && value != null)
+        {
+            Cache cache = getCache(level, name, false);
+            if (cache != null)
+                 cache.lpush(key,value);
+        }
+    }
     /**
      * Clear the cache
      */

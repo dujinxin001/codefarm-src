@@ -63,5 +63,9 @@ public interface Cache
     public List values();
     
     public Boolean exists(Object key);
+
+	public Object brpop(Object key,int seconds);
+
+	public void lpush(Object key, Object value);
     
 }

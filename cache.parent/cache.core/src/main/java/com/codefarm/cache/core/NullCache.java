@@ -103,5 +103,16 @@ public class NullCache implements Cache
     {
         return false;
     }
+
+	@Override
+	public Object brpop(Object key,int seconds) {
+		return null;
+	}
+
+
+	@Override
+	public void lpush(Object key, Object value) {
+		return ;
+	}
     
 }

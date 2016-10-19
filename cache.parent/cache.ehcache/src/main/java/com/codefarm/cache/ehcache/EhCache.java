@@ -288,5 +288,16 @@ public class EhCache implements Cache, CacheEventListener
     {
         throw new CloneNotSupportedException();
     }
+
+	@Override
+	public Object brpop(Object key,int seconds) {
+		 throw new CacheException("Operation not supported!!!");
+		
+	}
+
+	@Override
+	public void lpush(Object key, Object value) {
+		throw new CacheException("Operation not supported!!!");
+	}
     
 }

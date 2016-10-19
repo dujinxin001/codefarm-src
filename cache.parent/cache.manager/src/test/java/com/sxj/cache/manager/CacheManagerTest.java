@@ -33,7 +33,6 @@ public class CacheManagerTest
         Assert.assertEquals("demovalue", object.toString());
     }
     
-    @Test
     public void testL2Cache()
     {
         //        List<String> result = new ArrayList<String>();
@@ -59,5 +58,25 @@ public class CacheManagerTest
         //        //        cacheManager.set(2, "testL2Cache", "demokey2", "demovalue");
         //        Object object = cacheManager.get(2, "testL2Cache", "demokey");
         //        Assert.assertEquals("demovalue2", object.toString());
+    }
+	
+    public void testpush(){
+        cacheManager.lpush(CacheLevel.REDIS,
+                "1",
+                "111",
+                "123");
+       
+    }
+    @Test
+    public void testpop(){
+    	cacheManager.lpush(CacheLevel.REDIS,
+                "1",
+                "111",
+                "123");
+        Object o = cacheManager.brpop(CacheLevel.REDIS,
+                "1",
+                "111",
+                5);
+ System.out.println(o.toString());
     }
 }

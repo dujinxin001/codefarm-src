@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.codefarm</groupId>
     <artifactId>cache.parent</artifactId>
-    <version>4.2.4</version>
+   <version>4.2.5</version>
   </parent>
   <artifactId>cache.manager</artifactId>
   <name>cache.manager</name>
@@ -25,12 +25,12 @@
   	<dependency>
   		<groupId>com.codefarm</groupId>
   		<artifactId>cache.ehcache</artifactId>
-  		<version>${codefarm.version}</version>
+  		<version>${cache.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>com.codefarm</groupId>
   		<artifactId>cache.redis</artifactId>
-  		<version>${codefarm.version}</version>
+  		<version>${cache.version}</version>
   	</dependency>
   </dependencies>
 </project>

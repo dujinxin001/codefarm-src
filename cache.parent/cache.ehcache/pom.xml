@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.codefarm</groupId>
 		<artifactId>cache.parent</artifactId>
-		<version>4.2.4</version>
+		<version>4.2.5</version>
 	</parent>
 	<artifactId>cache.ehcache</artifactId>
 	<name>cache.ehcache</name>
@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>com.codefarm</groupId>
 			<artifactId>cache.core</artifactId>
-			<version>${codefarm.version}</version>
+			<version>${cache.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
