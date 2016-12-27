@@ -114,5 +114,10 @@ public class NullCache implements Cache
 	public void lpush(Object key, Object value) {
 		return ;
 	}
+
+	@Override
+	public void incr(Object key) {
+		return ;
+	}
     
 }

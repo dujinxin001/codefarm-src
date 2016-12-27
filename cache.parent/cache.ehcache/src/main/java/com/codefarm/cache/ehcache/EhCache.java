@@ -299,5 +299,11 @@ public class EhCache implements Cache, CacheEventListener
 	public void lpush(Object key, Object value) {
 		throw new CacheException("Operation not supported!!!");
 	}
+
+	@Override
+	public void incr(Object key) {
+		throw new CacheException("Operation not supported!!!");
+		
+	}
     
 }

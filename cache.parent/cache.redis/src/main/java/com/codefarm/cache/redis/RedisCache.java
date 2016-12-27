@@ -377,4 +377,27 @@ public class RedisCache implements Cache
             }
         }
 	}
+
+	@Override
+	public void incr(Object key) {
+        boolean broken = false;
+        Jedis cache = provider.getResource();
+        try
+        {
+            if (null == key){
+            	return;
+            }
+            cache.incr(serializeKey(key).getBytes());
+            
+        }
+        catch (Exception e)
+        {
+            LOGGER.error("Error occured when incr from L2 cache", e);
+            broken = true;
+        }
+        finally
+        {
+            provider.returnResource(cache, broken);
+        }
+	}
 }

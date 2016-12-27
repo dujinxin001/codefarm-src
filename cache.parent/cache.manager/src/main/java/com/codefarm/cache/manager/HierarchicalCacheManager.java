@@ -325,6 +325,14 @@ public class HierarchicalCacheManager
                  cache.lpush(key,value);
         }
     }
+    public static final void incr(CacheLevel level, String name, Object key){
+    	if (name != null && key != null)
+        {
+            Cache cache = getCache(level, name, false);
+            if (cache != null)
+                 cache.incr(key);
+        }
+    }
     /**
      * Clear the cache
      */

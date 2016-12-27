@@ -67,5 +67,7 @@ public interface Cache
 	public Object brpop(Object key,int seconds);
 
 	public void lpush(Object key, Object value);
+
+	public void incr(Object key);
     
 }
