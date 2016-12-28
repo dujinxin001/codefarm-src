@@ -185,7 +185,16 @@ public class HierarchicalCacheManager
         }
         return null;
     }
-    
+    public static final Object getNoSeri(CacheLevel level, String name, String key)
+    {
+        if (name != null && key != null)
+        {
+            Cache cache = getCache(level, name, false);
+            if (cache != null)
+                return cache.getNoSeri(key);
+        }
+        return null;
+    }
     /**
      * 获取缓存中的数据
      * @param <T>
@@ -244,7 +253,30 @@ public class HierarchicalCacheManager
                     cache.put(key, value, seconds);
         }
     }
+    public static final void setNoSeri(CacheLevel level, String name, String key,
+    		String value)
+    {
+        if (name != null && key != null && value != null)
+        {
+            Cache cache = getCache(level, name, true);
+            if (cache != null)
+                cache.putNoSeri(key, value);
+        }
+    }
     
+    public static final void setNoSeri(CacheLevel level, String name, String key,
+    		String value, int seconds)
+    {
+        if (name != null && key != null && value != null)
+        {
+            Cache cache = getCache(level, name, true);
+            if (cache != null)
+                if (seconds <= 0)
+                    cache.putNoSeri(key, value);
+                else
+                    cache.putNoSeri(key, value, seconds);
+        }
+    }
     /**
      * 清除缓存中的某个数据
      * @param level
@@ -325,7 +357,7 @@ public class HierarchicalCacheManager
                  cache.lpush(key,value);
         }
     }
-    public static final void incr(CacheLevel level, String name, Object key){
+    public static final void incr(CacheLevel level, String name, String key){
     	if (name != null && key != null)
         {
             Cache cache = getCache(level, name, false);

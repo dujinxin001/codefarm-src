@@ -68,6 +68,12 @@ public interface Cache
 
 	public void lpush(Object key, Object value);
 
-	public void incr(Object key);
+	public void incr(String key);
+
+	public void putNoSeri(String key, String value);
+
+	public void putNoSeri(String key, String value, int seconds);
+	
+	public Object getNoSeri(String key);
     
 }

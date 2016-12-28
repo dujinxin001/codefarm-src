@@ -379,7 +379,7 @@ public class RedisCache implements Cache
 	}
 
 	@Override
-	public void incr(Object key) {
+	public void incr(String key) {
         boolean broken = false;
         Jedis cache = provider.getResource();
         try
@@ -387,7 +387,7 @@ public class RedisCache implements Cache
             if (null == key){
             	return;
             }
-            cache.incr(serializeKey(key).getBytes());
+            cache.incr(key);
             
         }
         catch (Exception e)
@@ -399,5 +399,81 @@ public class RedisCache implements Cache
         {
             provider.returnResource(cache, broken);
         }
+	}
+
+	@Override
+	public void putNoSeri(String key, String value) {
+		if (value == null)
+            evict(key);
+        else
+        {
+            boolean broken = false;
+            Jedis cache = provider.getResource();
+            try
+            {
+                cache.set(key,value);
+            }
+            catch (Exception e)
+            {
+                broken = true;
+                LOGGER.error("Error occured when get data from L2 cache", e);
+            }
+            finally
+            {
+                provider.returnResource(cache, broken);
+            }
+        }
+		
+	}
+
+	@Override
+	public void putNoSeri(String key, String value, int seconds) {
+		 if (value == null)
+	            evict(key);
+	        else
+	        {
+	            boolean broken = false;
+	            Jedis cache = provider.getResource();
+	            try
+	            {
+	                Transaction multi = cache.multi();
+	              //  byte[] bytes = serializeKey(key).getBytes();
+	                multi.set(key,value);
+	                multi.expire(key, seconds);
+	                multi.exec();
+	            }
+	            catch (Exception e)
+	            {
+	                broken = true;
+	                LOGGER.error("Error occured when get data from L2 cache", e);
+	            }
+	            finally
+	            {
+	                provider.returnResource(cache, broken);
+	            }
+	        }
+		
+	}
+
+	@Override
+	public Object getNoSeri(String key) {
+        boolean broken = false;
+        Jedis cache = provider.getResource();
+        try
+        {
+            if (null == key)
+                return null;
+            return cache.get(key);
+        }
+        catch (Exception e)
+        {
+            LOGGER.error("Error occured when get data from L2 cache", e);
+            broken = true;
+        }
+        finally
+        {
+            provider.returnResource(cache, broken);
+        }
+        return null;
 	}
 }

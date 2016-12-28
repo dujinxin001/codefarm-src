@@ -116,8 +116,25 @@ public class NullCache implements Cache
 	}
 
 	@Override
-	public void incr(Object key) {
+	public void incr(String key) {
 		return ;
+	}
+
+	@Override
+	public void putNoSeri(String key, String value) {
+		return ;
+		
+	}
+
+	@Override
+	public void putNoSeri(String key, String value, int seconds) {
+		return ;
+		
+	}
+
+	@Override
+	public Object getNoSeri(String key) {
+		return null;
 	}
     
 }

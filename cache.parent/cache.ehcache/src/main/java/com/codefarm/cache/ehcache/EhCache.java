@@ -301,9 +301,26 @@ public class EhCache implements Cache, CacheEventListener
 	}
 
 	@Override
-	public void incr(Object key) {
+	public void incr(String key) {
 		throw new CacheException("Operation not supported!!!");
 		
+	}
+
+	@Override
+	public void putNoSeri(String key, String value) {
+		throw new CacheException("Operation not supported!!!");
+		
+	}
+
+	@Override
+	public void putNoSeri(String key, String value, int seconds) {
+		throw new CacheException("Operation not supported!!!");
+		
+	}
+
+	@Override
+	public Object getNoSeri(String key) {
+		return null;
 	}
     
 }
