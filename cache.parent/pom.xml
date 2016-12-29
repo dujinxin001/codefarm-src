@@ -14,7 +14,7 @@
 		<module>cache.spring</module>
 	</modules>
 	<properties>
-		<cache.version>4.2.5</cache.version>
+		<cache.version>4.2.6</cache.version>
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<junit.version>4.11</junit.version>

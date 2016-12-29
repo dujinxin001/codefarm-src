@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.codefarm</groupId>
     <artifactId>cache.parent</artifactId>
-   <version>4.2.5</version>
+   <version>4.2.6</version>
   </parent>
   <artifactId>cache.manager</artifactId>
   <name>cache.manager</name>
