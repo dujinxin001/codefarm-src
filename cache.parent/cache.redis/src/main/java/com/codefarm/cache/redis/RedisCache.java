@@ -3,6 +3,7 @@ package com.codefarm.cache.redis;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.LoggerFactory;
@@ -475,5 +476,63 @@ public class RedisCache implements Cache
             provider.returnResource(cache, broken);
         }
         return null;
+	}
+
+	@Override
+	public void zadd(String key, Map<String,Double> scoreMembers) {
+		boolean broken = false;
+        Jedis cache = provider.getResource();
+        try
+        {
+            cache.zadd(key, scoreMembers);
+        }
+        catch (Exception e)
+        {
+            broken = true;
+            LOGGER.error("Error occured when get data from L2 cache", e);
+        }
+        finally
+        {
+            provider.returnResource(cache, broken);
+        }
+	}
+
+	@Override
+	public Object zrange(String key, int start, int end) {
+        boolean broken = false;
+        Jedis cache = provider.getResource();
+        try
+        {
+            return cache.zrange(key,start,end);
+        }
+        catch (Exception e)
+        {
+            broken = true;
+            LOGGER.error("Error occured when get data from L2 cache", e);
+        }
+        finally
+        {
+            provider.returnResource(cache, broken);
+        }
+        return null;
+	}
+
+	@Override
+	public void zrem(String key, String member) {
+		 boolean broken = false;
+	        Jedis cache = provider.getResource();
+	        try
+	        {
+	            cache.zrem(key,member);
+	        }
+	        catch (Exception e)
+	        {
+	            broken = true;
+	            LOGGER.error("Error occured when get data from L2 cache", e);
+	        }
+	        finally
+	        {
+	            provider.returnResource(cache, broken);
+	        }
 	}
 }

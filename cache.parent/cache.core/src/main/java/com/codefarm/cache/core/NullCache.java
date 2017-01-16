@@ -1,6 +1,7 @@
 package com.codefarm.cache.core;
 
 import java.util.List;
+import java.util.Map;
 
 public class NullCache implements Cache
 {
@@ -135,6 +136,22 @@ public class NullCache implements Cache
 	@Override
 	public Object getNoSeri(String key) {
 		return null;
+	}
+
+
+	@Override
+	public void zadd(String key, Map<String, Double> scoreMembers) {
+		return ;
+	}
+
+	@Override
+	public Object zrange(String key, int start, int end) {
+		return null;
+	}
+
+	@Override
+	public void zrem(String key, String member) {
+		return ;
 	}
     
 }

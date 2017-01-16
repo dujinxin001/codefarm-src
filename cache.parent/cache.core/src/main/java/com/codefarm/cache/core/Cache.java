@@ -1,6 +1,7 @@
 package com.codefarm.cache.core;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Cache
 {
@@ -75,5 +76,11 @@ public interface Cache
 	public void putNoSeri(String key, String value, int seconds);
 	
 	public Object getNoSeri(String key);
+
+	public void zadd(String key, Map<String,Double> scoreMembers);
+
+	public Object zrange(String key, int start, int end);
+
+	public void zrem(String key, String member);
     
 }

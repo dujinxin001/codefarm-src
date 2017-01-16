@@ -3,6 +3,7 @@ package com.codefarm.cache.manager;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -363,6 +364,31 @@ public class HierarchicalCacheManager
             Cache cache = getCache(level, name, false);
             if (cache != null)
                  cache.incr(key);
+        }
+    } 
+    public static final void zadd(CacheLevel level,String name,String key,Map<String,Double> scoreMembers){
+    	if (name != null && key != null)
+        {
+            Cache cache = getCache(level, name, false);
+            if (cache != null)
+                 cache.zadd(key,scoreMembers);
+        }
+    }
+    public static final Object zrange(CacheLevel level,String name,String key,int start,int end){
+    	if (name != null && key != null)
+        {
+            Cache cache = getCache(level, name, false);
+            if (cache != null)
+                return cache.zrange(key,start,end);
+        }
+    	return null;
+    }
+    public static final void zrem(CacheLevel level,String name,String key,String member){
+    	if (name != null && key != null)
+        {
+            Cache cache = getCache(level, name, false);
+            if (cache != null)
+                 cache.zrem(key,member);
         }
     }
     /**

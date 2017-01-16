@@ -1,6 +1,7 @@
 package com.codefarm.cache.ehcache;
 
 import java.util.List;
+import java.util.Map;
 
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
@@ -321,6 +322,22 @@ public class EhCache implements Cache, CacheEventListener
 	@Override
 	public Object getNoSeri(String key) {
 		return null;
+	}
+
+	@Override
+	public void zadd(String key, Map<String, Double> scoreMembers) {
+		return ;
+		
+	}
+
+	@Override
+	public Object zrange(String key, int start, int end) {
+		return null;
+	}
+
+	@Override
+	public void zrem(String key, String member) {
+		return ;		
 	}
     
 }
