@@ -34,9 +34,9 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.sxj</groupId>
+			<groupId>com.codefarm</groupId>
 			<artifactId>spring-util</artifactId>
-			<version>4.2.3</version>
+			<version>4.2.4</version>
 		</dependency>
 	</dependencies>
 </project>

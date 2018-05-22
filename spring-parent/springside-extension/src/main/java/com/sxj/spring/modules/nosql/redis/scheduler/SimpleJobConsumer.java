@@ -10,13 +10,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.codefarm.spring.modules.util.Threads;
+import com.sxj.spring.modules.nosql.redis.JedisTemplate;
+import com.sxj.spring.modules.nosql.redis.JedisTemplate.JedisAction;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.util.Pool;
-
-import com.sxj.spring.modules.nosql.redis.JedisTemplate;
-import com.sxj.spring.modules.nosql.redis.JedisTemplate.JedisAction;
-import com.sxj.spring.modules.util.Threads;
 
 /*
  * 简单的基于brpop()API, 阻塞的取出任务。

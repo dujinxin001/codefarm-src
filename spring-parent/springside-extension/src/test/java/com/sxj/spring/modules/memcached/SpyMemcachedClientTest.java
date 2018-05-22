@@ -15,11 +15,11 @@ import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import com.codefarm.spring.modules.test.category.UnStable;
+import com.codefarm.spring.modules.test.spring.SpringContextTestCase;
+import com.codefarm.spring.modules.util.Threads;
 import com.google.common.collect.Lists;
 import com.sxj.spring.modules.cache.memcached.SpyMemcachedClient;
-import com.sxj.spring.modules.test.category.UnStable;
-import com.sxj.spring.modules.test.spring.SpringContextTestCase;
-import com.sxj.spring.modules.util.Threads;
 
 @Category(UnStable.class)
 @ContextConfiguration(locations = { "/applicationContext-memcached.xml" })
@@ -67,19 +67,19 @@ public class SpyMemcachedClientTest extends SpringContextTestCase
         assertThat(result).isNull();
     }
     
-    @Test
-    public void incr()
-    {
-        String key = "counter";
-        
-        assertThat(client.incr(key, 1, 1)).isEqualTo(1);
-        // 注意counter的实际类型是String
-        assertThat(client.get(key)).isEqualTo("1");
-        
-        assertThat(client.incr(key, 1, 1)).isEqualTo(2);
-        assertThat(client.get(key)).isEqualTo("2");
-        
-        assertThat(client.decr(key, 2, 1)).isEqualTo(0);
-        assertThat(client.get(key)).isEqualTo("0");
-    }
+//    @Test
+//    public void incr()
+//    {
+//        String key = "counter";
+//        
+//        assertThat(client.incr(key, 1, 1)).isEqualTo(1);
+//        // 注意counter的实际类型是String
+//        assertThat(client.get(key)).isEqualTo("1");
+//        
+//        assertThat(client.incr(key, 1, 1)).isEqualTo(2);
+//        assertThat(client.get(key)).isEqualTo("2");
+//        
+//        assertThat(client.decr(key, 2, 1)).isEqualTo(0);
+//        assertThat(client.get(key)).isEqualTo("0");
+//    }
 }

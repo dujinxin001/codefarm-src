@@ -4,17 +4,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.codefarm</groupId>
 	<artifactId>cache.parent</artifactId>
-	<version>4.2.7</version>
+	<version>4.2.4</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>cache.core</module>
 		<module>cache.ehcache</module>
-		<module>cache.redis</module>
+		<module>redis-core</module>
 		<module>cache.manager</module>
 		<module>cache.spring</module>
 	</modules>
 	<properties>
-		<cache.version>4.2.7</cache.version>
+		<cache.version>4.2.4</cache.version>
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<junit.version>4.11</junit.version>
@@ -102,9 +102,9 @@
 	</build>
 	<distributionManagement>
 		<repository>
-			<id>codefarm</id>
+			<id>yunwen</id>
 			<name>Local Nexus Repository</name>
-			<url>http://dev.codefarm.tech/nexus/content/repositories/releases/</url>
+			<url>http://maven.faqrobot.org/nexus/content/repositories/faqrobot/</url>
 		</repository>
 	</distributionManagement>
 </project>

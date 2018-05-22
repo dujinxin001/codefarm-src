@@ -211,9 +211,10 @@
 	</build>
 	<distributionManagement>
 		<repository>
-			<id>codefarm</id>
+			<id>yunwen</id>
 			<name>Local Nexus Repository</name>
-			<url>http://dev.codefarm.tech/nexus/content/repositories/releases/</url>
+<!-- 			<url>http://dev.codefarm.tech/nexus/content/repositories/releases/</url> -->
+			<url>http://maven.faqrobot.org/nexus/content/repositories/faqrobot/</url>
 		</repository>
 	</distributionManagement>
 </project>

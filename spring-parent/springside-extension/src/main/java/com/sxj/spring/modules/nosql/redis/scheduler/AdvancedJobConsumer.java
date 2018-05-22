@@ -7,13 +7,13 @@ package com.sxj.spring.modules.nosql.redis.scheduler;
 
 import java.util.List;
 
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.exceptions.JedisConnectionException;
-
+import com.codefarm.spring.modules.util.Threads;
 import com.google.common.collect.Lists;
 import com.sxj.spring.modules.nosql.redis.JedisScriptExecutor;
 import com.sxj.spring.modules.nosql.redis.JedisTemplate;
-import com.sxj.spring.modules.util.Threads;
+
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.exceptions.JedisConnectionException;
 
 /**
  * 高级的使用Lua脚本取回任务，支持高可靠性和批量取回任务，但不会阻塞，如果没有任务即时返回。

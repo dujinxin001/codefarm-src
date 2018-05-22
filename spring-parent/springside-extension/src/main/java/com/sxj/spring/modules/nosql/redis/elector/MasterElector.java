@@ -17,14 +17,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.util.Pool;
-
+import com.codefarm.spring.modules.util.Threads;
+import com.codefarm.spring.modules.util.Threads.WrapExceptionRunnable;
 import com.sxj.spring.modules.nosql.redis.JedisTemplate;
 import com.sxj.spring.modules.nosql.redis.JedisTemplate.JedisActionNoResult;
 import com.sxj.spring.modules.nosql.redis.JedisUtils;
-import com.sxj.spring.modules.util.Threads;
-import com.sxj.spring.modules.util.Threads.WrapExceptionRunnable;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.util.Pool;
 
 /**
  * Master选举实现, 基于setNx()与expire()两大API.

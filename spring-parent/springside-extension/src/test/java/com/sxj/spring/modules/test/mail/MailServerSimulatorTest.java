@@ -11,8 +11,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import com.codefarm.spring.modules.test.spring.SpringContextTestCase;
 import com.icegreen.greenmail.util.GreenMail;
-import com.sxj.spring.modules.test.spring.SpringContextTestCase;
 
 @ContextConfiguration(locations = { "/applicationContext-mail.xml" })
 public class MailServerSimulatorTest extends SpringContextTestCase {

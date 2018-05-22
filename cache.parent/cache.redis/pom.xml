@@ -6,10 +6,10 @@
 	<parent>
 		<groupId>com.codefarm</groupId>
 		<artifactId>cache.parent</artifactId>
-		<version>4.2.7</version>
+		<version>4.2.4</version>
 	</parent>
-	<artifactId>cache.redis</artifactId>
-	<name>cache.redis</name>
+	<artifactId>redis-core</artifactId>
+	<name>redis-core</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

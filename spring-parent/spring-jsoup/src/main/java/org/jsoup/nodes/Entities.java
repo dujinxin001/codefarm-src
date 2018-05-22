@@ -11,7 +11,7 @@ import java.util.Properties;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.parser.Parser;
 
-import com.sxj.spring.modules.util.ClassLoaderUtil;
+import com.codefarm.spring.modules.util.ClassLoaderUtil;
 
 /**
  * HTML entities, and escape routines.
@@ -231,7 +231,7 @@ public class Entities
             //            InputStream in = ResourcePatternUtils.getResourcePatternResolver(new PathMatchingResourcePatternResolver())
             //                    .getResource("/" + filename)
             //                    .getInputStream();
-            InputStream in = ClassLoaderUtil.getResource("/" + filename);
+            InputStream in = ClassLoaderUtil.getResourceAsStream("/" + filename);
             properties.load(in);
             in.close();
         }

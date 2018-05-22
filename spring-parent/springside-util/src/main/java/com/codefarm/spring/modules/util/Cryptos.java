@@ -5,7 +5,11 @@
  *******************************************************************************/
 package com.codefarm.spring.modules.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
@@ -15,8 +19,6 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import com.codefarm.spring.modules.util.Exceptions;
 
 /**
  * 支持HMAC-SHA1消息签名 及 DES/AES对称加密的工具类.
@@ -226,4 +228,50 @@ public class Cryptos
         random.nextBytes(bytes);
         return bytes;
     }
+    
+    /**将16进制转换为二进制 
+     * @param hexStr 
+     * @return 
+     */  
+    public static byte[] parseHexStr2Byte(String hexStr) {  
+            if (hexStr.length() < 1)  
+                    return null;  
+            byte[] result = new byte[hexStr.length()/2];  
+            for (int i = 0;i< hexStr.length()/2; i++) {  
+                    int high = Integer.parseInt(hexStr.substring(i*2, i*2+1), 16);  
+                    int low = Integer.parseInt(hexStr.substring(i*2+1, i*2+2), 16);  
+                    result[i] = (byte) (high * 16 + low);  
+            }  
+            return result;  
+    } 
+    
+    public static String getMD5(String str) {
+
+		try {
+			MessageDigest md = MessageDigest.getInstance("md5");
+			byte[] b = md.digest(str.getBytes());
+			return new String(b);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+    
+    public static void main(String[] args) throws IOException {
+    	String mchKey = "Monitor1111111111111111111111111";
+    	String sss="sRhpO4dlwtuYDPJYuOpVXnpGOJyvAssfrP/wP+3COqD8xmmcnG68fg5XC7YTHHOJ6+Sv+c14nuM+MIoyBaTWOpuqBz+1OaTYW0ra3qmjj6yLNA93rcWGsge/oa6fSusBxqmjwbROugsOH4pNSo6bVZAVr3RtuXuVL+T/agv2i4pw2LD2NwSkPIDSX2v2rrXsCrfVNZNZo+IrO7lUkmk9PCnLaadBjKDoJj4ksFUu6pJHgUZQdPlqGA8JeWlwFEu/Y8zhMvJt90PxWRgM4VsdVHydDpiprnh3zPVLozTzb2lZehUTXkkS0D+kNg9RE+6Q8KeGR6zrKrqWR0XX9IdyZ3+3A0a2YrE1SS+Kr+6CiaPUfKLK9UrBe5uU35fEoFHHgn7RR0XNMlIPhcxHm8AdQNkAsdqmrWTApibn1jNcn34zh2wEXcEUy+WbQTZreKi1CHdrr/HiZpaEEdKPY9/HnEnZdVkfpvzvhSfnsGA4AzL+j8BBWq5RaH/7PmzkwnlJjp+z+7vqg1bkY2SkjRLfFqYm/o+3srkbF337/+8sOXhKGs8jd0iMfyvJJzXSPIhjW3p85tzNtFEtZ/6PctXndGi+zAZvyKYDnub3SuB7afKrnaSaXiFnmS7r0qiIVxU65zW4axDJ6PFfZr8T0PnpzMrAczh3JMs1oWxjpZ5TSOlczr29tx7WlvcNnUc91q5r8Cvc52dn2/lW5ReTA9UA/s9Rxr0TBHkNuHtioguIglaShHG7617Ci/arYw9WAM/SXOESiKbo8Dye0oaJE3z4KX6WoD26nojoeOm7GmY2eUaP4QfuskkyxPNSzm99Wec1Q4uKUnoYgHrsWevUvRlj6OQavOUtFwo+/39ipbtewCN/I8P6tsOjbQjp7/WghtChBPJr8BH4KIymGIugWb4AA7BayUgCs3yjjJgAx0vjYwg+hPNGQ9GB70hJrrEH7kaYXb2Z0O0U5a8shWW9kfXFo8RjT53ctn7UrptQbKwjVhqUePBVFMtCGfqXrC8I2k5u7n+/PELQ/ms8uIZaw/xaPRNS5e5Pf7zEVKvmyvDcKeM=";
+    	byte[] deBase64 = Encodes.decodeBase64(sss);
+    	System.out.println(new String(deBase64));
+    	ByteArrayInputStream input = new ByteArrayInputStream(
+    			 mchKey.getBytes("UTF-8"));
+         byte[] md5 = Digests.md5(input);
+         String dsfdsf = Encodes.encodeHex(md5).toUpperCase();
+    	System.out.println(dsfdsf);
+    	//dsfdsf=Encodes.encodeBase64(md5);
+    	String dd = Cryptos.aesDecrypt(deBase64, dsfdsf.getBytes("UTF-8"));
+    	
+    	
+    	
+	}
 }

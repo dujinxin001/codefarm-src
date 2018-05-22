@@ -29,6 +29,7 @@ import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.codefarm.spring.modules.util.Encodes;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JavaType;
@@ -47,7 +48,6 @@ import com.sxj.jsonrpc.core.ErrorResolver.JsonError;
 import com.sxj.jsonrpc.core.MultipleErrorResolver;
 import com.sxj.jsonrpc.core.NoCloseOutputStream;
 import com.sxj.jsonrpc.core.ReadContext;
-import com.sxj.spring.modules.util.Encodes;
 
 public class JsonRpcServer
 {
