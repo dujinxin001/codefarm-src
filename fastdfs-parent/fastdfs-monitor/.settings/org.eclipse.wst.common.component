@@ -4,6 +4,9 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="spring-util-4.2.4.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/spring-util/spring-util">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="fastdfs-monitor"/>
         <property name="java-output-path" value="/fastdfs-monitor/target/classes"/>
     </wb-module>

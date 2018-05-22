@@ -28,6 +28,6 @@
 
 	</typeHandlers> -->
 	<plugins>
-		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />
+		<plugin interceptor="com.codefarm.mybatis.pagination.interceptor.PaginationInterceptor" />
 	</plugins>
 </configuration>

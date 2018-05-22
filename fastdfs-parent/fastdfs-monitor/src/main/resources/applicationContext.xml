@@ -11,7 +11,7 @@
                         http://www.springframework.org/schema/task 
                         http://www.springframework.org/schema/task/spring-task-4.0.xsd">
 	<context:annotation-config />
-	<context:component-scan base-package="com.sxj.fastdfs.monitor">
+	<context:component-scan base-package="com.codefarm.fastdfs.monitor">
 		<context:exclude-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
 		<context:exclude-filter type="annotation"
@@ -39,17 +39,17 @@
 		<property name="dataSource" ref="fsMariadbDataSource"></property>
 		<property name="annotatedClasses">
 			<list>
-				<value>com.sxj.fastdfs.monitor.vo.Group</value>
-				<value>com.sxj.fastdfs.monitor.vo.Storage</value>
-				<value>com.sxj.fastdfs.monitor.vo.GroupHour</value>
-				<value>com.sxj.fastdfs.monitor.vo.StorageHour</value>
-				<value>com.sxj.fastdfs.monitor.vo.GroupDay</value>
-				<value>com.sxj.fastdfs.monitor.vo.StorageDay</value>
-				<value>com.sxj.fastdfs.monitor.vo.WarningData</value>
-				<value>com.sxj.fastdfs.monitor.vo.WarningUser</value>
-				<value>com.sxj.fastdfs.monitor.vo.User</value>
-				<value>com.sxj.fastdfs.monitor.vo.Fdfs_file</value>
-				<value>com.sxj.fastdfs.monitor.vo.DownloadFileRecord</value>
+				<value>com.codefarm.fastdfs.monitor.vo.Group</value>
+				<value>com.codefarm.fastdfs.monitor.vo.Storage</value>
+				<value>com.codefarm.fastdfs.monitor.vo.GroupHour</value>
+				<value>com.codefarm.fastdfs.monitor.vo.StorageHour</value>
+				<value>com.codefarm.fastdfs.monitor.vo.GroupDay</value>
+				<value>com.codefarm.fastdfs.monitor.vo.StorageDay</value>
+				<value>com.codefarm.fastdfs.monitor.vo.WarningData</value>
+				<value>com.codefarm.fastdfs.monitor.vo.WarningUser</value>
+				<value>com.codefarm.fastdfs.monitor.vo.User</value>
+				<value>com.codefarm.fastdfs.monitor.vo.Fdfs_file</value>
+				<value>com.codefarm.fastdfs.monitor.vo.DownloadFileRecord</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -69,11 +69,13 @@
 		scheduler="myScheduler" />
 	<task:executor id="myExecutor" pool-size="5" />
 	<task:scheduler id="myScheduler" pool-size="10" />
-	<bean id="sqlSessionFactory" class="com.sxj.mybatis.orm.ActiveSQLSessionFactoryBean">
+	<bean id="sqlSessionFactory" class="com.codefarm.mybatis.orm.MybatisSQLSessionFactoryBean">
 		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
 		<property name="dataSource" ref="fsMariadbDataSource" />
 		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
 		<!-- 显式指定Mapper文件位置 -->
+		<property name="typeAliasesPackage"
+			value="com.codefarm.fastdfs.entity"></property>
 		<property name="mapperLocations" value="classpath*:/mapper/**/*Mapper.xml" />
 	</bean>
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">

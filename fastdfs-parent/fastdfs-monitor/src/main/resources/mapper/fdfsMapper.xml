@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="cn.me.fdfs.dao.FdfsDao">
+<mapper namespace="com.codefarm.fastdfs.monitor.dao.FdfsDao">
 	<delete id="deleteGroup" parameterType="java.util.Date">
 		delete from tbgroup where created &lt; #date#
 	</delete>

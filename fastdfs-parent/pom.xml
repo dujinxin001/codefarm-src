@@ -1,22 +1,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.sxj</groupId>
+	<groupId>com.codefarm</groupId>
 	<artifactId>fastdfs-parent</artifactId>
 	<version>1.0</version>
 	<packaging>pom</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.7</java.version>
-		<com.sxj.version>1.0</com.sxj.version>
-		<com.sxj.spring>4.2.3</com.sxj.spring>
+		<codefarm.version>4.2.4</codefarm.version>
 		<mybatis.version>3.2.7</mybatis.version>
 		<mybatis.orm.version>3.2.2</mybatis.orm.version>
 		<spring.mybatis.version>1.2.2</spring.mybatis.version>
 		<com.alibaba.druid.version>1.0.7</com.alibaba.druid.version>
 		<mysql.version>5.1.31</mysql.version>
 		<junit.version>4.11</junit.version>
-		<spring.version>4.0.6.RELEASE</spring.version>
+		<spring.version>4.3.6.RELEASE</spring.version>
 		<spring.webflow.version>2.4.0.RELEASE</spring.webflow.version>
 		<servlet.version>3.0.1</servlet.version>
 		<jstl.version>1.2</jstl.version>
@@ -55,21 +54,27 @@
 			</dependency>
 			<!-- For Testing -->
 			<dependency>
-				<groupId>com.sxj</groupId>
+				<groupId>com.codefarm</groupId>
 				<artifactId>spring-test</artifactId>
-				<version>${com.sxj.spring}</version>
+				<version>${codefarm.version}</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.sxj</groupId>
+				<groupId>com.codefarm</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${codefarm.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.codefarm</groupId>
 				<artifactId>spring-core</artifactId>
-				<version>${com.sxj.spring}</version>
+				<version>${codefarm.version}</version>
 			</dependency>
 			<!-- For DAO -->
 			<dependency>
-				<groupId>com.sxj</groupId>
+				<groupId>com.codefarm</groupId>
 				<artifactId>mybatis-orm</artifactId>
-				<version>${mybatis.orm.version}</version>
+				<version>${codefarm.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
