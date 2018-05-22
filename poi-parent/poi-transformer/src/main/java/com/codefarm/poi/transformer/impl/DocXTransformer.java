@@ -1,4 +1,4 @@
-package com.sxj.poi.transformer.impl;
+package com.codefarm.poi.transformer.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,9 +8,9 @@ import org.apache.poi.xwpf.converter.xhtml.XHTMLConverter;
 import org.apache.poi.xwpf.converter.xhtml.XHTMLOptions;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
-import com.sxj.poi.transformer.AbstractPictureExactor;
-import com.sxj.poi.transformer.ITransformer;
-import com.sxj.poi.transformer.POITransformException;
+import com.codefarm.poi.transformer.AbstractPictureExactor;
+import com.codefarm.poi.transformer.ITransformer;
+import com.codefarm.poi.transformer.POITransformException;
 
 public class DocXTransformer implements ITransformer
 {

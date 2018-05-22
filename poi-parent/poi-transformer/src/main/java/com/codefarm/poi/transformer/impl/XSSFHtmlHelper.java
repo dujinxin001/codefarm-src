@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-package com.sxj.poi.transformer.impl;
+package com.codefarm.poi.transformer.impl;
 
 import java.util.Formatter;
 import java.util.Map;
@@ -25,7 +25,7 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.sxj.poi.transformer.HtmlHelper;
+import com.codefarm.poi.transformer.HtmlHelper;
 
 /**
  * Implementation of {@link HtmlHelper} for XSSF files.

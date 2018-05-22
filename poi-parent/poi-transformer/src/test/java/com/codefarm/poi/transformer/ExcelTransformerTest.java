@@ -1,4 +1,4 @@
-package com.sxj.poi.transformer;
+package com.codefarm.poi.transformer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,7 +8,9 @@ import java.io.FileOutputStream;
 import org.junit.After;
 import org.junit.Test;
 
-import com.sxj.poi.transformer.impl.XlsTransformer;
+import com.codefarm.poi.transformer.ExcelTransformer;
+import com.codefarm.poi.transformer.POITransformException;
+import com.codefarm.poi.transformer.impl.XlsTransformer;
 
 public class ExcelTransformerTest
 {

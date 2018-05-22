@@ -1,11 +1,11 @@
-package com.sxj.poi.transformer;
+package com.codefarm.poi.transformer;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.sxj.poi.transformer.impl.DocTransformer;
-import com.sxj.poi.transformer.impl.DocXTransformer;
+import com.codefarm.poi.transformer.impl.DocTransformer;
+import com.codefarm.poi.transformer.impl.DocXTransformer;
 
 public class WordTransformer implements ITransformer
 {

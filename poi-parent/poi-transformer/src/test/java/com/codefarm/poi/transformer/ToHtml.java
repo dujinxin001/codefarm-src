@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-package com.sxj.poi.transformer;
+package com.codefarm.poi.transformer;
 
 import static org.apache.poi.ss.usermodel.CellStyle.ALIGN_CENTER;
 import static org.apache.poi.ss.usermodel.CellStyle.ALIGN_CENTER_SELECTION;
@@ -73,8 +73,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.sxj.poi.transformer.impl.HSSFHtmlHelper;
-import com.sxj.poi.transformer.impl.XSSFHtmlHelper;
+import com.codefarm.poi.transformer.HtmlHelper;
+import com.codefarm.poi.transformer.impl.HSSFHtmlHelper;
+import com.codefarm.poi.transformer.impl.XSSFHtmlHelper;
 
 /**
  * This example shows how to display a spreadsheet in HTML using the classes for

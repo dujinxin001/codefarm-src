@@ -1,5 +1,6 @@
-package com.sxj.poi.transformer.impl;
+package com.codefarm.poi.transformer.impl;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -10,40 +11,39 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.poi.hwpf.converter.WordToHtmlConverter;
-import org.apache.poi.hwpf.converter.WordToHtmlUtils;
+import org.apache.poi.hssf.converter.ExcelToHtmlConverter;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.w3c.dom.Document;
 
-import com.sxj.poi.transformer.AbstractPictureExactor;
-import com.sxj.poi.transformer.ITransformer;
-import com.sxj.poi.transformer.POITransformException;
+import com.codefarm.poi.transformer.AbstractPictureExactor;
+import com.codefarm.poi.transformer.ITransformer;
+import com.codefarm.poi.transformer.POITransformException;
 
-public class DocTransformer implements ITransformer
+public class XlsTransformer implements ITransformer
 {
-    
-    private AbstractPictureExactor pictureExactor;
     
     public void toHTML(InputStream source, OutputStream output)
             throws POITransformException
     {
-        
+        HSSFWorkbook workbook;
         try
         {
-            WordToHtmlConverter wordToHtmlConverter = new WordToHtmlConverter(
+            workbook = new HSSFWorkbook(source);
+            
+            ExcelToHtmlConverter excelToHtmlConverter = new ExcelToHtmlConverter(
                     DocumentBuilderFactory.newInstance()
                             .newDocumentBuilder()
                             .newDocument());
-            if (pictureExactor != null)
-                wordToHtmlConverter.setPicturesManager(pictureExactor);
-            wordToHtmlConverter
-                    .processDocument(WordToHtmlUtils.loadDoc(source));
-            Document htmlDocument = wordToHtmlConverter.getDocument();
-            DOMSource domSource = new DOMSource(htmlDocument);
+            excelToHtmlConverter.processWorkbook(workbook);
+            excelToHtmlConverter.setOutputRowNumbers(false);
+            Document doc = excelToHtmlConverter.getDocument();
+            DOMSource domSource = new DOMSource(doc);
             StreamResult streamResult = new StreamResult(output);
             TransformerFactory tf = TransformerFactory.newInstance();
             Transformer serializer = tf.newTransformer();
+            // TODO set encoding from a command argument
             serializer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            serializer.setOutputProperty(OutputKeys.INDENT, "yes");
+            serializer.setOutputProperty(OutputKeys.INDENT, "no");
             serializer.setOutputProperty(OutputKeys.METHOD, "html");
             serializer.transform(domSource, streamResult);
         }
@@ -51,7 +51,18 @@ public class DocTransformer implements ITransformer
         {
             throw new POITransformException(e);
         }
-        
+        finally
+        {
+            try
+            {
+                source.close();
+                output.close();
+            }
+            catch (IOException e)
+            {
+            }
+            
+        }
     }
     
     public void toPDF(InputStream source, OutputStream output)
@@ -61,9 +72,11 @@ public class DocTransformer implements ITransformer
         
     }
     
+    @Override
     public void setPictureExactor(AbstractPictureExactor pictureExactor)
     {
-        this.pictureExactor = pictureExactor;
+        // TODO Auto-generated method stub
+        
     }
     
 }
