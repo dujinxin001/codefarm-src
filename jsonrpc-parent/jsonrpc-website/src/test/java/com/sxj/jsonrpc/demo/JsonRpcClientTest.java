@@ -5,8 +5,8 @@ import java.net.URL;
 
 import org.junit.Test;
 
-import com.sxj.jsonrpc.client.JsonRpcHttpClient;
-import com.sxj.jsonrpc.demo.service.IMathService;
+import com.codefarm.jsonrpc.client.JsonRpcHttpClient;
+import com.codefarm.jsonrpc.demo.service.IMathService;
 
 public class JsonRpcClientTest
 {
