@@ -1,9 +1,11 @@
-package com.sxj.birt.spring;
+package com.codefarm.birt.spring;
 
 import java.util.List;
 
 import org.eclipse.birt.report.engine.api.IAction;
 import org.eclipse.birt.report.engine.api.script.IReportContext;
+
+import com.codefarm.birt.spring.SimpleRequestParameterActionHandler;
 
 public class MasterActionHandler extends SimpleRequestParameterActionHandler
 {

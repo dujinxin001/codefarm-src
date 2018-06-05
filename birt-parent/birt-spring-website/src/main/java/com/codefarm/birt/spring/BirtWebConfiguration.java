@@ -1,4 +1,4 @@
-package com.sxj.birt.spring;
+package com.codefarm.birt.spring;
 
 import javax.inject.Inject;
 
@@ -10,6 +10,10 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
+
+import com.codefarm.birt.spring.BirtEngineFactory;
+import com.codefarm.birt.spring.BirtViewResolver;
+import com.codefarm.birt.spring.HtmlSingleFormatBirtView;
 
 @EnableWebMvc
 @ComponentScan(basePackageClasses = { BirtWebConfiguration.class })

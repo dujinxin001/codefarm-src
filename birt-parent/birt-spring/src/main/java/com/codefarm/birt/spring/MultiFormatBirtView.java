@@ -1,4 +1,4 @@
-package com.sxj.birt.spring;
+package com.codefarm.birt.spring;
 
 import org.eclipse.birt.report.engine.api.IRenderOption;
 import org.eclipse.birt.report.engine.api.RenderOption;

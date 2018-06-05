@@ -1,20 +1,22 @@
-package com.sxj.birt.spring;
+package com.codefarm.birt.spring;
 
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.birt.report.engine.api.EXCELRenderOption;
+import org.eclipse.birt.report.engine.api.IPDFRenderOption;
 import org.eclipse.birt.report.engine.api.IRenderOption;
+import org.eclipse.birt.report.engine.api.PDFRenderOption;
 import org.eclipse.birt.report.engine.api.RenderOption;
 
-public class ExcelSingleFormatBirtView extends AbstractSingleFormatBirtView
+public class PdfSingleFormatBirtView extends AbstractSingleFormatBirtView
 {
     
-    public ExcelSingleFormatBirtView()
+    public PdfSingleFormatBirtView()
     {
-        setContentType("application/vnd.ms-excel");
+        setContentType("application/pdf");
+        
     }
     
     @Override
@@ -24,21 +26,21 @@ public class ExcelSingleFormatBirtView extends AbstractSingleFormatBirtView
             Map<String, Object> appContextValuesMap, String reportName,
             String format, IRenderOption options) throws Throwable
     {
+        
         String oName = reportName;
         if (oName.toLowerCase().endsWith(".rptdesign"))
         {
             oName = oName.replaceAll("(?i).rptdesign", "");
         }
         
-        response.setHeader("Content-Disposition",
-                "attachment; filename=" + oName + ".xls");
-        EXCELRenderOption excelOptions = new EXCELRenderOption(options);
-        excelOptions.setOutputFormat("xls");
-        //        pdfOptions.setOption(IPDFRenderOption.PAGE_OVERFLOW,
-        //                IPDFRenderOption.FIT_TO_PAGE_SIZE);
+        response.setHeader("Content-Disposition", "attachment; filename="
+                + oName + ".pdf");
         
-        excelOptions.setOutputStream(response.getOutputStream());
-        return excelOptions;
+        PDFRenderOption pdfOptions = new PDFRenderOption(options);
+        pdfOptions.setOutputFormat("pdf");
+        pdfOptions.setOption(IPDFRenderOption.PAGE_OVERFLOW,
+                IPDFRenderOption.FIT_TO_PAGE_SIZE);
+        pdfOptions.setOutputStream(response.getOutputStream());
+        return pdfOptions;
     }
-    
 }
