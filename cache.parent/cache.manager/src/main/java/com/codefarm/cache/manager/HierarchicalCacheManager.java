@@ -19,6 +19,9 @@ import com.codefarm.cache.ehcache.EhCacheProvider;
 import com.codefarm.cache.redis.RedisCacheProvider;
 import com.codefarm.spring.modules.util.ClassLoaderUtil;
 
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPubSub;
+
 /**
  * 缓存管理器
  */
@@ -162,6 +165,26 @@ public class HierarchicalCacheManager
                         autoCreate,
                         listener);
         }
+    }
+    
+    public static void startSubscribe(String channelsName,JedisPubSub pubSub) {
+    	if(l2_provider instanceof RedisCacheProvider) {
+    		RedisCacheProvider provider=(RedisCacheProvider) l2_provider;
+    		provider.getResource().subscribe(pubSub, channelsName);
+    	}else {
+    		LOGGER.error("缓存管理器没有实现消息队列");
+    	}
+    }
+    
+    public static Jedis getJedis() {
+    	if(l2_provider instanceof RedisCacheProvider) {
+    		LOGGER.info("获取redis");
+    		RedisCacheProvider provider=(RedisCacheProvider) l2_provider;
+    		return provider.getResource();
+    	}else {
+    		LOGGER.error("获取redis实现错误");
+    		return null;
+    	}
     }
     
     public static final void shutdown(int level)

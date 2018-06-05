@@ -9,7 +9,7 @@
 	<modules>
 		<module>cache.core</module>
 		<module>cache.ehcache</module>
-		<module>redis-core</module>
+		<module>cache.redis</module>
 		<module>cache.manager</module>
 		<module>cache.spring</module>
 	</modules>
