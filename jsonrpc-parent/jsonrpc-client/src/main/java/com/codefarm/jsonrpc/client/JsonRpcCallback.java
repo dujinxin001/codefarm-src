@@ -2,7 +2,7 @@ package com.codefarm.jsonrpc.client;
 
 public interface JsonRpcCallback<T>
 {
-    
+     
     /**
      * Called if the remote invocation was successful.
      *
