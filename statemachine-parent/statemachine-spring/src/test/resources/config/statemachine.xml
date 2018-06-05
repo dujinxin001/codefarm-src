@@ -15,7 +15,7 @@
                         http://www.springframework.org/schema/aop/spring-aop-4.0.xsd"
 	default-lazy-init="true">
 	<context:annotation-config />
-	<context:component-scan base-package="com.sxj.statemachine.spring">
+	<context:component-scan base-package="com.codefarm.statemachine.spring">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
 	</context:component-scan>
 	<!-- <bean id="fsm1" class="com.sxj.statemachine.StateMachineFactory" factory-method="newInstance" 
@@ -24,7 +24,7 @@
 		factory-method="newInstance" lazy-init="false"> <constructor-arg> <bean class="com.sxj.statemachine.spring.FSM2"></bean> 
 		</constructor-arg> </bean> -->
 	<bean class="com.sxj.statemachine.spring.StateMachineFactoryBean">
-		<property name="basePackages" value="com.sxj.statemachine.spring">
+		<property name="basePackages" value="com.codefarm.statemachine.spring">
 		</property>
 	</bean>
 </beans>
