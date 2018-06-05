@@ -7,13 +7,14 @@
 	<packaging>pom</packaging>
 	<version>4.2.4</version>
 	<modules>
-		<module>springside-core</module>
-		<module>springside-extension</module>
-		<module>springside-util</module>
+		<module>spring-core</module>
+		<module>spring-extension</module>
+		<module>spring-util</module>
 		<module>spring-test</module>
 		<module>spring-quartz</module>
 		<module>spring-jsoup</module>
 		<module>spring-shiro-x509</module>
+		<module>spring-shiro-tags</module>
 		<module>spring-freemarker</module>
 	</modules>
 	<dependencyManagement>
@@ -28,6 +29,11 @@
 				<groupId>org.apache.shiro</groupId>
 				<artifactId>shiro-web</artifactId>
 				<optional>true</optional>
+				<version>${shiro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-all</artifactId>
 				<version>${shiro.version}</version>
 			</dependency>
 			<dependency>
@@ -127,6 +133,11 @@
 				<artifactId>spring-data-jpa</artifactId>
 				<version>1.6.0.RELEASE</version>
 			</dependency>
+			<dependency>
+				<groupId>org.freemarker</groupId>
+				<artifactId>freemarker</artifactId>
+				<version>${freemarker.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<properties>
@@ -135,7 +146,7 @@
 		<spring.version>4.2.4.RELEASE</spring.version>
 		<shiro.version>1.2.4</shiro.version>
 		<servlet.version>3.1.0</servlet.version>
-		<jackson.version>2.4.2</jackson.version>
+		<jackson.version>2.9.3</jackson.version>
 		<hibernate.validator.version>5.1.2.Final</hibernate.validator.version>
 		<junit.version>4.11</junit.version>
 		<assertj.version>1.6.1</assertj.version>
@@ -213,7 +224,7 @@
 		<repository>
 			<id>yunwen</id>
 			<name>Local Nexus Repository</name>
-<!-- 			<url>http://dev.codefarm.tech/nexus/content/repositories/releases/</url> -->
+<!-- 			<url>http://ci.coderun99.com:88/nexus/content/repositories/releases/</url> -->
 			<url>http://maven.faqrobot.org/nexus/content/repositories/faqrobot/</url>
 		</repository>
 	</distributionManagement>
