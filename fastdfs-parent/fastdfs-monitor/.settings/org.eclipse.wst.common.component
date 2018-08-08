@@ -4,9 +4,6 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <dependent-module archiveName="fastdfs-client-java-1.27-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/fastdfs-client-java/fastdfs-client-java">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="mybatis-orm-4.2.4.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/mybatis-orm/mybatis-orm">
             <dependency-type>uses</dependency-type>
         </dependent-module>

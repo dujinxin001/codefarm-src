@@ -297,7 +297,7 @@ public class EhCache implements Cache, CacheEventListener
 	}
 
 	@Override
-	public void lpush(Object key, Object value) {
+	public void lpush(Object key, byte[] value) {
 		throw new CacheException("Operation not supported!!!");
 	}
 
@@ -338,6 +338,18 @@ public class EhCache implements Cache, CacheEventListener
 	@Override
 	public void zrem(String key, String member) {
 		return ;		
+	}
+
+	@Override
+	public void publish(String name, String value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public byte[] rpop(Object key) {
+		// TODO Auto-generated method stub
+		return null;
 	}
     
 }

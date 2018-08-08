@@ -5,7 +5,8 @@ import java.util.Map;
 
 public interface Cache
 {
-    
+ 
+    public void publish(String name,String value);
     /**
      * Get an item from the cache, nontransactionally
      * @param key
@@ -67,7 +68,9 @@ public interface Cache
 
 	public Object brpop(Object key,int seconds);
 
-	public void lpush(Object key, Object value);
+	public void lpush(Object key, byte[] value);
+	
+	public byte[] rpop(Object key);
 
 	public void incr(String key);
 

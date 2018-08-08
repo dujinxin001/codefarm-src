@@ -17,7 +17,7 @@ import redis.clients.jedis.JedisPoolConfig;
  */
 public class RedisCacheProvider implements CacheProvider
 {
-    
+     
     private static String host;
     
     private static final String LOCALHOST = "127.0.0.1";
@@ -29,6 +29,8 @@ public class RedisCacheProvider implements CacheProvider
     private static final int DEFAULT_DATABASE = 0;
     
     private static final int DEFAULT_MAXIDLE = 10;
+    
+    private static final int DEFAULT_MAXTOTAL = 10;
     
     private static final int DEFAULT_MINIDLE = 5;
     
@@ -110,6 +112,8 @@ public class RedisCacheProvider implements CacheProvider
         timeout = getProperty(props, "timeout", DEFAULT_TIMEOUT);
         
         database = getProperty(props, "database", DEFAULT_DATABASE);
+        int maxTotal = getProperty(props, "maxTotal", DEFAULT_MAXTOTAL);
+        config.setMaxTotal(maxTotal);
         
         config.setMaxIdle(getProperty(props, "maxIdle", DEFAULT_MAXIDLE));
         
